@@ -10,11 +10,12 @@ import UIKit
 import QuartzCore
 import WebKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UISearchControllerDelegate {
 	
 	
 	let searchController = UISearchController(searchResultsController: nil)
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
+	
 	@IBOutlet weak var webView: WKWebView!
 	
 	
@@ -38,8 +39,44 @@ class ViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		self.navigationController?.navigationItem.titleView?.isHidden = true
-		navigationItem.searchController = searchController
+		searchController.delegate = self
+		
+		if #available(iOS 11.0, *) {
+			searchBar = searchController.searchBar
+			
+//			if let navigationbar = self.navigationController?.navigationBar {
+//				navigationbar.isHidden = true
+//			}
+			
+//			for subview in (self.navigationController?.navigationBar.subviews)! {
+//				if NSStringFromClass(subview.classForCoder).contains("BarBackground") {
+//					  var subViewFrame: CGRect = subview.frame
+//					  // subViewFrame.origin.y = -20;
+//					  subViewFrame.size.height = 200
+//					  subview.frame = subViewFrame
+//
+//				 }
+//
+//			}
+				
+				
+			navigationItem.searchController = searchController
+			navigationItem.hidesSearchBarWhenScrolling = false
+			navigationItem.prompt = nil
+		}
+		
+//		navigationController?.navigationBar.isHidden = true
+		
+//		self.view.addSubview(searchBar)
+//		searchBar.translatesAutoresizingMaskIntoConstraints = false
+//		searchBar.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor).isActive = true
+//		searchBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+//		searchBar.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor).isActive = true
+//		searchBar.widthAnchor.constraint(equalToConstant: 30).isActive = true
+//
+//		searchBar.searchBarStyle = .minimal
+		
+//		navigationItem.searchController = searchController
 		
 //		let appearance = UINavigationBarAppearance()
 //		appearance.titlePositionAdjustment = UIOffset(horizontal: 0.0, vertical: -5.0)
@@ -62,7 +99,8 @@ class ViewController: UIViewController {
 		webView?.load(request)
 		webView?.navigationDelegate = self
 		
-		self.webView?.isHidden = true
+		//FIXME: - hide
+//		self.webView?.isHidden = true
 		
 	}
 	
@@ -74,7 +112,9 @@ class ViewController: UIViewController {
 			image.frame = CGRect(x: 0, y:100, width: 375, height: 400)
 			image.didSelect = selectImage
 			//375 667
-			self.view.addSubview(image)
+			
+			//FIXME: - hide
+//			self.view.addSubview(image)//
 		}
 		
 //		for webView in customWebViews {
@@ -261,7 +301,7 @@ class ViewController: UIViewController {
 
 }
 
-
+//MARK: - UISearchResultsUpdating
 extension ViewController: UISearchResultsUpdating {
 	func updateSearchResults(for searchController: UISearchController) {
 		print("updateSearchResults")
@@ -274,6 +314,7 @@ extension ViewController: UISearchResultsUpdating {
 	}
 }
 
+//MARK: - UISearchBarDelegate
 extension ViewController: UISearchBarDelegate {
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 		print("textDidChange")
@@ -283,6 +324,7 @@ extension ViewController: UISearchBarDelegate {
 	
 }
 
+//MARK: - WKNavigationDelegate
 extension ViewController: WKNavigationDelegate {
 	func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
 		print("didStartProvisionalNavigation")
