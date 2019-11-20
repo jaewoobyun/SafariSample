@@ -16,86 +16,56 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xH4-Q6-fmg">
-                                <rect key="frame" x="0.0" y="74" width="375" height="533"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="574"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
                                     <wkPreferences key="preferences"/>
                                 </wkWebViewConfiguration>
                             </wkWebView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wzn-gd-rPr" userLabel="Controls">
-                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="3W9-dN-Fad">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lAd-gM-ZJz">
-                                                <rect key="frame" x="0.0" y="0.0" width="59" height="50"/>
-                                                <state key="normal" title="back" image="chevron.left" catalog="system"/>
-                                                <connections>
-                                                    <action selector="backButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GV3-Ho-tDY"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uqX-ke-f83" userLabel="forward">
-                                                <rect key="frame" x="79" y="0.0" width="59" height="50"/>
-                                                <state key="normal" title="Button" image="chevron.right" catalog="system"/>
-                                                <connections>
-                                                    <action selector="forwardButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PPh-WL-SfG"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PiK-ht-hFG" userLabel="share">
-                                                <rect key="frame" x="158" y="0.0" width="59" height="50"/>
-                                                <state key="normal" title="Button" image="square.and.arrow.up" catalog="system"/>
-                                                <connections>
-                                                    <action selector="shareButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lRD-h5-99g"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zp2-Rc-BQ8" userLabel="bookmarks">
-                                                <rect key="frame" x="237" y="0.0" width="59" height="50"/>
-                                                <state key="normal" title="Button" image="book" catalog="system"/>
-                                                <connections>
-                                                    <segue destination="x66-j2-sKh" kind="presentation" id="DW4-DG-xsx"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jPl-5E-PsU" userLabel="tabs">
-                                                <rect key="frame" x="316" y="0.0" width="59" height="50"/>
-                                                <state key="normal" title="Button" image="rectangle.on.rectangle" catalog="system"/>
-                                                <connections>
-                                                    <action selector="openTabs:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0kb-lb-tNq"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstItem="PiK-ht-hFG" firstAttribute="width" secondItem="lAd-gM-ZJz" secondAttribute="width" id="4kt-tI-yY4"/>
-                                            <constraint firstItem="uqX-ke-f83" firstAttribute="width" secondItem="lAd-gM-ZJz" secondAttribute="width" id="IVb-JG-yC5"/>
-                                            <constraint firstItem="Zp2-Rc-BQ8" firstAttribute="width" secondItem="lAd-gM-ZJz" secondAttribute="width" id="OHR-lv-Z32"/>
-                                            <constraint firstItem="jPl-5E-PsU" firstAttribute="width" secondItem="lAd-gM-ZJz" secondAttribute="width" id="lNi-u5-AQH"/>
-                                        </constraints>
-                                    </stackView>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="7dV-pa-bMx"/>
-                                    <constraint firstItem="3W9-dN-Fad" firstAttribute="leading" secondItem="wzn-gd-rPr" secondAttribute="leading" id="MDn-aq-yfU"/>
-                                    <constraint firstAttribute="trailing" secondItem="3W9-dN-Fad" secondAttribute="trailing" id="jdb-03-FRt"/>
-                                    <constraint firstAttribute="bottom" secondItem="3W9-dN-Fad" secondAttribute="bottom" id="mvf-GS-D20"/>
-                                    <constraint firstItem="3W9-dN-Fad" firstAttribute="top" secondItem="wzn-gd-rPr" secondAttribute="top" id="nR7-Id-Ymo"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="wzn-gd-rPr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="1lI-VH-SXX"/>
                             <constraint firstItem="xH4-Q6-fmg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="AF0-4p-dkC"/>
                             <constraint firstItem="xH4-Q6-fmg" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Jz7-Kl-t2U"/>
-                            <constraint firstItem="wzn-gd-rPr" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="d03-4C-gWy"/>
-                            <constraint firstItem="wzn-gd-rPr" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="egf-Bk-MaD"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="xH4-Q6-fmg" secondAttribute="bottom" constant="60" id="wNz-yi-AUl"/>
-                            <constraint firstItem="xH4-Q6-fmg" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="30" id="xv2-vL-eLT"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="xH4-Q6-fmg" secondAttribute="bottom" id="wNz-yi-AUl"/>
+                            <constraint firstItem="xH4-Q6-fmg" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="xv2-vL-eLT"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <toolbarItems>
+                        <barButtonItem title="back" image="chevron.left" catalog="system" id="8sG-45-Ll8">
+                            <connections>
+                                <action selector="backButton:" destination="BYZ-38-t0r" id="gxn-MK-Pma"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="LaF-Wk-aik"/>
+                        <barButtonItem tag="1" title="forward" image="chevron.right" catalog="system" id="13O-Yf-iO0">
+                            <connections>
+                                <action selector="forwardButton:" destination="BYZ-38-t0r" id="eGI-J7-HRS"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="iGR-8a-U4j"/>
+                        <barButtonItem title="share" image="square.and.arrow.up" catalog="system" id="dMB-CJ-pxV">
+                            <connections>
+                                <action selector="shareButton:" destination="BYZ-38-t0r" id="AKo-4P-VX7"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="UqI-hn-b0p"/>
+                        <barButtonItem title="bookmark" image="book" catalog="system" id="DiD-Hz-Oqg">
+                            <connections>
+                                <segue destination="x66-j2-sKh" kind="presentation" id="70N-Dq-GdT"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="HYu-5G-688"/>
+                        <barButtonItem title="tabs" image="square.on.square" catalog="system" id="RjH-Zo-VZ9">
+                            <connections>
+                                <action selector="openTabs:" destination="BYZ-38-t0r" id="qVR-4g-4wt"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" id="fEF-5Z-JzD"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="webView" destination="xH4-Q6-fmg" id="JrR-X5-40n"/>
                     </connections>
@@ -107,13 +77,17 @@
         <!--Navigation Controller-->
         <scene sceneID="wyS-rr-yV8">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Nnr-1H-VeS" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" hidesBarsOnSwipe="YES" hidesBarsWhenVerticallyCompact="YES" id="Nnr-1H-VeS" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="q7u-un-zoc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="pkp-5k-eF9">
+                        <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="R1V-II-Z42"/>
                     </connections>
@@ -131,7 +105,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Kw5-ZJ-SOv">
-                                <rect key="frame" x="0.0" y="100" width="375" height="547"/>
+                                <rect key="frame" x="0.0" y="100" width="375" height="498"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="sample" textLabel="1Yc-Dg-2zN" detailTextLabel="cGk-4s-xHL" style="IBUITableViewCellStyleValue1" id="hzM-Ye-zFZ">
@@ -164,7 +138,7 @@
                                 <rect key="frame" x="0.0" y="56" width="375" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" id="XzS-pg-HE4">
-                                        <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="PFf-II-Fdr">
+                                        <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="PFf-II-Fdr">
                                             <rect key="frame" x="16" y="6" width="343" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <segments>
@@ -192,6 +166,11 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Ugd-E1-GHp"/>
                     </view>
+                    <toolbarItems>
+                        <barButtonItem title="Item" id="hgl-Wj-qno"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="WGn-5v-B1J"/>
+                        <barButtonItem title="Item" id="W8M-R3-im7"/>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" id="2wL-yO-L6G">
                         <barButtonItem key="rightBarButtonItem" title="Done" id="AHP-le-1VO">
                             <connections>
@@ -199,7 +178,10 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="bottomLeftBarButton" destination="hgl-Wj-qno" id="zE5-Sj-euu"/>
+                        <outlet property="bottomRightBarButton" destination="W8M-R3-im7" id="xLw-w4-nuT"/>
                         <outlet property="segmentedControl" destination="PFf-II-Fdr" id="37j-Hx-VVg"/>
                         <outlet property="tableView" destination="Kw5-ZJ-SOv" id="RQf-W0-Wsg"/>
                         <outlet property="topToolBar" destination="dfH-C5-YOM" id="erV-fu-2yw"/>
@@ -207,25 +189,29 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DA6-ug-dXN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1040.8" y="1795.9520239880062"/>
+            <point key="canvasLocation" x="1041" y="1532"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="b8c-HZ-zhu">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="x66-j2-sKh" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="x66-j2-sKh" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="tqi-jN-ZeP">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="CYd-Vm-Rpe">
+                        <rect key="frame" x="0.0" y="603" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="jXU-6R-wqH" kind="relationship" relationship="rootViewController" id="xO9-zQ-j7p"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R7g-mC-sBA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1040.8" y="1042.128935532234"/>
+            <point key="canvasLocation" x="1041" y="846"/>
         </scene>
     </scenes>
     <resources>
@@ -234,7 +220,7 @@
         <image name="chevron.right" catalog="system" width="48" height="64"/>
         <image name="clock" catalog="system" width="64" height="60"/>
         <image name="eyeglasses" catalog="system" width="64" height="26"/>
-        <image name="rectangle.on.rectangle" catalog="system" width="64" height="48"/>
         <image name="square.and.arrow.up" catalog="system" width="56" height="64"/>
+        <image name="square.on.square" catalog="system" width="64" height="56"/>
     </resources>
 </document>

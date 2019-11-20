@@ -22,22 +22,36 @@ class BookmarksVC: UIViewController {
 	
 	@IBOutlet weak var tableView: UITableView!
 	
+	@IBOutlet weak var bottomLeftBarButton: UIBarButtonItem!
+	
+	@IBOutlet weak var bottomRightBarButton: UIBarButtonItem!
+	
+	
 	//MARK: - Constants
 	static let tableViewBookmarkCellIdentifier = "BookmarkCellID"
+	static let tableViewHistoryCellIdentifier = "HistoryCellID"
 	private static let nibName = "BookmarkNib"
 	
 	
 	@IBAction func indexChanged(_ sender: UISegmentedControl) {
 		switch segmentedControl.selectedSegmentIndex {
 		case 0:
-			print("Bookmarks")
 			self.title = "Bookmarks"
+			searchController.searchBar.placeholder = "Search Bookmarks"
+			//TODO: - bookmarks cell
+			bottomRightBarButton.title = "Edit"
 		case 1:
-			print("Reading List")
 			self.title = "Reading List"
+			searchController.searchBar.placeholder = "Search Reading List"
+			//TODO: - reading list cell
+			tableView.reloadData()
 		case 2:
-			print("History")
 			self.title = "History"
+			searchController.searchBar.placeholder = "Search History"
+			//TODO: - historycell
+			bottomRightBarButton.title = "Clear"
+			
+//			reloadTableView()
 		default:
 			break
 		}
@@ -52,20 +66,15 @@ class BookmarksVC: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-//		self.title = "Bookmarks"
+		self.title = "Bookmarks"
 		self.title = title
 		
 		self.topToolBar.delegate = self
 		
-		navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-		navigationController?.navigationBar.shadowImage = UIImage()
-		navigationController?.navigationBar.barTintColor = barBackgroundColor
-		
-		
 //		self.navigationItem.searchController = searchController
 		
 //		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "sample")
-		
+		self.navigationController?.navigationBar.barTintColor = barBackgroundColor
 		
 		tableView.delegate = self
 		tableView.dataSource = self
@@ -73,10 +82,14 @@ class BookmarksVC: UIViewController {
 		tableView.tableHeaderView = searchController.searchBar
 		
 		tableView.reloadData()
+		
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		self.title = title
+		navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+		navigationController?.navigationBar.shadowImage = UIImage()
+		navigationController?.navigationBar.barTintColor = barBackgroundColor
 		tableView.reloadData()
 	}
 	
@@ -86,6 +99,15 @@ class BookmarksVC: UIViewController {
 		navigationController?.navigationBar.setBackgroundImage(nil, for: UIBarMetrics.default)
 		navigationController?.navigationBar.shadowImage = nil
 	}
+	
+	func reloadTableView() {
+		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "example")
+		tableView.reloadData()
+	}
+	
+	
+	
+	
 	
 }
 
@@ -114,6 +136,7 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		
 		let cell = tableView.dequeueReusableCell(withIdentifier: "sample", for: indexPath)
 		cell.textLabel?.text = "\(indexPath.row)awfe"
 		cell.detailTextLabel?.text = "detail"

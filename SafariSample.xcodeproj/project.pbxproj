@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		CC8B79162383885A0061068C /* BookmarksVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B79152383885A0061068C /* BookmarksVC.swift */; };
+		CC8B791A2383CBFE0061068C /* Nav.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B79192383CBFE0061068C /* Nav.swift */; };
+		CC8B791C2384C75A0061068C /* bookmarks_11_19_19.html in Resources */ = {isa = PBXBuildFile; fileRef = CC8B791B2384C7590061068C /* bookmarks_11_19_19.html */; };
+		CC8B791E2384CBC20061068C /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B791D2384CBC20061068C /* History.swift */; };
 		CCB7A74E2382295E00D8B0A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB7A74D2382295E00D8B0A0 /* AppDelegate.swift */; };
 		CCB7A7502382295E00D8B0A0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB7A74F2382295E00D8B0A0 /* SceneDelegate.swift */; };
 		CCB7A7522382295E00D8B0A0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB7A7512382295E00D8B0A0 /* ViewController.swift */; };
@@ -22,6 +25,9 @@
 
 /* Begin PBXFileReference section */
 		CC8B79152383885A0061068C /* BookmarksVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksVC.swift; sourceTree = "<group>"; };
+		CC8B79192383CBFE0061068C /* Nav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nav.swift; sourceTree = "<group>"; };
+		CC8B791B2384C7590061068C /* bookmarks_11_19_19.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = bookmarks_11_19_19.html; sourceTree = "<group>"; };
+		CC8B791D2384CBC20061068C /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		CCB7A74A2382295E00D8B0A0 /* SafariSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SafariSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCB7A74D2382295E00D8B0A0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CCB7A74F2382295E00D8B0A0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -73,8 +79,11 @@
 				CCB7A76323823B0000D8B0A0 /* ImageViewCard.swift */,
 				CCB7A7612382317400D8B0A0 /* CustomWebView.swift */,
 				CCC26AAF23827AF1006E2E62 /* SearchTableViewController.swift */,
+				CC8B79192383CBFE0061068C /* Nav.swift */,
 				CC8B79152383885A0061068C /* BookmarksVC.swift */,
+				CC8B791D2384CBC20061068C /* History.swift */,
 				CCB7A7532382295E00D8B0A0 /* Main.storyboard */,
+				CC8B791B2384C7590061068C /* bookmarks_11_19_19.html */,
 				CCB7A7562382296200D8B0A0 /* Assets.xcassets */,
 				CCB7A7582382296200D8B0A0 /* LaunchScreen.storyboard */,
 				CCB7A75B2382296200D8B0A0 /* Info.plist */,
@@ -142,6 +151,7 @@
 			files = (
 				CCB7A75A2382296200D8B0A0 /* LaunchScreen.storyboard in Resources */,
 				CCB7A7572382296200D8B0A0 /* Assets.xcassets in Resources */,
+				CC8B791C2384C75A0061068C /* bookmarks_11_19_19.html in Resources */,
 				CCB7A7552382295E00D8B0A0 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -157,7 +167,9 @@
 				CCB7A7522382295E00D8B0A0 /* ViewController.swift in Sources */,
 				CCC26AAE23825EE5006E2E62 /* OpenTabsVC.swift in Sources */,
 				CCC26AB023827AF1006E2E62 /* SearchTableViewController.swift in Sources */,
+				CC8B791E2384CBC20061068C /* History.swift in Sources */,
 				CCB7A74E2382295E00D8B0A0 /* AppDelegate.swift in Sources */,
+				CC8B791A2383CBFE0061068C /* Nav.swift in Sources */,
 				CCB7A7502382295E00D8B0A0 /* SceneDelegate.swift in Sources */,
 				CC8B79162383885A0061068C /* BookmarksVC.swift in Sources */,
 				CCB7A76423823B0000D8B0A0 /* ImageViewCard.swift in Sources */,
