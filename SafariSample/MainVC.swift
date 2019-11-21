@@ -10,15 +10,42 @@ import UIKit
 import QuartzCore
 import WebKit
 
+let hostNameForLocalFile = ""
+
 class MainVC: UIViewController, UISearchControllerDelegate {
 	
 	
 	let searchController = UISearchController(searchResultsController: nil)
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
 	
+	
+//	@IBOutlet weak var topToolBar: UIToolbar!
+//	@IBOutlet weak var searchBar: UISearchBar!
+	
+	var progressView = UIProgressView(frame: CGRect.zero)
+	
+	@IBOutlet weak var backButton: UIBarButtonItem!
+	@IBOutlet weak var forwardButton: UIBarButtonItem!
+	
 	@IBOutlet weak var webView: WKWebView!
 	
+	var currentContentMode: WKWebpagePreferences.ContentMode?
+	var contentModeToRequestForHost: [String: WKWebpagePreferences.ContentMode] = [:]
+	var estimatedProgressObservationToken: NSKeyValueObservation?
+	var canGoBackObservationToken: NSKeyValueObservation?
+	var canGoForwardObservationToken: NSKeyValueObservation?
 	
+	
+	//MARK: - ?????
+	required init?(coder: NSCoder) {
+		let configuration = WKWebViewConfiguration()
+		configuration.applicationNameForUserAgent = "Version/1.0 SafariSample/1.0"
+		webView = WKWebView(frame: .zero, configuration: configuration)
+
+		super.init(coder: coder)
+	}
+	
+
 
 	var isGalleryOpen = false
 	
@@ -41,6 +68,13 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		searchController.delegate = self
+		searchController.searchResultsUpdater = self
+		searchController.searchBar.delegate = self
+		searchController.searchBar.placeholder = "Search or enter website name"
+		searchController.obscuresBackgroundDuringPresentation = false
+		
+		webView?.navigationDelegate = self
+		webView.scrollView.delegate = self
 		
 		if #available(iOS 11.0, *) {
 			searchBar = searchController.searchBar
@@ -60,17 +94,29 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 			//			}
 			
 			
+			//FIXME: - !!!!!!!!!!!!searchController in Navigation
 			navigationItem.searchController = searchController
 			navigationItem.hidesSearchBarWhenScrolling = false
 			navigationItem.prompt = nil
 			navigationController?.toolbar.delegate = self
 		}
+		self.navigationController?.navigationBar.isHidden = true
+		
+		
+//		self.navigationController?.navigationBar.backgroundColor = UIColor.yellow
+		self.navigationController?.navigationBar.barTintColor = UIColor.green
+//		self.navigationController?.navigationItem.searchController?.searchBar.backgroundColor = UIColor.blue
+//		self.navigationController?.navigationItem.searchController?.searchBar.barTintColor = UIColor.purple
+		
+		
+		
+		////  searchBar customization
 		searchBar.showsBookmarkButton = true
 		let refreshImage = UIImage(systemName: "arrow.clockwise")
 		let aIcon = UIImage(systemName: "a")
 		searchBar.setImage(aIcon, for: UISearchBar.Icon.search, state: UIControl.State.normal)
 		searchBar.setImage(refreshImage, for: UISearchBar.Icon.bookmark, state: UIControl.State.normal)
-		
+
 		
 		//		navigationController?.navigationBar.isHidden = true
 		//		self.view.addSubview(searchBar)
@@ -92,14 +138,9 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 		////configure appearance
 		//		navigationItem.standardAppearance = appearance
 		
-		searchController.searchResultsUpdater = self
-		searchController.searchBar.delegate = self
-		searchController.searchBar.placeholder = "Search or enter website name"
-		searchController.obscuresBackgroundDuringPresentation = false
-		
-		//		let request = URLRequest(url: URL(string: "https://learnappmaking.com")!)
-		let request = URLRequest(url: URL(string: "https://m.naver.com")!)
-		webView?.load(request)
+//		let request = URLRequest(url: URL(string: "https://learnappmaking.com")!)
+//		let request = URLRequest(url: URL(string: "https://m.naver.com")!)
+//		webView?.load(request)
 		
 //		if let filePath = Bundle.main.url(forResource: "bookmarks_11_19_19", withExtension: "html") {
 //			let request = NSURLRequest(url: filePath)
@@ -107,14 +148,55 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 //		}
 		
 		
-		webView?.navigationDelegate = self
-		
-		self.webView.scrollView.delegate = self
-		
 		//FIXME: - hide
 		//		self.webView?.isHidden = true
 		
+		var loadedExistingURL = false
+		if let lastCommittedURLStringString = UserDefaults.standard.object(forKey: "LastCommittedURLString") as? String {
+			if let url = URL(string: lastCommittedURLStringString) {
+				searchBar.text = lastCommittedURLStringString
+				webView.load(URLRequest(url: url))
+				loadedExistingURL = true
+			}
+		}
 		
+		if !loadedExistingURL {
+			loadStartPage()
+		}
+		setUpObservation()
+		
+	}
+	
+	@objc func showPopover() {
+		print("show PopOver !!!!!!!!!!!!!!!!!!!!!!!!!")
+	}
+	
+	func setUpObservation() {
+		estimatedProgressObservationToken = webView.observe(\.estimatedProgress) { (object, change) in
+			 let estimatedProgress = self.webView.estimatedProgress
+//			 self.progressBarWidthConstraint.constant = CGFloat(estimatedProgress) * (self.view.bounds.width - 200)
+//			 self.progressBar.alpha = 1
+			
+//			self.progressView.progress = Float(estimatedProgress)
+			
+//			 if estimatedProgress >= 1 {
+//				  UIView.animate(withDuration: 0.5, animations: {
+//						self.progressBar.alpha = 0
+//
+//				  }, completion: { (finished) in
+//						self.progressBarWidthConstraint.constant = 0
+//
+//				  })
+//			 }
+		}
+
+		canGoBackObservationToken = webView.observe(\.canGoBack) { (object, change) in
+			 self.backButton.isEnabled = self.webView.canGoBack
+		}
+
+		canGoForwardObservationToken = webView.observe(\.canGoForward) { (object, change) in
+			 self.forwardButton.isEnabled = self.webView.canGoForward
+		}
 	}
 	
 	//MARK: - ViewDidAppear
@@ -157,6 +239,14 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 		super.viewWillDisappear(animated)
 		//		navigationController?.hidesBarsOnSwipe = false
 	}
+	
+	func loadStartPage() {
+		if let bookmarksURL = Bundle.main.url(forResource: "bookmarks_11_19_19", withExtension: "html") {
+			searchBar.text = "bookmarks_11_19_19.html"
+			webView.loadFileURL(bookmarksURL, allowingReadAccessTo: Bundle.main.bundleURL)
+		}
+	}
+	
 	
 	
 	func searchWebSite(urlString: String) {
@@ -209,11 +299,77 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 			}
 		}
 		
-		self.navigationItem.title = selectedImage.title
+//		self.navigationItem.title = selectedImage.title
 		isGalleryOpen = false
 	}
 	
+	func reload() {
+		
+	}
 	
+	@IBOutlet weak var tabsButton: UIBarButtonItem!
+	
+	func presentPopoverWithActions(actions: [UIAlertAction]) {
+		let alertController = UIAlertController(title: nil, message: nil
+			, preferredStyle: UIAlertController.Style.actionSheet)
+		for action in actions {
+			alertController.addAction(action)
+		}
+		if let popoverController = alertController.popoverPresentationController {
+			popoverController.sourceRect = tabsButton.accessibilityFrame
+			popoverController.sourceView = self.view
+			popoverController.permittedArrowDirections = .up
+		}
+		self.present(alertController, animated: true, completion: nil)
+		
+	}
+	
+	@IBAction func popOverButton(_ sender: UIBarButtonItem) {
+		presentPopoverWithActions(actions: [
+			addToFavoritesAction(),
+			shareAction(),
+			toggleContentAction(),
+			loadStartPageAction()
+		])
+	}
+	
+	func addToFavoritesAction() -> UIAlertAction {
+		 return UIAlertAction(title: "Add To Favorites", style: .default, handler: { (alert: UIAlertAction!) -> Void in
+			  // Not implemented.
+		 })
+	}
+	func shareAction() -> UIAlertAction {
+		 return UIAlertAction(title: "Share…", style: .default, handler: { (alert: UIAlertAction!) -> Void in
+			  // Not implemented.
+		 })
+	}
+	// Setup the popover item for toggling between the mobile and desktop version of a site.
+	func toggleContentAction() -> UIAlertAction {
+		 let requestMobileSite = currentContentMode == .desktop
+		 let title = requestMobileSite ? "Request Mobile Site" : "Request Desktop Site"
+		 return UIAlertAction(title: title, style: .default, handler: { (alert: UIAlertAction!) -> Void in
+			  // Toggle the content mode of the current website and reload the content.
+			  if let url = self.webView.url {
+					let requestedContentMode = requestMobileSite ? WKWebpagePreferences.ContentMode.mobile : WKWebpagePreferences.ContentMode.desktop
+					if url.scheme != "file" {
+						 if let hostName = url.host {
+							  self.contentModeToRequestForHost[hostName] = requestedContentMode
+						 }
+					} else {
+						 self.contentModeToRequestForHost[hostNameForLocalFile] = requestedContentMode
+					}
+					self.webView.reloadFromOrigin()
+			  }
+		 })
+	}
+	
+   func loadStartPageAction() -> UIAlertAction {
+        return UIAlertAction(title: "Load Start Page", style: .default, handler: { (alert: UIAlertAction!) -> Void in
+            self.loadStartPage()
+        })
+    }
+	
+
 	@IBAction func backButton(_ sender: UIBarButtonItem) {
 		self.webView.goBack()
 	}
@@ -354,8 +510,7 @@ extension MainVC: UIToolbarDelegate {
 		
 		return UIBarPosition.bottom
 	}
-	
-	
+
 	
 }
 
@@ -368,7 +523,7 @@ extension MainVC: UISearchResultsUpdating {
 	}
 	
 	func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-//		searchWebSite(urlString: searchBar.text!)
+//		self.searchBar.showsCancelButton = true
 		guard var urlString = searchBar.text?.lowercased() else {
 			return
 		}
@@ -388,15 +543,19 @@ extension MainVC: UISearchResultsUpdating {
 		if let targetUrl = URL(string: urlString) {
 			webView.load(URLRequest(url: targetUrl))
 		}
+		
 	}
 	
 	func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
+		///??????
 		searchBar.endEditing(true)
-		return false
+		searchBar.resignFirstResponder()
+		return true
 	}
 	
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 		searchBarTextDidEndEditing(searchBar)
+		self.searchBar.resignFirstResponder()
 	}
 	
 }
@@ -408,14 +567,20 @@ extension MainVC: UISearchBarDelegate {
 	}
 	
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-		self.searchBar.endEditing(true)
-//		self.searchBar.resignFirstResponder()
+//		self.searchBar.endEditing(true)
+		searchBar.endEditing(true)
+//		searchBar.showsCancelButton = false
+		searchBar.resignFirstResponder()
+		resignFirstResponder()
+		hideKeyboardWhenTappedAround() //??????
 		//FIXME: - keyboard 내려가야됨
 	}
 	
 	func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
 		//TODO: - refresh
 		print("bookmark button clicked")
+		self.webView.reload()
+
 	}
 	
 	
@@ -453,4 +618,22 @@ extension MainVC: WKNavigationDelegate {
 	
 	
 	
+}
+
+//// To hide the keyboard when clicking around??
+extension UIViewController {
+
+	func hideKeyboardWhenTappedAround() {
+		 let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard(_:)))
+		 tap.cancelsTouchesInView = false
+		 view.addGestureRecognizer(tap)
+	}
+
+	@objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
+		 view.endEditing(true)
+
+		 if let nav = self.navigationController {
+			  nav.view.endEditing(true)
+		 }
+	}
 }

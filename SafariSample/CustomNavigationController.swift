@@ -1,8 +1,8 @@
 //
-//  Nav.swift
+//  CustomNavigationController.swift
 //  SafariSample
 //
-//  Created by Nomad on 2019/11/19.
+//  Created by Nomad on 2019/11/21.
 //  Copyright © 2019 Nomad. All rights reserved.
 //
 
@@ -14,8 +14,17 @@ class CustomNavigationController: UINavigationController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+		self.navigationBar.backgroundColor = UIColor.red
+		self.navigationBar.barTintColor = UIColor.orange
+		
+		print("navigation bar frame!!!!!!!!!!!!!!!")
+		print(self.navigationBar.frame)
+		print("searchbar frame!!!!!!!!!!!!")
+		print(self.navigationItem.searchController?.searchBar.frame)
+		self.navigationBar.frame = CGRect(x: 0.0, y: -22.0, width: 375.0, height: 22.0)
     }
     
+
     /*
     // MARK: - Navigation
 

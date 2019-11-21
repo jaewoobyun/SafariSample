@@ -7,16 +7,16 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--MainVC-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SafariSample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="BYZ-38-t0r" customClass="MainVC" customModule="SafariSample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xH4-Q6-fmg">
-                                <rect key="frame" x="0.0" y="44" width="375" height="574"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -28,21 +28,21 @@
                         <constraints>
                             <constraint firstItem="xH4-Q6-fmg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="AF0-4p-dkC"/>
                             <constraint firstItem="xH4-Q6-fmg" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Jz7-Kl-t2U"/>
+                            <constraint firstItem="xH4-Q6-fmg" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="O0B-GJ-fFl"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="xH4-Q6-fmg" secondAttribute="bottom" id="wNz-yi-AUl"/>
-                            <constraint firstItem="xH4-Q6-fmg" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="xv2-vL-eLT"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <toolbarItems>
                         <barButtonItem title="back" image="chevron.left" catalog="system" id="8sG-45-Ll8">
                             <connections>
-                                <action selector="backButton:" destination="BYZ-38-t0r" id="gxn-MK-Pma"/>
+                                <action selector="backButton:" destination="BYZ-38-t0r" id="ufG-nn-Bkm"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="LaF-Wk-aik"/>
                         <barButtonItem tag="1" title="forward" image="chevron.right" catalog="system" id="13O-Yf-iO0">
                             <connections>
-                                <action selector="forwardButton:" destination="BYZ-38-t0r" id="eGI-J7-HRS"/>
+                                <action selector="forwardButton:" destination="BYZ-38-t0r" id="zyg-4j-PQY"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="iGR-8a-U4j"/>
@@ -60,27 +60,30 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="HYu-5G-688"/>
                         <barButtonItem title="tabs" image="square.on.square" catalog="system" id="RjH-Zo-VZ9">
                             <connections>
-                                <action selector="openTabs:" destination="BYZ-38-t0r" id="qVR-4g-4wt"/>
+                                <action selector="popOverButton:" destination="BYZ-38-t0r" id="sc5-f1-ycP"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" id="fEF-5Z-JzD"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="fEF-5Z-JzD"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="backButton" destination="8sG-45-Ll8" id="DSu-9g-TjP"/>
+                        <outlet property="forwardButton" destination="13O-Yf-iO0" id="Iry-b1-s81"/>
+                        <outlet property="tabsButton" destination="RjH-Zo-VZ9" id="SJH-hd-Tyr"/>
                         <outlet property="webView" destination="xH4-Q6-fmg" id="JrR-X5-40n"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1042.0289855072465" y="138.61607142857142"/>
+            <point key="canvasLocation" x="1040.8" y="138.0809595202399"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Custom Navigation Controller-->
         <scene sceneID="wyS-rr-yV8">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" hidesBarsOnSwipe="YES" hidesBarsWhenVerticallyCompact="YES" id="Nnr-1H-VeS" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" toolbarHidden="NO" hidesBarsOnSwipe="YES" hidesBarsWhenVerticallyCompact="YES" id="Nnr-1H-VeS" customClass="CustomNavigationController" customModule="SafariSample" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="q7u-un-zoc">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" id="q7u-un-zoc">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -136,6 +139,7 @@
                             </tableView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dfH-C5-YOM">
                                 <rect key="frame" x="0.0" y="56" width="375" height="44"/>
+                                <color key="backgroundColor" systemColor="systemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <items>
                                     <barButtonItem style="plain" id="XzS-pg-HE4">
                                         <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="PFf-II-Fdr">
