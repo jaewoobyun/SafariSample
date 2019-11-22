@@ -19,11 +19,10 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
 	
 	
-//	@IBOutlet weak var topToolBar: UIToolbar!
-//	@IBOutlet weak var searchBar: UISearchBar!
+	//	@IBOutlet weak var topToolBar: UIToolbar!
+	//		@IBOutlet weak var searchBar: UISearchBar!
 	
-	var progressView = UIProgressView(frame: CGRect.zero)
-	
+	@IBOutlet weak var progressView: UIProgressView!
 	@IBOutlet weak var backButton: UIBarButtonItem!
 	@IBOutlet weak var forwardButton: UIBarButtonItem!
 	
@@ -37,36 +36,32 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 	
 	
 	//MARK: - ?????
-	required init?(coder: NSCoder) {
-		let configuration = WKWebViewConfiguration()
-		configuration.applicationNameForUserAgent = "Version/1.0 SafariSample/1.0"
-		webView = WKWebView(frame: .zero, configuration: configuration)
-
-		super.init(coder: coder)
-	}
+		required init?(coder: NSCoder) {
+			let configuration = WKWebViewConfiguration()
+			configuration.applicationNameForUserAgent = "Version/1.0 SafariSample/1.0"
+			webView = WKWebView(frame: .zero, configuration: configuration)
 	
-
-
+			super.init(coder: coder)
+		}
+	
 	var isGalleryOpen = false
 	
-	let images = [
+	var images = [
 		ImageViewCard(imageNamed: "sampleImage1", title: "SampleImage1"),
 		ImageViewCard(imageNamed: "favorites", title: "favorites"),
 		ImageViewCard(imageNamed: "tabs", title: "tabs"),
 		ImageViewCard(imageNamed: "bookmark", title: "bookmark")
 	]
 	
+	var snapshots: [UIView] = []
+	
+	
 	//	let URLArray = [URL(string: "https://m.naver.com"), URL(string: "https://m.daum.net/?nil_top=mobile"), URL(string: "https://learnappmaking.com")]
-	//
-	//	let customWebViews = [
-	//		CustomWebView(url: URL(string: "https://m.naver.com")! , title: ""),
-	//		CustomWebView(url: URL(string: "https://m.daum.net/?nil_top=mobile")! , title: ""),
-	//		CustomWebView(url: URL(string: "https://learnappmaking.com")! , title: "")
-	//	]
 	
 	//MARK: - ViewDidLoad
 	override func viewDidLoad() {
 		super.viewDidLoad()
+//		self.view.backgroundColor = UIColor.red
 		searchController.delegate = self
 		searchController.searchResultsUpdater = self
 		searchController.searchBar.delegate = self
@@ -93,30 +88,25 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 			//
 			//			}
 			
-			
-			//FIXME: - !!!!!!!!!!!!searchController in Navigation
 			navigationItem.searchController = searchController
 			navigationItem.hidesSearchBarWhenScrolling = false
 			navigationItem.prompt = nil
 			navigationController?.toolbar.delegate = self
 		}
 		self.navigationController?.navigationBar.isHidden = true
-		
-		
-//		self.navigationController?.navigationBar.backgroundColor = UIColor.yellow
-		self.navigationController?.navigationBar.barTintColor = UIColor.green
-//		self.navigationController?.navigationItem.searchController?.searchBar.backgroundColor = UIColor.blue
-//		self.navigationController?.navigationItem.searchController?.searchBar.barTintColor = UIColor.purple
-		
-		
+		self.navigationController?.navigationBar.barTintColor = UIColor.white
 		
 		////  searchBar customization
 		searchBar.showsBookmarkButton = true
 		let refreshImage = UIImage(systemName: "arrow.clockwise")
 		let aIcon = UIImage(systemName: "a")
-		searchBar.setImage(aIcon, for: UISearchBar.Icon.search, state: UIControl.State.normal)
+		searchBar.setImage(aIcon, for: UISearchBar.Icon.search, state: UIControl.State.disabled)
 		searchBar.setImage(refreshImage, for: UISearchBar.Icon.bookmark, state: UIControl.State.normal)
-
+		
+		let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "textformat.size"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(showPopover))
+		navigationItem.leftBarButtonItem = leftBarButton
+		
+		
 		
 		//		navigationController?.navigationBar.isHidden = true
 		//		self.view.addSubview(searchBar)
@@ -138,19 +128,6 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 		////configure appearance
 		//		navigationItem.standardAppearance = appearance
 		
-//		let request = URLRequest(url: URL(string: "https://learnappmaking.com")!)
-//		let request = URLRequest(url: URL(string: "https://m.naver.com")!)
-//		webView?.load(request)
-		
-//		if let filePath = Bundle.main.url(forResource: "bookmarks_11_19_19", withExtension: "html") {
-//			let request = NSURLRequest(url: filePath)
-//			webView.load(request as URLRequest)
-//		}
-		
-		
-		//FIXME: - hide
-		//		self.webView?.isHidden = true
-		
 		var loadedExistingURL = false
 		if let lastCommittedURLStringString = UserDefaults.standard.object(forKey: "LastCommittedURLString") as? String {
 			if let url = URL(string: lastCommittedURLStringString) {
@@ -165,37 +142,37 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 		}
 		setUpObservation()
 		
+		//MARK: - -----------------
+//		self.webView.isHidden = true
+		
 	}
 	
 	@objc func showPopover() {
 		print("show PopOver !!!!!!!!!!!!!!!!!!!!!!!!!")
+		presentPopoverWithActions(actions: [
+			addToFavoritesAction(),
+			shareAction(),
+			toggleContentAction(),
+			loadStartPageAction()
+		])
 	}
 	
 	func setUpObservation() {
 		estimatedProgressObservationToken = webView.observe(\.estimatedProgress) { (object, change) in
-			 let estimatedProgress = self.webView.estimatedProgress
-//			 self.progressBarWidthConstraint.constant = CGFloat(estimatedProgress) * (self.view.bounds.width - 200)
-//			 self.progressBar.alpha = 1
-			
-//			self.progressView.progress = Float(estimatedProgress)
-			
-//			 if estimatedProgress >= 1 {
-//				  UIView.animate(withDuration: 0.5, animations: {
-//						self.progressBar.alpha = 0
-//
-//				  }, completion: { (finished) in
-//						self.progressBarWidthConstraint.constant = 0
-//
-//				  })
-//			 }
+			let estimatedProgress = self.webView.estimatedProgress
+			self.progressView.alpha = 1
+			self.progressView.progress = Float(estimatedProgress)
+			if estimatedProgress >= 1 { //로딩이 끝나면 progressview 를 안 보이게 해준다.
+				self.progressView.alpha = 0
+			}
 		}
-
+		
 		canGoBackObservationToken = webView.observe(\.canGoBack) { (object, change) in
-			 self.backButton.isEnabled = self.webView.canGoBack
+			self.backButton.isEnabled = self.webView.canGoBack
 		}
-
+		
 		canGoForwardObservationToken = webView.observe(\.canGoForward) { (object, change) in
-			 self.forwardButton.isEnabled = self.webView.canGoForward
+			self.forwardButton.isEnabled = self.webView.canGoForward
 		}
 	}
 	
@@ -205,26 +182,23 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 		
 		for image in images {
 			image.layer.anchorPoint.y = 0.0
-			image.frame = CGRect(x: 0, y:100, width: 375, height: 400)
-			image.didSelect = selectImage
 			//375 667
+			image.frame = CGRect(x: 0, y:100, width: 375, height: 667)
+			image.didSelect = selectImage
 //			self.view.addSubview(image)//
 		}
-		
-		//		for webView in customWebViews {
-		//			webView.layer.anchorPoint.y = 0.0
-		//			webView.frame = CGRect(x: 0, y: 100, width: 375, height: 400)
-		//			let request = URLRequest(url: URLArray[0]!)
-		//			webView.load(request)
-		//			webView.didSelect = selectWebView
-		//			self.view.addSubview(webView)
-		//		}
-		//		navigationItem.title = images.last?.title
-		//		navigationItem.titleView?.isHidden = true //??
-		
 		var perspective = CATransform3DIdentity
 		perspective.m34 = -1.0/250.0
 		view.layer.sublayerTransform = perspective
+		
+//		for snapshot in snapshots {
+//			snapshot.layer.anchorPoint.y = 0.0
+//			snapshot.frame = CGRect(x: 0, y: 44, width: 375, height: 667)
+//			self.view.addSubview(snapshot)
+//		}
+//		var perspectvie = CATransform3DIdentity
+//		perspectvie.m34 = -1.0/250.0
+//		view.layer.sublayerTransform = perspectvie
 		
 	}
 	
@@ -238,6 +212,7 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		//		navigationController?.hidesBarsOnSwipe = false
+		
 	}
 	
 	func loadStartPage() {
@@ -299,12 +274,8 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 			}
 		}
 		
-//		self.navigationItem.title = selectedImage.title
+		//		self.navigationItem.title = selectedImage.title
 		isGalleryOpen = false
-	}
-	
-	func reload() {
-		
 	}
 	
 	@IBOutlet weak var tabsButton: UIBarButtonItem!
@@ -324,52 +295,43 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 		
 	}
 	
-	@IBAction func popOverButton(_ sender: UIBarButtonItem) {
-		presentPopoverWithActions(actions: [
-			addToFavoritesAction(),
-			shareAction(),
-			toggleContentAction(),
-			loadStartPageAction()
-		])
-	}
-	
 	func addToFavoritesAction() -> UIAlertAction {
-		 return UIAlertAction(title: "Add To Favorites", style: .default, handler: { (alert: UIAlertAction!) -> Void in
-			  // Not implemented.
-		 })
+		return UIAlertAction(title: "Add To Favorites", style: .default, handler: { (alert: UIAlertAction!) -> Void in
+			// Not implemented.
+		})
 	}
 	func shareAction() -> UIAlertAction {
-		 return UIAlertAction(title: "Share…", style: .default, handler: { (alert: UIAlertAction!) -> Void in
-			  // Not implemented.
-		 })
+		return UIAlertAction(title: "Share…", style: .default, handler: { (alert: UIAlertAction!) -> Void in
+			// Not implemented.
+		})
 	}
 	// Setup the popover item for toggling between the mobile and desktop version of a site.
 	func toggleContentAction() -> UIAlertAction {
-		 let requestMobileSite = currentContentMode == .desktop
-		 let title = requestMobileSite ? "Request Mobile Site" : "Request Desktop Site"
-		 return UIAlertAction(title: title, style: .default, handler: { (alert: UIAlertAction!) -> Void in
-			  // Toggle the content mode of the current website and reload the content.
-			  if let url = self.webView.url {
-					let requestedContentMode = requestMobileSite ? WKWebpagePreferences.ContentMode.mobile : WKWebpagePreferences.ContentMode.desktop
-					if url.scheme != "file" {
-						 if let hostName = url.host {
-							  self.contentModeToRequestForHost[hostName] = requestedContentMode
-						 }
-					} else {
-						 self.contentModeToRequestForHost[hostNameForLocalFile] = requestedContentMode
+		let requestMobileSite = currentContentMode == .desktop
+		let title = requestMobileSite ? "Request Mobile Site" : "Request Desktop Site"
+		return UIAlertAction(title: title, style: .default, handler: { (alert: UIAlertAction!) -> Void in
+			// Toggle the content mode of the current website and reload the content.
+			if let url = self.webView.url {
+				let requestedContentMode = requestMobileSite ? WKWebpagePreferences.ContentMode.mobile : WKWebpagePreferences.ContentMode.desktop
+				if url.scheme != "file" {
+					if let hostName = url.host {
+						self.contentModeToRequestForHost[hostName] = requestedContentMode
 					}
-					self.webView.reloadFromOrigin()
-			  }
-		 })
+				} else {
+					self.contentModeToRequestForHost[hostNameForLocalFile] = requestedContentMode
+				}
+				self.webView.reloadFromOrigin()
+			}
+		})
 	}
 	
-   func loadStartPageAction() -> UIAlertAction {
-        return UIAlertAction(title: "Load Start Page", style: .default, handler: { (alert: UIAlertAction!) -> Void in
-            self.loadStartPage()
-        })
-    }
+	func loadStartPageAction() -> UIAlertAction {
+		return UIAlertAction(title: "Load Start Page", style: .default, handler: { (alert: UIAlertAction!) -> Void in
+			self.loadStartPage()
+		})
+	}
 	
-
+	
 	@IBAction func backButton(_ sender: UIBarButtonItem) {
 		self.webView.goBack()
 	}
@@ -388,8 +350,27 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 	}
 	
 	@IBAction func openTabs(_ sender: Any) {
+		//TODO: - !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//		var snapshot = webView.snapshotView(afterScreenUpdates: true)
+//		snapshot?.frame = webView.frame //???
+//
+//		self.snapshots.append(snapshot!)
+////		self.view.addSubview(snapshot!)
+//		self.webView.stopLoading()
+//		self.webView.backgroundColor = UIColor.black
+//		self.webView.removeFromSuperview()
+//
+//		if isGalleryOpen {
+//			for subview in view.subviews {
+//				guard let snapshotView = subview as? SnapshotCard else {
+//					continue
+//				}
+//				webView.scrollView
+//			}
+//		}
+
+		
 		if isGalleryOpen {
-			self.webView.isHidden = true //
 			for subview in view.subviews {
 				guard let image = subview as? ImageViewCard else {
 					continue
@@ -398,16 +379,16 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 				animation.fromValue = NSValue(caTransform3D: image.layer.transform)
 				animation.toValue = NSValue(caTransform3D: CATransform3DIdentity)
 				animation.duration = 0.33
-				
+
 				image.layer.add(animation, forKey: nil)
 				image.layer.transform = CATransform3DIdentity
 			}
 			isGalleryOpen = false
 			return
 		}
-		
+
 		var imageYOffset: CGFloat = 50.0
-		
+
 		for subview in view.subviews {
 			guard let image = subview as? ImageViewCard else {
 				continue
@@ -420,20 +401,43 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 			imageTransform = CATransform3DScale(imageTransform, 0.95, 0.6, 1.0)
 			//3
 			imageTransform = CATransform3DRotate(imageTransform, .pi/8, -1.0, 0.0, 0.0)
-			
+
 			let animation = CABasicAnimation(keyPath: "transform")
 			animation.fromValue = NSValue(caTransform3D: image.layer.transform)
 			animation.toValue = NSValue(caTransform3D: imageTransform)
 			animation.duration = 0.33
 			image.layer.add(animation, forKey: nil)
-			
+
 			image.layer.transform = imageTransform
-			
+
 			imageYOffset += view.frame.height / CGFloat(images.count)
-			
+
 		}
-		self.webView.isHidden = false
 		isGalleryOpen = true
+		
+		// ------------------------------------------------------------------
+		
+//		var imageYOffset: CGFloat = 50.0
+//		self.webView.stopLoading()
+//		self.webView.removeFromSuperview()
+//		self.view.addSubview(snapshot!)
+//		for subview in view.subviews {
+//			var imageTransform = CATransform3DIdentity
+//			imageTransform = CATransform3DTranslate(imageTransform, 0.0, imageYOffset, 0.0)
+//			imageTransform = CATransform3DScale(imageTransform, 0.95, 0.6, 1.0)
+//			imageTransform = CATransform3DRotate(imageTransform, .pi/8, -1.0, 0.0, 0.0)
+//			let animation = CABasicAnimation(keyPath: "transform")
+//			animation.fromValue = NSValue(caTransform3D: subview.layer.transform)
+//			animation.toValue = NSValue(caTransform3D: imageTransform)
+//			animation.duration = 0.33
+//			subview.layer.add(animation, forKey: nil)
+//			subview.layer.transform = imageTransform
+//			imageYOffset += view.frame.height / CGFloat(snapshots.count)
+//		}
+//		isGalleryOpen = true
+//		if isGalleryOpen {
+//			print("gallery is open")
+//		}
 		
 		//		if isGalleryOpen {
 		//			for subview in view.subviews {
@@ -485,8 +489,8 @@ extension MainVC: UIScrollViewDelegate {
 		if(velocity.y>0) {
 			//Code will work without the animation block.I am using animation block incase if you want to set any delay to it.
 			UIView.animate(withDuration: 0.5, delay: 0, options: UIView.AnimationOptions(), animations: {
-				            self.navigationController?.setNavigationBarHidden(true, animated: true)
-				            self.navigationController?.setToolbarHidden(true, animated: true)
+				self.navigationController?.setNavigationBarHidden(true, animated: true)
+				self.navigationController?.setToolbarHidden(true, animated: true)
 				//				self.navigationController?.navigationItem.hidesSearchBarWhenScrolling = false
 				//				self.navigationController?.toolbar.isHidden = true
 				
@@ -510,7 +514,7 @@ extension MainVC: UIToolbarDelegate {
 		
 		return UIBarPosition.bottom
 	}
-
+	
 	
 }
 
@@ -523,7 +527,7 @@ extension MainVC: UISearchResultsUpdating {
 	}
 	
 	func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-//		self.searchBar.showsCancelButton = true
+		//		self.searchBar.showsCancelButton = true
 		guard var urlString = searchBar.text?.lowercased() else {
 			return
 		}
@@ -567,9 +571,9 @@ extension MainVC: UISearchBarDelegate {
 	}
 	
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-//		self.searchBar.endEditing(true)
+		//		self.searchBar.endEditing(true)
 		searchBar.endEditing(true)
-//		searchBar.showsCancelButton = false
+		//		searchBar.showsCancelButton = false
 		searchBar.resignFirstResponder()
 		resignFirstResponder()
 		hideKeyboardWhenTappedAround() //??????
@@ -580,7 +584,7 @@ extension MainVC: UISearchBarDelegate {
 		//TODO: - refresh
 		print("bookmark button clicked")
 		self.webView.reload()
-
+		
 	}
 	
 	
@@ -612,9 +616,9 @@ extension MainVC: WKNavigationDelegate {
 		print("didFinish")
 	}
 	
-//	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
-//		//TODO: -
-//	}
+	//	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
+	//		//TODO: -
+	//	}
 	
 	
 	
@@ -622,18 +626,18 @@ extension MainVC: WKNavigationDelegate {
 
 //// To hide the keyboard when clicking around??
 extension UIViewController {
-
+	
 	func hideKeyboardWhenTappedAround() {
-		 let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard(_:)))
-		 tap.cancelsTouchesInView = false
-		 view.addGestureRecognizer(tap)
+		let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard(_:)))
+		tap.cancelsTouchesInView = false
+		view.addGestureRecognizer(tap)
 	}
-
+	
 	@objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
-		 view.endEditing(true)
-
-		 if let nav = self.navigationController {
-			  nav.view.endEditing(true)
-		 }
+		view.endEditing(true)
+		
+		if let nav = self.navigationController {
+			nav.view.endEditing(true)
+		}
 	}
 }

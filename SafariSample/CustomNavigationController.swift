@@ -12,10 +12,8 @@ class CustomNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-		self.navigationBar.backgroundColor = UIColor.red
-		self.navigationBar.barTintColor = UIColor.orange
+//		self.navigationBar.backgroundColor = UIColor.red
+//		self.navigationBar.barTintColor = UIColor.orange
 		
 		print("navigation bar frame!!!!!!!!!!!!!!!")
 		print(self.navigationBar.frame)

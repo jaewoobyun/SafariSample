@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CC8698A12387A6460043D796 /* SnapshotCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A02387A6460043D796 /* SnapshotCard.swift */; };
+		CC8698A32387B4BE0043D796 /* TabsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A22387B4BE0043D796 /* TabsController.swift */; };
 		CC8B79162383885A0061068C /* BookmarksVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B79152383885A0061068C /* BookmarksVC.swift */; };
 		CC8B791C2384C75A0061068C /* bookmarks_11_19_19.html in Resources */ = {isa = PBXBuildFile; fileRef = CC8B791B2384C7590061068C /* bookmarks_11_19_19.html */; };
 		CC8B791E2384CBC20061068C /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B791D2384CBC20061068C /* History.swift */; };
@@ -24,6 +26,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CC8698A02387A6460043D796 /* SnapshotCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotCard.swift; sourceTree = "<group>"; };
+		CC8698A22387B4BE0043D796 /* TabsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsController.swift; sourceTree = "<group>"; };
 		CC8B79152383885A0061068C /* BookmarksVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksVC.swift; sourceTree = "<group>"; };
 		CC8B791B2384C7590061068C /* bookmarks_11_19_19.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = bookmarks_11_19_19.html; sourceTree = "<group>"; };
 		CC8B791D2384CBC20061068C /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
@@ -77,6 +81,8 @@
 				CCB7A7512382295E00D8B0A0 /* MainVC.swift */,
 				CCC26AAD23825EE5006E2E62 /* OpenTabsVC.swift */,
 				CCB7A76323823B0000D8B0A0 /* ImageViewCard.swift */,
+				CC8698A02387A6460043D796 /* SnapshotCard.swift */,
+				CC8698A22387B4BE0043D796 /* TabsController.swift */,
 				CCB7A7612382317400D8B0A0 /* CustomWebView.swift */,
 				CCB83914238636F6005DF432 /* CustomNavigationController.swift */,
 				CCC26AAF23827AF1006E2E62 /* SearchTableViewController.swift */,
@@ -167,10 +173,12 @@
 				CCB7A7522382295E00D8B0A0 /* MainVC.swift in Sources */,
 				CCC26AAE23825EE5006E2E62 /* OpenTabsVC.swift in Sources */,
 				CCC26AB023827AF1006E2E62 /* SearchTableViewController.swift in Sources */,
+				CC8698A12387A6460043D796 /* SnapshotCard.swift in Sources */,
 				CC8B791E2384CBC20061068C /* History.swift in Sources */,
 				CCB7A74E2382295E00D8B0A0 /* AppDelegate.swift in Sources */,
 				CCB83915238636F6005DF432 /* CustomNavigationController.swift in Sources */,
 				CCB7A7502382295E00D8B0A0 /* SceneDelegate.swift in Sources */,
+				CC8698A32387B4BE0043D796 /* TabsController.swift in Sources */,
 				CC8B79162383885A0061068C /* BookmarksVC.swift in Sources */,
 				CCB7A76423823B0000D8B0A0 /* ImageViewCard.swift in Sources */,
 			);
