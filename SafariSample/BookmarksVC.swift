@@ -8,57 +8,23 @@
 
 import Foundation
 import UIKit
+import SwiftSoup
 
 class BookmarksVC: UIViewController {
 	
 	
 	//MARK: - Outlets
-	@IBAction func done(_ sender: UIBarButtonItem) {
-		self.dismiss(animated: true, completion: nil)
-	}
-	@IBOutlet weak var topToolBar: UIToolbar!
-	
-	@IBOutlet weak var segmentedControl: UISegmentedControl!
-	
 	@IBOutlet weak var tableView: UITableView!
-	
-	@IBOutlet weak var bottomLeftBarButton: UIBarButtonItem!
-	
-	@IBOutlet weak var bottomRightBarButton: UIBarButtonItem!
-	
 	
 	//MARK: - Constants
 	static let tableViewBookmarkCellIdentifier = "BookmarkCellID"
 	static let tableViewHistoryCellIdentifier = "HistoryCellID"
 	private static let nibName = "BookmarkNib"
 	
-	
-	@IBAction func indexChanged(_ sender: UISegmentedControl) {
-		switch segmentedControl.selectedSegmentIndex {
-		case 0:
-			self.title = "Bookmarks"
-			searchController.searchBar.placeholder = "Search Bookmarks"
-			//TODO: - bookmarks cell
-			bottomRightBarButton.title = "Edit"
-		case 1:
-			self.title = "Reading List"
-			searchController.searchBar.placeholder = "Search Reading List"
-			//TODO: - reading list cell
-			tableView.reloadData()
-		case 2:
-			self.title = "History"
-			searchController.searchBar.placeholder = "Search History"
-			//TODO: - historycell
-			bottomRightBarButton.title = "Clear"
-			
-//			reloadTableView()
-		default:
-			break
-		}
-		
-	}
-	
 	//MARK: - Properties
+	
+	var bookmarkStrings: [String] = []
+	var allHrefs: [URL] = []
 	
 	let searchController = UISearchController(searchResultsController: nil)
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
@@ -67,9 +33,10 @@ class BookmarksVC: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.title = "Bookmarks"
-		self.title = title
 		
-		self.topToolBar.delegate = self
+		readStringFromHTMLFile(with: "bookmarks_11_19_19")
+		
+//		self.topToolBar.delegate = self
 		
 //		self.navigationItem.searchController = searchController
 		
@@ -80,10 +47,75 @@ class BookmarksVC: UIViewController {
 		tableView.dataSource = self
 		
 		tableView.tableHeaderView = searchController.searchBar
-		
+
 		tableView.reloadData()
 		
 	}
+	
+	private func readStringFromHTMLFile(with name: String) -> String {
+		guard let path = Bundle.main.url(forResource: name, withExtension: "html") else { return "" }
+		do {
+			let content = try String(contentsOf: path, encoding: String.Encoding.utf8)
+			print("-----------content-------------")
+//			print(content)
+			let doc: Document = try SwiftSoup.parse(content)
+			let link: Element = try doc.select("A").first()!
+//			let h3s: [Element] = try doc.getElementsContainingOwnText("H3").array()
+			
+//			let firstDepth = try doc.childNode(<#T##index: Int##Int#>)
+
+//			let text: String = try doc.body()!.text();
+//			let linkHref: String = try link.attr("href");
+//			let linkText: String = try link.text();
+//
+//			let linkOuterH: String = try link.outerHtml();
+//			let linkInnerH: String = try link.html();
+		
+//			bookmarkStrings.append(contentsOf: )
+
+//			print(doc)
+//			print("------link---------")
+//			print(link)
+//			print("------text---------")
+//			print(text)
+//			print("-----linkHref----------")
+//			print(linkHref)
+//			print("------linkText---------")
+//			print(linkText)
+//
+//			print("------linkOuterH---------")
+//			print(linkOuterH)
+//			print("------linkText---------")
+//			print(linkInnerH)
+			
+			
+			
+//			bookmarkStrings.append(text)
+//			print("------bookmarkStrings-----")
+//			print(bookmarkStrings)
+			
+//			bookmarkStrings.append(try doc.getElementsByTag("H3"))
+//			print("-------bookmarkstrings------")
+//			print(bookmarkStrings)
+			
+			
+//			guard let elements = try? doc.getAllElements() else { return content}
+//
+//			for element in elements {
+//				for textNode in element.textNodes() {
+//					bookmarkStrings.append(textNode.text())
+//				}
+//			}
+//			print(bookmarkStrings)
+			
+			
+			return content
+		}
+		catch {
+			return ""
+		}
+	}
+
 	
 	override func viewWillAppear(_ animated: Bool) {
 		self.title = title
@@ -111,14 +143,6 @@ class BookmarksVC: UIViewController {
 	
 }
 
-//MARK: - ToolbarDelgate
-extension BookmarksVC: UIToolbarDelegate {
-	func position(for bar: UIBarPositioning) -> UIBarPosition {
-		return UIBarPosition.topAttached
-	}
-}
-
-
 //MARK: - UISearchResultsUpdating
 extension BookmarksVC: UISearchResultsUpdating {
 	func updateSearchResults(for searchController: UISearchController) {
@@ -127,7 +151,6 @@ extension BookmarksVC: UISearchResultsUpdating {
 	
 	
 }
-
 
 //MARK: - UITableView Delegate, Datasource
 extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {

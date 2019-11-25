@@ -106,8 +106,6 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 		let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "textformat.size"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(showPopover))
 		navigationItem.leftBarButtonItem = leftBarButton
 		
-		
-		
 		//		navigationController?.navigationBar.isHidden = true
 		//		self.view.addSubview(searchBar)
 		//		searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -586,9 +584,7 @@ extension MainVC: UISearchBarDelegate {
 		self.webView.reload()
 		
 	}
-	
-	
-	
+
 	
 }
 

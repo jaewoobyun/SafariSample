@@ -3,12 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		51C125083E4B8FDC9D9711F0 /* Pods_SafariSample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0B2BB88E69780FE2F8CA02 /* Pods_SafariSample.framework */; };
 		CC8698A12387A6460043D796 /* SnapshotCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A02387A6460043D796 /* SnapshotCard.swift */; };
 		CC8698A32387B4BE0043D796 /* TabsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A22387B4BE0043D796 /* TabsController.swift */; };
+		CC8698A9238B54CE0043D796 /* ReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A8238B54CE0043D796 /* ReadingList.swift */; };
+		CC8698AB238B6C460043D796 /* SegmentControlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698AA238B6C460043D796 /* SegmentControlVC.swift */; };
+		CC8698AD238BBCBD0043D796 /* BookmarksData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698AC238BBCBD0043D796 /* BookmarksData.swift */; };
 		CC8B79162383885A0061068C /* BookmarksVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B79152383885A0061068C /* BookmarksVC.swift */; };
 		CC8B791C2384C75A0061068C /* bookmarks_11_19_19.html in Resources */ = {isa = PBXBuildFile; fileRef = CC8B791B2384C7590061068C /* bookmarks_11_19_19.html */; };
 		CC8B791E2384CBC20061068C /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B791D2384CBC20061068C /* History.swift */; };
@@ -26,8 +30,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7455F079C048747E45A9A5A6 /* Pods-SafariSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SafariSample.release.xcconfig"; path = "Target Support Files/Pods-SafariSample/Pods-SafariSample.release.xcconfig"; sourceTree = "<group>"; };
+		8C0B2BB88E69780FE2F8CA02 /* Pods_SafariSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SafariSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D8759F6130660DC9EBA7B40 /* Pods-SafariSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SafariSample.debug.xcconfig"; path = "Target Support Files/Pods-SafariSample/Pods-SafariSample.debug.xcconfig"; sourceTree = "<group>"; };
 		CC8698A02387A6460043D796 /* SnapshotCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotCard.swift; sourceTree = "<group>"; };
 		CC8698A22387B4BE0043D796 /* TabsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsController.swift; sourceTree = "<group>"; };
+		CC8698A8238B54CE0043D796 /* ReadingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingList.swift; sourceTree = "<group>"; };
+		CC8698AA238B6C460043D796 /* SegmentControlVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentControlVC.swift; sourceTree = "<group>"; };
+		CC8698AC238BBCBD0043D796 /* BookmarksData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksData.swift; sourceTree = "<group>"; };
 		CC8B79152383885A0061068C /* BookmarksVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksVC.swift; sourceTree = "<group>"; };
 		CC8B791B2384C7590061068C /* bookmarks_11_19_19.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = bookmarks_11_19_19.html; sourceTree = "<group>"; };
 		CC8B791D2384CBC20061068C /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
@@ -51,17 +61,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51C125083E4B8FDC9D9711F0 /* Pods_SafariSample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B6D6CD5A6DE85E61946FA6B4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9D8759F6130660DC9EBA7B40 /* Pods-SafariSample.debug.xcconfig */,
+				7455F079C048747E45A9A5A6 /* Pods-SafariSample.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		CCB7A7412382295E00D8B0A0 = {
 			isa = PBXGroup;
 			children = (
 				CCB7A74C2382295E00D8B0A0 /* SafariSample */,
 				CCB7A74B2382295E00D8B0A0 /* Products */,
+				B6D6CD5A6DE85E61946FA6B4 /* Pods */,
+				D57D2AFA47E8B4A6496302AA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -86,8 +108,11 @@
 				CCB7A7612382317400D8B0A0 /* CustomWebView.swift */,
 				CCB83914238636F6005DF432 /* CustomNavigationController.swift */,
 				CCC26AAF23827AF1006E2E62 /* SearchTableViewController.swift */,
+				CC8698AA238B6C460043D796 /* SegmentControlVC.swift */,
 				CC8B79152383885A0061068C /* BookmarksVC.swift */,
+				CC8698AC238BBCBD0043D796 /* BookmarksData.swift */,
 				CC8B791D2384CBC20061068C /* History.swift */,
+				CC8698A8238B54CE0043D796 /* ReadingList.swift */,
 				CCB7A7532382295E00D8B0A0 /* Main.storyboard */,
 				CC8B791B2384C7590061068C /* bookmarks_11_19_19.html */,
 				CCB7A7562382296200D8B0A0 /* Assets.xcassets */,
@@ -97,6 +122,14 @@
 			path = SafariSample;
 			sourceTree = "<group>";
 		};
+		D57D2AFA47E8B4A6496302AA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8C0B2BB88E69780FE2F8CA02 /* Pods_SafariSample.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -104,9 +137,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CCB7A75E2382296200D8B0A0 /* Build configuration list for PBXNativeTarget "SafariSample" */;
 			buildPhases = (
+				9D8FCE683C0E14CF6918AB09 /* [CP] Check Pods Manifest.lock */,
 				CCB7A7462382295E00D8B0A0 /* Sources */,
 				CCB7A7472382295E00D8B0A0 /* Frameworks */,
 				CCB7A7482382295E00D8B0A0 /* Resources */,
+				9F501E7FF4CFE2CC682EB141 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -164,6 +199,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		9D8FCE683C0E14CF6918AB09 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SafariSample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9F501E7FF4CFE2CC682EB141 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SafariSample/Pods-SafariSample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SafariSample/Pods-SafariSample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SafariSample/Pods-SafariSample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		CCB7A7462382295E00D8B0A0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -172,6 +249,9 @@
 				CCB7A7622382317400D8B0A0 /* CustomWebView.swift in Sources */,
 				CCB7A7522382295E00D8B0A0 /* MainVC.swift in Sources */,
 				CCC26AAE23825EE5006E2E62 /* OpenTabsVC.swift in Sources */,
+				CC8698AD238BBCBD0043D796 /* BookmarksData.swift in Sources */,
+				CC8698A9238B54CE0043D796 /* ReadingList.swift in Sources */,
+				CC8698AB238B6C460043D796 /* SegmentControlVC.swift in Sources */,
 				CCC26AB023827AF1006E2E62 /* SearchTableViewController.swift in Sources */,
 				CC8698A12387A6460043D796 /* SnapshotCard.swift in Sources */,
 				CC8B791E2384CBC20061068C /* History.swift in Sources */,
@@ -322,6 +402,7 @@
 		};
 		CCB7A75F2382296200D8B0A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9D8759F6130660DC9EBA7B40 /* Pods-SafariSample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -340,6 +421,7 @@
 		};
 		CCB7A7602382296200D8B0A0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7455F079C048747E45A9A5A6 /* Pods-SafariSample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
