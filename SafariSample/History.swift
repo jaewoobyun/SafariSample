@@ -25,7 +25,40 @@ class History: UITableViewController {
 		tableView.tableHeaderView = searchController.searchBar
 		
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "historycellsample")
+		
+		
 	}
+	
+	@IBAction func clearButton(_ sender: UIBarButtonItem) {
+		let alertController = UIAlertController(title: nil, message: "Clearing will remove history, cookies, and other browsing data. History will be cleared from devices signed into your iCloud Account. Clear from:", preferredStyle: UIAlertController.Style.actionSheet)
+		let lastHour = UIAlertAction(title: "The last hour", style: UIAlertAction.Style.destructive) { (alertaction) in
+			//
+		}
+		let today = UIAlertAction(title: "Today", style: UIAlertAction.Style.destructive) { (action) in
+			//
+		}
+		let todayAndYesterday = UIAlertAction(title: "Today and Yesterday", style: UIAlertAction.Style.destructive) { (action) in
+			//
+		}
+		let allTime = UIAlertAction(title: "All Time", style: UIAlertAction.Style.destructive) { (action) in
+			//
+		}
+		let cancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
+			//
+		}
+		alertController.addAction(lastHour)
+		alertController.addAction(today)
+		alertController.addAction(todayAndYesterday)
+		alertController.addAction(allTime)
+		alertController.addAction(cancel)
+		
+		self.present(alertController, animated: true
+			, completion: nil
+		)
+		
+		
+	}
+	
 	
 	override func numberOfSections(in tableView: UITableView) -> Int {
 		return Dates.count
@@ -44,9 +77,12 @@ class History: UITableViewController {
 		
 		if indexPath.section == 0 {
 			cell.textLabel?.text = visitedWebsites[indexPath.row]
+			cell.detailTextLabel?.text = visitedWebsites[indexPath.row]
+			
 		}
 		else if indexPath.section == 1 {
 			cell.textLabel?.text = visitedWebsites[indexPath.row]
+			cell.detailTextLabel?.text = visitedWebsites[indexPath.row]
 		}
 		
 		return cell
@@ -61,4 +97,11 @@ extension History: UISearchResultsUpdating {
 	}
 	
 	
+}
+
+class HistoryCell: UITableViewCell {
+	
+	override func awakeFromNib() {
+		super.awakeFromNib()
+	}
 }

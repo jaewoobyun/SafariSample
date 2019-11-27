@@ -45,7 +45,9 @@ class BookmarksVC: UIViewController {
 	])
 	
 	var toggle: Bool = false
-	var newFolderButton = UIBarButtonItem(title: "New Folder", style: UIBarButtonItem.Style.plain, target: self, action: #selector(addNewFolder))
+	var newFolderButton:UIBarButtonItem?
+	
+	var btnTemp:UIButton?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -69,7 +71,15 @@ class BookmarksVC: UIViewController {
 		tableView.isEditing = false
 		toggle = tableView.isEditing
 		
-		self.toolbarItems?.insert(newFolderButton, at: 0)
+		
+		btnTemp = UIButton.init(type: .custom)
+		btnTemp = UIButton.init(type: UIButton.ButtonType.contactAdd)
+		btnTemp?.setTitle("New Folder", for: .normal)
+		
+		newFolderButton = UIBarButtonItem.init(customView: btnTemp!)
+		
+		//newFolderButton = UIBarButtonItem(title: "New Folder", style: UIBarButtonItem.Style.plain, target: self, action: #selector(addNewFolder))
+		self.toolbarItems?.insert(newFolderButton!, at: 0)
 		
 
 		
@@ -84,10 +94,11 @@ class BookmarksVC: UIViewController {
 		if toggle == true {
 			tableView.isEditing = true
 			
-			
+			btnTemp?.isHidden = false
 		} else {
 			tableView.isEditing = false
-
+			btnTemp?.isHidden = true
+			
 		}
 		
 	}
