@@ -8,3 +8,19 @@
 
 import Foundation
 
+class BookmarksData {
+	struct Folders {
+		var folderName: String
+		var items: [Bookmark]
+	}
+	
+	struct Bookmark {
+		var name: String
+		var href: URL
+		var icon: URL?
+	}
+	
+	
+}
+
+

@@ -213,10 +213,15 @@
                     </view>
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="e4f-Qo-mOA"/>
-                        <barButtonItem title="Edit" id="Z4F-fq-VhJ"/>
+                        <barButtonItem title="Edit" id="Z4F-fq-VhJ">
+                            <connections>
+                                <action selector="editButton:" destination="3bs-5K-631" id="OZV-MN-Nm6"/>
+                            </connections>
+                        </barButtonItem>
                     </toolbarItems>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="editButton" destination="Z4F-fq-VhJ" id="tee-Ds-Rn9"/>
                         <outlet property="tableView" destination="sqX-xt-ZLb" id="L2S-pV-c5W"/>
                     </connections>
                 </viewController>

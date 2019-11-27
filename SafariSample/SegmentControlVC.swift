@@ -111,6 +111,7 @@ class SegmentControlVC: UIViewController {
 		//configure Child View
 		viewController.view.bounds = view.bounds //
 		viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+		self.toolbarItems = viewController.toolbarItems
 		
 		//Notify Child ViewController
 		viewController.didMove(toParent: self)
