@@ -86,8 +86,39 @@
       "scale" : "2x"
     },
     {
-      "idiom" : "ios-marketing",
       "size" : "1024x1024",
+      "idiom" : "ios-marketing",
+      "filename" : "iconfinder_safari_1024_171344 (1).png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "16x16",
+      "idiom" : "mac",
+      "filename" : "iconfinder_safari_16_171344.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "32x32",
+      "idiom" : "mac",
+      "filename" : "iconfinder_safari_32_171344 (1).png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "128x128",
+      "idiom" : "mac",
+      "filename" : "iconfinder_safari_128_171344 (1).png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "256x256",
+      "idiom" : "mac",
+      "filename" : "iconfinder_safari_256_171344 (1).png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "512x512",
+      "idiom" : "mac",
+      "filename" : "iconfinder_safari_512_171344 (1).png",
       "scale" : "1x"
     }
   ],

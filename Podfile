@@ -7,4 +7,5 @@ target 'SafariSample' do
 
   # Pods for SafariSample
   pod 'SwiftSoup'
+  pod 'CITreeView', '~> 1.6.1'
 end

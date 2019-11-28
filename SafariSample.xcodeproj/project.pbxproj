@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		51C125083E4B8FDC9D9711F0 /* Pods_SafariSample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0B2BB88E69780FE2F8CA02 /* Pods_SafariSample.framework */; };
+		CC456726238F89E1006C1EF1 /* EditFolderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC456725238F89E1006C1EF1 /* EditFolderVC.swift */; };
+		CC456728238F8C40006C1EF1 /* FolderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC456727238F8C40006C1EF1 /* FolderData.swift */; };
+		CC45672A238FACB0006C1EF1 /* CITreeViewClasses in Resources */ = {isa = PBXBuildFile; fileRef = CC456729238FACB0006C1EF1 /* CITreeViewClasses */; };
+		CC45672C238FB8B3006C1EF1 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC45672B238FB8B3006C1EF1 /* SampleData.swift */; };
 		CC8698A12387A6460043D796 /* SnapshotCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A02387A6460043D796 /* SnapshotCard.swift */; };
 		CC8698A32387B4BE0043D796 /* TabsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A22387B4BE0043D796 /* TabsController.swift */; };
 		CC8698A9238B54CE0043D796 /* ReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A8238B54CE0043D796 /* ReadingList.swift */; };
@@ -33,6 +37,10 @@
 		7455F079C048747E45A9A5A6 /* Pods-SafariSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SafariSample.release.xcconfig"; path = "Target Support Files/Pods-SafariSample/Pods-SafariSample.release.xcconfig"; sourceTree = "<group>"; };
 		8C0B2BB88E69780FE2F8CA02 /* Pods_SafariSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SafariSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D8759F6130660DC9EBA7B40 /* Pods-SafariSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SafariSample.debug.xcconfig"; path = "Target Support Files/Pods-SafariSample/Pods-SafariSample.debug.xcconfig"; sourceTree = "<group>"; };
+		CC456725238F89E1006C1EF1 /* EditFolderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderVC.swift; sourceTree = "<group>"; };
+		CC456727238F8C40006C1EF1 /* FolderData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderData.swift; sourceTree = "<group>"; };
+		CC456729238FACB0006C1EF1 /* CITreeViewClasses */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CITreeViewClasses; sourceTree = "<group>"; };
+		CC45672B238FB8B3006C1EF1 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		CC8698A02387A6460043D796 /* SnapshotCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotCard.swift; sourceTree = "<group>"; };
 		CC8698A22387B4BE0043D796 /* TabsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsController.swift; sourceTree = "<group>"; };
 		CC8698A8238B54CE0043D796 /* ReadingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingList.swift; sourceTree = "<group>"; };
@@ -98,8 +106,10 @@
 		CCB7A74C2382295E00D8B0A0 /* SafariSample */ = {
 			isa = PBXGroup;
 			children = (
+				CCB7A7532382295E00D8B0A0 /* Main.storyboard */,
 				CCB7A74D2382295E00D8B0A0 /* AppDelegate.swift */,
 				CCB7A74F2382295E00D8B0A0 /* SceneDelegate.swift */,
+				CC456729238FACB0006C1EF1 /* CITreeViewClasses */,
 				CCB7A7512382295E00D8B0A0 /* MainVC.swift */,
 				CCC26AAD23825EE5006E2E62 /* OpenTabsVC.swift */,
 				CCB7A76323823B0000D8B0A0 /* ImageViewCard.swift */,
@@ -112,8 +122,10 @@
 				CC8B79152383885A0061068C /* BookmarksVC.swift */,
 				CC8698AC238BBCBD0043D796 /* BookmarksData.swift */,
 				CC8B791D2384CBC20061068C /* History.swift */,
+				CC456727238F8C40006C1EF1 /* FolderData.swift */,
+				CC45672B238FB8B3006C1EF1 /* SampleData.swift */,
 				CC8698A8238B54CE0043D796 /* ReadingList.swift */,
-				CCB7A7532382295E00D8B0A0 /* Main.storyboard */,
+				CC456725238F89E1006C1EF1 /* EditFolderVC.swift */,
 				CC8B791B2384C7590061068C /* bookmarks_11_19_19.html */,
 				CCB7A7562382296200D8B0A0 /* Assets.xcassets */,
 				CCB7A7582382296200D8B0A0 /* LaunchScreen.storyboard */,
@@ -191,6 +203,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CCB7A75A2382296200D8B0A0 /* LaunchScreen.storyboard in Resources */,
+				CC45672A238FACB0006C1EF1 /* CITreeViewClasses in Resources */,
 				CCB7A7572382296200D8B0A0 /* Assets.xcassets in Resources */,
 				CC8B791C2384C75A0061068C /* bookmarks_11_19_19.html in Resources */,
 				CCB7A7552382295E00D8B0A0 /* Main.storyboard in Resources */,
@@ -247,13 +260,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				CCB7A7622382317400D8B0A0 /* CustomWebView.swift in Sources */,
+				CC456728238F8C40006C1EF1 /* FolderData.swift in Sources */,
 				CCB7A7522382295E00D8B0A0 /* MainVC.swift in Sources */,
 				CCC26AAE23825EE5006E2E62 /* OpenTabsVC.swift in Sources */,
 				CC8698AD238BBCBD0043D796 /* BookmarksData.swift in Sources */,
 				CC8698A9238B54CE0043D796 /* ReadingList.swift in Sources */,
 				CC8698AB238B6C460043D796 /* SegmentControlVC.swift in Sources */,
+				CC45672C238FB8B3006C1EF1 /* SampleData.swift in Sources */,
 				CCC26AB023827AF1006E2E62 /* SearchTableViewController.swift in Sources */,
 				CC8698A12387A6460043D796 /* SnapshotCard.swift in Sources */,
+				CC456726238F89E1006C1EF1 /* EditFolderVC.swift in Sources */,
 				CC8B791E2384CBC20061068C /* History.swift in Sources */,
 				CCB7A74E2382295E00D8B0A0 /* AppDelegate.swift in Sources */,
 				CCB83915238636F6005DF432 /* CustomNavigationController.swift in Sources */,

@@ -73,11 +73,13 @@ class History: UITableViewController {
 	}
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: "historycellsample", for: indexPath)
+		let cell = tableView.dequeueReusableCell(withIdentifier: "prototype", for: indexPath)
+		cell.detailTextLabel?.textColor = UIColor.gray
 		
 		if indexPath.section == 0 {
 			cell.textLabel?.text = visitedWebsites[indexPath.row]
 			cell.detailTextLabel?.text = visitedWebsites[indexPath.row]
+			
 			
 		}
 		else if indexPath.section == 1 {
@@ -86,6 +88,14 @@ class History: UITableViewController {
 		}
 		
 		return cell
+	}
+	
+	override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+		return .delete
+	}
+	
+	override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+		return true
 	}
 	
 	

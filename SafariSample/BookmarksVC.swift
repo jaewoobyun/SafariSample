@@ -74,7 +74,9 @@ class BookmarksVC: UIViewController {
 		
 		btnTemp = UIButton.init(type: .custom)
 		btnTemp = UIButton.init(type: UIButton.ButtonType.contactAdd)
-		btnTemp?.setTitle("New Folder", for: .normal)
+//		btnTemp?.setTitle("New Folder", for: .normal) //title
+		btnTemp?.addTarget(self, action: #selector(addNewFolder), for: UIControl.Event.touchUpInside)
+		btnTemp?.isHidden = true
 		
 		newFolderButton = UIBarButtonItem.init(customView: btnTemp!)
 		
@@ -93,18 +95,21 @@ class BookmarksVC: UIViewController {
 		toggle = !toggle
 		if toggle == true {
 			tableView.isEditing = true
-			
 			btnTemp?.isHidden = false
+			sender.title = "Done"
 		} else {
 			tableView.isEditing = false
 			btnTemp?.isHidden = true
-			
+			sender.title = "Edit"
 		}
 		
 	}
 	
 	@objc func addNewFolder() {
-		print("New Folder Clicked")
+		print("AddNewFolder!!")
+		let storyboard = UIStoryboard(name: "Main", bundle: nil)
+		let editFolderVC = storyboard.instantiateViewController(identifier: "EditFolderVC")
+		self.navigationController?.pushViewController(editFolderVC, animated: true)
 	}
 	
 	
