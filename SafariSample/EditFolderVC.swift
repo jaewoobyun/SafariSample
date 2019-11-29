@@ -10,16 +10,18 @@ import UIKit
 
 class EditFolderVC: UIViewController {
 	
+	
 	@IBOutlet weak var tableView: UITableView!
 	
 	var folderData = [FolderData]()
 	var sampleData = [SampleData]()
 	var initialFolderTitles = ["Bookmarks", "Favorites", "ReadingList"]
 	
+	var cellisExpanded: Bool = false
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.title = "Edit Folder"
-		
 		
 		folderData = [
 			FolderData(sectionTitle: "Bookmarks", isExpanded: false, containsUserSelectedValue: false, sectionOptions: ["Row Item 1", "Row Item 2", "Row Item 3"]),
@@ -35,9 +37,6 @@ class EditFolderVC: UIViewController {
 		
 		
 	}
-	
-	
-	
 	
 	/*
 	// MARK: - Navigation
@@ -124,9 +123,21 @@ extension EditFolderVC: UITableViewDataSource, UITableViewDelegate {
 				}
 				else {
 					cell.indentationLevel = 2
-					cell.indentationWidth = 10
+					cell.indentationWidth = 5
 					cell.shouldIndentWhileEditing = true
-					cell.textLabel?.text = sampleData[0].contents[indexPath.row - 1]
+					let string = sampleData[0].contents[indexPath.row - 1]
+					
+					let imageAttachment = NSTextAttachment()
+					imageAttachment.image = UIImage(systemName: "folder")
+					let imageOffsety: CGFloat = -5.0
+					imageAttachment.bounds = CGRect(x: 0, y: imageOffsety, width: imageAttachment.image!.size.width, height: imageAttachment.image!.size.height)
+					let attachmentString = NSAttributedString(attachment: imageAttachment)
+					let completeText = NSMutableAttributedString(string: "")
+					completeText.append(attachmentString)
+					let textAfterIcon = NSMutableAttributedString(string: " " + string!)
+					completeText.append(textAfterIcon)
+					cell.textLabel?.attributedText = completeText
+					cell.imageView?.image = nil
 					
 				}
 				
@@ -153,10 +164,17 @@ extension EditFolderVC: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		if indexPath.section == 1 {
 			if indexPath.row == 0 {
-				sampleData[0].isExpanded = true
+				sampleData[0].isExpanded = !sampleData[0].isExpanded
 				tableView.reloadData()
+//				tableView.beginUpdates()
 				
+			}
+			if indexPath.row == 1 {
 				
+				//FIXME: - 임시
+				let storyboard = UIStoryboard(name: "Main", bundle: nil)
+				let editBookmarkVC = storyboard.instantiateViewController(identifier: "EditBookmarkVC")
+				self.navigationController?.pushViewController(editBookmarkVC, animated: true)
 			}
 		}
 	}

@@ -36,7 +36,8 @@ class BookmarksVC: UIViewController {
 //	let sampleBookmarkData2 = BookmarksData.Bookmark(name: "facebook", href: URL(string: "www.facebook.com")!, icon: nil)
 //	let sampleBookmarkData3 = BookmarksData.Bookmark(name: "apple", href: URL(string: "www.apple.com")!, icon: nil)
 	
-	let sampleFolderData = BookmarksData.Folders.init(folderName: "Favorites", items: [
+	let sampleFolderData = BookmarksData.Folders.init(folderName: "Favorites", items:
+		[
 		BookmarksData.Bookmark(name: "google", href: URL(string: "www.google.com")!, icon: nil),
 		BookmarksData.Bookmark(name: "naver", href: URL(string: "www.m.naver.com")!, icon: nil),
 		BookmarksData.Bookmark(name: "facebook", href: URL(string: "www.facebook.com")!, icon: nil),

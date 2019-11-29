@@ -24,3 +24,8 @@ class BookmarksData {
 }
 
 
+extension BookmarksData {
+	
+	
+	
+}
