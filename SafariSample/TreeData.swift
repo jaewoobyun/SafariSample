@@ -85,7 +85,8 @@ extension TreeData {
 		 let parent5 = TreeData(title: "Sports Car",children:[child51,child52,child53,child54,child55])
 
 		 
-		 return [parent5,parent2,parent1,parent3,parent4]
+//		 return [parent5,parent2,parent1,parent3,parent4]
+		return [parent5]
 		
 	}
 }

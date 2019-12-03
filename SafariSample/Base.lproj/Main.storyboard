@@ -169,7 +169,7 @@
         <!--BookmarksVC-->
         <scene sceneID="qj7-Yu-LhP">
             <objects>
-                <viewController storyboardIdentifier="Bookmarks" id="3bs-5K-631" customClass="BookmarksVC" customModule="SafariSample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BookmarksVC" id="3bs-5K-631" customClass="BookmarksVC" customModule="SafariSample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="k4x-RO-487">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

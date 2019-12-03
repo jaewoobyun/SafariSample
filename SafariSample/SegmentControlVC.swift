@@ -24,7 +24,7 @@ class SegmentControlVC: UIViewController {
 		//Load Storyboard
 		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
 		//Instantiate VC
-		var viewController = storyboard.instantiateViewController(identifier: "Bookmarks") as! BookmarksVC
+		var viewController = storyboard.instantiateViewController(identifier: "BookmarksVC") as! BookmarksVC
 		// Add VC as ChildVC
 		self.add(asChildViewController: viewController)
 		return viewController

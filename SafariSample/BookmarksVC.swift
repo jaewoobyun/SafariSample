@@ -24,6 +24,7 @@ class BookmarksVC: UIViewController {
 	
 	//MARK: - Properties
 	
+	var bookmarksData: [BookmarksData] = []
 	var bookmarkStrings: [String] = []
 	var topmostItem: [String] = []
 	
@@ -36,27 +37,33 @@ class BookmarksVC: UIViewController {
 //	let sampleBookmarkData2 = BookmarksData.Bookmark(name: "facebook", href: URL(string: "www.facebook.com")!, icon: nil)
 //	let sampleBookmarkData3 = BookmarksData.Bookmark(name: "apple", href: URL(string: "www.apple.com")!, icon: nil)
 	
-	let sampleFolderData = BookmarksData.Folders.init(folderName: "Favorites", items:
-		[
-		BookmarksData.Bookmark(name: "google", href: URL(string: "www.google.com")!, icon: nil),
-		BookmarksData.Bookmark(name: "naver", href: URL(string: "www.m.naver.com")!, icon: nil),
-		BookmarksData.Bookmark(name: "facebook", href: URL(string: "www.facebook.com")!, icon: nil),
-		BookmarksData.Bookmark(name: "apple", href: URL(string: "www.apple.com")!, icon: nil)
-		
-	])
+//	let sampleFolderData = BookmarksData.Folders.init(folderName: "Favorites", items:
+//		[
+//		BookmarksData.Bookmark(name: "google", href: URL(string: "www.google.com")!, icon: nil),
+//		BookmarksData.Bookmark(name: "naver", href: URL(string: "www.m.naver.com")!, icon: nil),
+//		BookmarksData.Bookmark(name: "facebook", href: URL(string: "www.facebook.com")!, icon: nil),
+//		BookmarksData.Bookmark(name: "apple", href: URL(string: "www.apple.com")!, icon: nil)
+//
+//	])
 	
 	var toggle: Bool = false
 	var newFolderButton:UIBarButtonItem?
 	
 	var btnTemp:UIButton?
+	var selectedIndex: Int?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
 		self.title = "Bookmarks"
 		
+		BookmarksDataModel.createSampleData()
+		let bookmarksArray = BookmarksDataModel.bookMarkDatas
+		
+		bookmarksData = bookmarksArray
+		
 		readStringFromHTMLFile(with: "bookmarks_11_19_19")
-		print(topmostItem)
+//		print(topmostItem)
 //		self.topToolBar.delegate = self
 		
 //		self.navigationItem.searchController = searchController
@@ -83,8 +90,6 @@ class BookmarksVC: UIViewController {
 		
 		//newFolderButton = UIBarButtonItem(title: "New Folder", style: UIBarButtonItem.Style.plain, target: self, action: #selector(addNewFolder))
 		self.toolbarItems?.insert(newFolderButton!, at: 0)
-		
-
 		
 		tableView.reloadData()
 		
@@ -252,9 +257,6 @@ class BookmarksVC: UIViewController {
 	}
 	
 	
-	
-	
-	
 }
 
 //MARK: - UISearchResultsUpdating
@@ -270,16 +272,54 @@ extension BookmarksVC: UISearchResultsUpdating {
 extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //		return topmostItem.count
-		return sampleFolderData.items.count
+//		return sampleFolderData.items.count
+		
+		if selectedIndex == nil {
+			return bookmarksData.count
+		}
+		else {
+			return bookmarksData[selectedIndex!].child.count
+		}
+		
+//		return bookmarksData.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		
 		let cell = tableView.dequeueReusableCell(withIdentifier: "sample", for: indexPath)
 //		cell.textLabel?.text = topmostItem[indexPath.row]
-		cell.textLabel?.text = sampleFolderData.folderName
+//		cell.textLabel?.text = sampleFolderData.folderName
+		
+		if !bookmarksData[indexPath.row].isFolder {
+			cell.imageView?.image = UIImage(systemName: "book")
+			cell.textLabel?.text = bookmarksData[indexPath.row].titleString
+			return cell
+		}
+		cell.textLabel?.text = bookmarksData[indexPath.row].titleString
 		
 		return cell
+	}
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		print("didSelctRowAt \(indexPath)")
+		
+		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+		var reuseableVC = storyboard.instantiateViewController(identifier: "BookmarksVC") as! BookmarksVC
+		
+		if bookmarksData[indexPath.row].isFolder {
+			print("is Folder")
+			navigationController?.pushViewController(reuseableVC, animated: true)
+//			reuseableVC.title = bookmarksData[indexPath.row].titleString
+			reuseableVC.selectedIndex = indexPath.row
+			reuseableVC.bookmarksData = [bookmarksData[indexPath.row]]
+			
+		}
+		else {
+			print("isn't Folder")
+		}
+		
+		
+		
 	}
 	
 	func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {

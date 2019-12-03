@@ -18,6 +18,7 @@ class EditBookmarkVC: UIViewController {
 	
 	
 	var data: [TreeData] = []
+	var selectedFolderTitle: String?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -28,8 +29,10 @@ class EditBookmarkVC: UIViewController {
 		
 		treeView.collapseNoneSelectedRows = false
 		treeView.register(UINib(nibName: "FolderCell", bundle: nil), forCellReuseIdentifier: "folderCell")
-		treeView.expandAllRows()
+//		treeView.expandAllRows()
 	}
+	
+
 	
 	/*
 	// MARK: - Navigation
@@ -49,7 +52,9 @@ extension EditBookmarkVC: CITreeViewDelegate {
 	}
 	
 	func didExpandTreeViewNode(treeViewNode: CITreeViewNode, atIndexPath: IndexPath) {
-		//
+		if atIndexPath.row == 0 {
+			treeView.expandAllRows()
+		}
 	}
 	
 	func willCollapseTreeViewNode(treeViewNode: CITreeViewNode, atIndexPath: IndexPath) {
@@ -57,7 +62,9 @@ extension EditBookmarkVC: CITreeViewDelegate {
 	}
 	
 	func didCollapseTreeViewNode(treeViewNode: CITreeViewNode, atIndexPath: IndexPath) {
-		//
+		if atIndexPath.row == 0 {
+			treeView.collapseAllRows()
+		}
 	}
 	
 	func treeView(_ treeView: CITreeView, heightForRowAt indexPath: IndexPath, withTreeViewNode treeViewNode: CITreeViewNode) -> CGFloat {
@@ -65,13 +72,40 @@ extension EditBookmarkVC: CITreeViewDelegate {
 	}
 	
 	func treeView(_ treeView: CITreeView, didSelectRowAt treeViewNode: CITreeViewNode, atIndexPath indexPath: IndexPath) {
-		print("didSelectRowAt", treeViewNode)
+//		print("didSelectRowAt", treeViewNode)
+//		if let parentNode = treeViewNode.parentNode {
+//			print("parentNode.item", parentNode.item)
+//		}
+		
+//		print("TreeViewNode: ", treeViewNode, "indexPath:", indexPath.section, indexPath.row)
+		if let selectedNodeAtIndexPath = treeViewNode.self.item as? TreeData {
+//			var selectedTitle = ""
+//			if indexPath.row != 0 {
+//				let dataObjString = selectedNodeAtIndexPath.title
+//				selectedTitle = dataObjString
+//			}
+			
+			
+			let selectedNodeItemTitle = selectedNodeAtIndexPath.title
+			selectedFolderTitle = selectedNodeItemTitle
+//			treeView.collapseAllRows()
+		}
+		
 	}
 	
+
+	
 	func treeView(_ treeView: CITreeView, didDeselectRowAt treeViewNode: CITreeViewNode, atIndexPath indexPath: IndexPath) {
-		if let parentNode = treeViewNode.parentNode{
-			print(parentNode.item)
+//		if let parentNode = treeViewNode.parentNode{
+//			print(parentNode.item)
+//		}
+		
+		if let selectedNodeAtIndexPath = treeViewNode.self.item as? TreeData {
+			let string = selectedNodeAtIndexPath.title
+			print(string)
 		}
+		
+		
 	}
 	
 	
@@ -80,6 +114,10 @@ extension EditBookmarkVC: CITreeViewDelegate {
 extension EditBookmarkVC: CITreeViewDataSource {
 	func treeViewSelectedNodeChildren(for treeViewNodeItem: AnyObject) -> [AnyObject] {
 		if let dataObj = treeViewNodeItem as? TreeData {
+			
+//			print(dataObj.title)
+			
+			
 			return dataObj.children
 		}
 		return []
@@ -91,13 +129,16 @@ extension EditBookmarkVC: CITreeViewDataSource {
 	
 	func treeView(_ treeView: CITreeView, atIndexPath indexPath: IndexPath, withTreeViewNode treeViewNode: CITreeViewNode) -> UITableViewCell {
 		let cell = treeView.dequeueReusableCell(withIdentifier: "folderCell") as! FolderCell
-		
 //		let cell = treeView.dequeueReusableCell(withIdentifier: "exampleCell", for: indexPath)
+		
 		let dataObj = treeViewNode.item as! TreeData
 		cell.folderName.text = dataObj.title
 		cell.setupCell(level: treeViewNode.level)
 		
-//		cell.textLabel?.text = dataObj.title
+//		if indexPath.row == 0 && selectedFolderTitle != nil {
+//			cell.folderName.text = selectedFolderTitle
+//
+//		}
 		
 		return cell
 	}
