@@ -17,9 +17,13 @@ class History: UITableViewController {
 	var visitedWebsites: [String] = ["www.google.com", "www.naver.com", "www.facebook.com", "www.daum.net"]
 	var Dates: [String] = ["Tuesday Afternoon", "Monday, November 18", "Saturday, November 16", "awefawef"]
 	
+	let historyData = UserDefaults.standard.stringArray(forKey: "HistoryData") ?? [String]()
+	
 	//MARK: - ViewDidLoad
 	override func viewDidLoad() {
 		self.title = "History"
+		self.navigationController?.navigationBar.isHidden = false
+		
 		tableView.delegate = self
 		tableView.dataSource = self
 		tableView.tableHeaderView = searchController.searchBar
@@ -70,6 +74,7 @@ class History: UITableViewController {
 	
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return visitedWebsites.count
+//		return historyData.count
 	}
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -79,6 +84,7 @@ class History: UITableViewController {
 		if indexPath.section == 0 {
 			cell.textLabel?.text = visitedWebsites[indexPath.row]
 			cell.detailTextLabel?.text = visitedWebsites[indexPath.row]
+//			cell.detailTextLabel?.text = historyData[indexPath.row]
 			
 			
 		}

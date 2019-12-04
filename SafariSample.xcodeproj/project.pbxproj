@@ -17,6 +17,8 @@
 		CC456728238F8C40006C1EF1 /* FolderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC456727238F8C40006C1EF1 /* FolderData.swift */; };
 		CC45672A238FACB0006C1EF1 /* CITreeViewClasses in Resources */ = {isa = PBXBuildFile; fileRef = CC456729238FACB0006C1EF1 /* CITreeViewClasses */; };
 		CC45672C238FB8B3006C1EF1 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC45672B238FB8B3006C1EF1 /* SampleData.swift */; };
+		CC5B8B2423973FC3004688A3 /* SearchResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5B8B2323973FC3004688A3 /* SearchResultsController.swift */; };
+		CC5B8B262397942A004688A3 /* history.plist in Resources */ = {isa = PBXBuildFile; fileRef = CC5B8B252397942A004688A3 /* history.plist */; };
 		CC8698A12387A6460043D796 /* SnapshotCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A02387A6460043D796 /* SnapshotCard.swift */; };
 		CC8698A32387B4BE0043D796 /* TabsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A22387B4BE0043D796 /* TabsController.swift */; };
 		CC8698A9238B54CE0043D796 /* ReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A8238B54CE0043D796 /* ReadingList.swift */; };
@@ -51,6 +53,8 @@
 		CC456727238F8C40006C1EF1 /* FolderData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderData.swift; sourceTree = "<group>"; };
 		CC456729238FACB0006C1EF1 /* CITreeViewClasses */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CITreeViewClasses; sourceTree = "<group>"; };
 		CC45672B238FB8B3006C1EF1 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		CC5B8B2323973FC3004688A3 /* SearchResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsController.swift; sourceTree = "<group>"; };
+		CC5B8B252397942A004688A3 /* history.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = history.plist; sourceTree = "<group>"; };
 		CC8698A02387A6460043D796 /* SnapshotCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotCard.swift; sourceTree = "<group>"; };
 		CC8698A22387B4BE0043D796 /* TabsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsController.swift; sourceTree = "<group>"; };
 		CC8698A8238B54CE0043D796 /* ReadingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingList.swift; sourceTree = "<group>"; };
@@ -121,6 +125,8 @@
 				CCB7A74F2382295E00D8B0A0 /* SceneDelegate.swift */,
 				CC456729238FACB0006C1EF1 /* CITreeViewClasses */,
 				CCB7A7512382295E00D8B0A0 /* MainVC.swift */,
+				CC5B8B252397942A004688A3 /* history.plist */,
+				CC5B8B2323973FC3004688A3 /* SearchResultsController.swift */,
 				CCC26AAD23825EE5006E2E62 /* OpenTabsVC.swift */,
 				CCB7A76323823B0000D8B0A0 /* ImageViewCard.swift */,
 				CC8698A02387A6460043D796 /* SnapshotCard.swift */,
@@ -218,6 +224,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CCB7A75A2382296200D8B0A0 /* LaunchScreen.storyboard in Resources */,
+				CC5B8B262397942A004688A3 /* history.plist in Resources */,
 				CC06F1B22390A35A0096A6CD /* FolderCell.xib in Resources */,
 				CC45672A238FACB0006C1EF1 /* CITreeViewClasses in Resources */,
 				CCB7A7572382296200D8B0A0 /* Assets.xcassets in Resources */,
@@ -285,6 +292,7 @@
 				CC8698A9238B54CE0043D796 /* ReadingList.swift in Sources */,
 				CC8698AB238B6C460043D796 /* SegmentControlVC.swift in Sources */,
 				CC06F1B62390DD940096A6CD /* EditBookmarkVC.swift in Sources */,
+				CC5B8B2423973FC3004688A3 /* SearchResultsController.swift in Sources */,
 				CC45672C238FB8B3006C1EF1 /* SampleData.swift in Sources */,
 				CCC26AB023827AF1006E2E62 /* SearchTableViewController.swift in Sources */,
 				CC8698A12387A6460043D796 /* SnapshotCard.swift in Sources */,

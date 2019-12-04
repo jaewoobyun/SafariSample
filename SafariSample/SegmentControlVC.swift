@@ -53,12 +53,20 @@ class SegmentControlVC: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.title = "Bookmarks"
-		
+		///
 		self.navigationController?.navigationBar.barTintColor = UIColor.blue
+		self.navigationController?.isNavigationBarHidden = false
+		self.navigationController?.navigationBar.isHidden = false
+		
 		self.topToolBar.delegate = self
 		
 		setupView()
 		
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		self.navigationController?.setNavigationBarHidden(false, animated: true)
 	}
 	
 	func setupView() {

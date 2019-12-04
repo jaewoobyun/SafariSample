@@ -14,7 +14,6 @@ let hostNameForLocalFile = ""
 
 class MainVC: UIViewController, UISearchControllerDelegate {
 	
-	
 	let searchController = UISearchController(searchResultsController: nil)
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
 	
@@ -34,8 +33,8 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 	var canGoBackObservationToken: NSKeyValueObservation?
 	var canGoForwardObservationToken: NSKeyValueObservation?
 	
+	var visitedWebSiteHistoryRecords: [String] = []
 	
-	//MARK: - ?????
 		required init?(coder: NSCoder) {
 			let configuration = WKWebViewConfiguration()
 			configuration.applicationNameForUserAgent = "Version/1.0 SafariSample/1.0"
@@ -62,6 +61,11 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 //		self.view.backgroundColor = UIColor.red
+				
+		let storyboard = UIStoryboard(name: "Main", bundle: nil)
+		let resultsController = storyboard.instantiateViewController(identifier: "SearchResultsController") as! SearchResultsController
+		let searchController = UISearchController(searchResultsController: resultsController)
+		
 		searchController.delegate = self
 		searchController.searchResultsUpdater = self
 		searchController.searchBar.delegate = self
@@ -102,6 +106,7 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 		let aIcon = UIImage(systemName: "a")
 		searchBar.setImage(aIcon, for: UISearchBar.Icon.search, state: UIControl.State.disabled)
 		searchBar.setImage(refreshImage, for: UISearchBar.Icon.bookmark, state: UIControl.State.normal)
+		searchBar.autocapitalizationType = .none
 		
 		let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "textformat.size"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(showPopover))
 		navigationItem.leftBarButtonItem = leftBarButton
@@ -139,10 +144,48 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 			loadStartPage()
 		}
 		setUpObservation()
-		
-		//MARK: - -----------------
 //		self.webView.isHidden = true
 		
+//		webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { (cookies) in
+//			for cookie in cookies {
+//				print("cookie.name: \(cookie.name) , cookie.value\(cookie.value)")
+//			}
+//		}
+		
+//		let websiteDataRecord = WKWebsiteDataRecord()
+		
+
+		///Save the history data into hisotry PList
+//		let customPlist = "history.plist"
+//		let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+//		let path = paths[0] as NSString
+//		let plist = path.strings(byAppendingPaths: [customPlist]).first!
+//		let data = NSMutableDictionary(contentsOfFile: plist) ?? NSMutableDictionary()
+		
+				/// 방문한 웹사이트 리스트를 추출함.
+		WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
+			records.forEach { (record) in
+				print("record!!!: \(record)")
+				self.visitedWebSiteHistoryRecords.append(record.displayName)
+//				data.setValue("\(record.displayName)", forKey: record.displayName)
+//				data.write(toFile: plist, atomically: true)
+				
+				/// append the history data to UserDefaults
+				UserDefaults.standard.setValue(self.visitedWebSiteHistoryRecords, forKey: "HistoryData")
+				
+			}
+			
+		}
+
+
+		
+	}
+	
+	func getPlist(withName name: String) -> [String]? {
+		if let path = Bundle.main.path(forResource: name, ofType: "plist"), let xml = FileManager.default.contents(atPath: path) {
+			return (try? PropertyListSerialization.propertyList(from: xml, options: PropertyListSerialization.ReadOptions.mutableContainersAndLeaves, format: nil)) as? [String]
+		}
+		return nil
 	}
 	
 	@objc func showPopover() {
@@ -151,7 +194,8 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 			addToFavoritesAction(),
 			shareAction(),
 			toggleContentAction(),
-			loadStartPageAction()
+			loadStartPageAction(),
+			cancelAction()
 		])
 	}
 	
@@ -200,10 +244,20 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 		
 	}
 	
+//	override class func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+//		if keyPath == "title" {
+//			if let title = webView.title {
+//				print(title)
+//			}
+//		}
+//	}
+	
 	//MARK: - ViewWillAppear
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		//		navigationController?.hidesBarsOnSwipe = true
+		
+//		webView.addObserver(self, forKeyPath: #keyPath(WKWebView.title), options: NSKeyValueObservingOptions.new, context: nil)
 	}
 	
 	//MARK: - ViewWillDisappear
@@ -300,8 +354,19 @@ class MainVC: UIViewController, UISearchControllerDelegate {
 	}
 	func shareAction() -> UIAlertAction {
 		return UIAlertAction(title: "Share…", style: .default, handler: { (alert: UIAlertAction!) -> Void in
-			// Not implemented.
+			let message = "Message goes here"
+			if let link = NSURL(string: self.searchBar.text!) {
+				let objectsToShare = [message, link] as [Any]
+				let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+				activityVC.excludedActivityTypes = []
+				self.present(activityVC, animated: true, completion: nil)
+			}
 		})
+	}
+	func cancelAction() -> UIAlertAction {
+		return UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (alert: UIAlertAction!) in
+			//
+		}
 	}
 	// Setup the popover item for toggling between the mobile and desktop version of a site.
 	func toggleContentAction() -> UIAlertAction {
@@ -526,10 +591,41 @@ extension MainVC: UISearchResultsUpdating {
 	
 	func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
 		//		self.searchBar.showsCancelButton = true
+		
+		//// Search protocol????
+		//		var urlstring = "search keyword"
+		//
+		//		if urlstring.hasPrefix("http://") {
+		//			if let url = URL(string: urlstring) {
+		//				if UIApplication.shared.canOpenURL(url) {
+		//
+		//				}
+		//			}
+		//		} else if urlstring.hasPrefix("https://") {
+		//			if let url = URL(string: urlstring) {
+		//				if UIApplication.shared.canOpenURL(url) {
+		//
+		//				}
+		//			}
+		//		} else {
+		//			urlstring.insert("http://", at: 0)
+		//
+		//			if let url = URL(string: urlstring) {
+		//				if UIApplication.shared.canOpenURL(url) {
+		//
+		//				} else {
+		//					//정상적인 url이 아니다.
+		//				}
+		//			} else {
+		//				//정상적인 url이 아니다.
+		//			}
+		//
+		//		}
+		
 		guard var urlString = searchBar.text?.lowercased() else {
 			return
 		}
-		
+
 		if !urlString.contains("://") {
 			if urlString.contains("localhost") || urlString.contains("127.0.0.1") {
 				urlString = "http://" + urlString
@@ -537,6 +633,10 @@ extension MainVC: UISearchResultsUpdating {
 				urlString = "https://" + urlString
 			}
 		}
+		
+//		if !urlString.contains(".com") {
+//			urlString.append(contentsOf: ".com")
+//		}
 		
 		if webView.url?.absoluteString == urlString {
 			return

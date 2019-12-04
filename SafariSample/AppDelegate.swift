@@ -12,6 +12,25 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 //	var window: UIWindow?
+	
+//	var plistPathInDocument: String = String()
+//	
+//	func preparePlistForUse(){
+//		 // 1
+//		let rootPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, .userDomainMask, true)[0]
+//		 // 2
+//		plistPathInDocument = rootPath.appending("/history.plist")
+//		if !FileManager.default.fileExists(atPath: plistPathInDocument){
+//			let plistPathInBundle = Bundle.main.path(forResource: "notes", ofType: "plist") as String?
+//			  // 3
+//			  do {
+//				try FileManager.defaultManager.copyItemAtPath(plistPathInBundle, toPath: plistPathInDocument)
+//			  }catch{
+//					print("Error occurred while copying file to document \(error)")
+//			  }
+//		 }
+//	}
+	
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.

@@ -24,6 +24,7 @@ class BookmarksVC: UIViewController {
 	
 	//MARK: - Properties
 	
+	var isDepthViewController:Bool = false
 	var bookmarksData: [BookmarksData] = []
 	var bookmarkStrings: [String] = []
 	var topmostItem: [String] = []
@@ -50,17 +51,20 @@ class BookmarksVC: UIViewController {
 	var newFolderButton:UIBarButtonItem?
 	
 	var btnTemp:UIButton?
-	var selectedIndex: Int?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		self.title = "Bookmarks"
 		
-		BookmarksDataModel.createSampleData()
-		let bookmarksArray = BookmarksDataModel.bookMarkDatas
+		self.navigationController?.navigationBar.isHidden = false
 		
-		bookmarksData = bookmarksArray
+		if bookmarksData.count == 0, !isDepthViewController {
+			self.title = "Bookmarks"
+			BookmarksDataModel.createSampleData()
+			let bookmarksArray = BookmarksDataModel.bookMarkDatas
+			bookmarksData = bookmarksArray
+		}
+		
 		
 		readStringFromHTMLFile(with: "bookmarks_11_19_19")
 //		print(topmostItem)
@@ -271,17 +275,7 @@ extension BookmarksVC: UISearchResultsUpdating {
 //MARK: - UITableView Delegate, Datasource
 extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//		return topmostItem.count
-//		return sampleFolderData.items.count
-		
-		if selectedIndex == nil {
-			return bookmarksData.count
-		}
-		else {
-			return bookmarksData[selectedIndex!].child.count
-		}
-		
-//		return bookmarksData.count
+		return bookmarksData.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -304,19 +298,30 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 		print("didSelctRowAt \(indexPath)")
 		
 		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-		var reuseableVC = storyboard.instantiateViewController(identifier: "BookmarksVC") as! BookmarksVC
 		
-		if bookmarksData[indexPath.row].isFolder {
-			print("is Folder")
-			navigationController?.pushViewController(reuseableVC, animated: true)
-//			reuseableVC.title = bookmarksData[indexPath.row].titleString
-			reuseableVC.selectedIndex = indexPath.row
-			reuseableVC.bookmarksData = [bookmarksData[indexPath.row]]
-			
+		
+		if let reuseableVC = storyboard.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC {
+			if bookmarksData[indexPath.row].isFolder {
+				print("is Folder")
+				reuseableVC.navigationController?.title = bookmarksData[indexPath.row].titleString
+				reuseableVC.title = bookmarksData[indexPath.row].titleString
+				reuseableVC.bookmarksData = bookmarksData[indexPath.row].child
+				reuseableVC.isDepthViewController = true
+				navigationController?.pushViewController(reuseableVC, animated: true)
+				
+			}
+			else {
+				print("isn't Folder")
+				let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
+				let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
+				alert.addAction(action)
+				self.present(alert, animated: true, completion: nil)
+			}
+		} else {
+			print("vc load fail")
 		}
-		else {
-			print("isn't Folder")
-		}
+		
+		
 		
 		
 		

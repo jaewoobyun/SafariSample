@@ -28,6 +28,7 @@ class ReadingList: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.title = "Reading List"
+		self.navigationController?.navigationBar.isHidden = false
 		
 		self.editButton = self.editButtonItem
 		tableView.delegate = self
