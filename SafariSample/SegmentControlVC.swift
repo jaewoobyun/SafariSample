@@ -140,6 +140,24 @@ class SegmentControlVC: UIViewController {
 		updateView()
 	}
 	
+	//MARK: - PreviewActionItems
+	override var previewActionItems: [UIPreviewActionItem] {
+		let addBookmark = UIPreviewAction(title: "Add Bookmark", style: UIPreviewAction.Style.default) { [unowned self](action, viewcontroller) in
+			print("addBookmark pressed")
+		}
+
+		let addToReadingList = UIPreviewAction(title: "Add to Reading Llist", style: UIPreviewAction.Style.default) { [unowned self](previewaction, viewcontroller) in
+			print("addtoreadinglist pressed")
+		}
+
+		let cancelAction = UIPreviewAction(title: "Cancel", style: UIPreviewAction.Style.destructive) { [unowned self](action, vc) in
+			print("cancel pressed")
+		}
+
+		return [addBookmark, addToReadingList, cancelAction]
+	}
+	
+	
 	
 }
 

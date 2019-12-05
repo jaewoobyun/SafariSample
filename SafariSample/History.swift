@@ -14,8 +14,9 @@ class History: UITableViewController {
 	let searchController = UISearchController(searchResultsController: nil)
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
 	
-	var visitedWebsites: [String] = ["www.google.com", "www.naver.com", "www.facebook.com", "www.daum.net"]
-	var Dates: [String] = ["Tuesday Afternoon", "Monday, November 18", "Saturday, November 16", "awefawef"]
+//	var Dates: [String] = ["Tuesday Afternoon", "Monday, November 18", "Saturday, November 16", "awefawef"]
+	
+	var dates: [String] = []
 	
 	let historyData = UserDefaults.standard.stringArray(forKey: "HistoryData") ?? [String]()
 	
@@ -23,6 +24,16 @@ class History: UITableViewController {
 	override func viewDidLoad() {
 		self.title = "History"
 		self.navigationController?.navigationBar.isHidden = false
+		
+		let now = Date()
+		let date = DateFormatter()
+		date.locale = Locale(identifier: "ko_kr")
+		date.dateFormat = "EEEE, MMMM d"
+		let krDateTime = date.string(from: now)
+		
+		UserDefaults.standard.setValue(krDateTime, forKey: "Date")
+		
+		dates = [(UserDefaults.standard.object(forKey: "Date") as? String ?? "Today")]
 		
 		tableView.delegate = self
 		tableView.dataSource = self
@@ -32,6 +43,8 @@ class History: UITableViewController {
 		
 		
 	}
+	
+	
 	
 	@IBAction func clearButton(_ sender: UIBarButtonItem) {
 		let alertController = UIAlertController(title: nil, message: "Clearing will remove history, cookies, and other browsing data. History will be cleared from devices signed into your iCloud Account. Clear from:", preferredStyle: UIAlertController.Style.actionSheet)
@@ -65,33 +78,23 @@ class History: UITableViewController {
 	
 	
 	override func numberOfSections(in tableView: UITableView) -> Int {
-		return Dates.count
+		return dates.count
 	}
 	
 	override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		return Dates[section]
+		return dates[section]
 	}
 	
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return visitedWebsites.count
-//		return historyData.count
+//		return visitedWebsites.count
+		return historyData.count
 	}
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "prototype", for: indexPath)
+		cell.textLabel?.text = historyData[indexPath.row]
+		cell.detailTextLabel?.text = historyData[indexPath.row]
 		cell.detailTextLabel?.textColor = UIColor.gray
-		
-		if indexPath.section == 0 {
-			cell.textLabel?.text = visitedWebsites[indexPath.row]
-			cell.detailTextLabel?.text = visitedWebsites[indexPath.row]
-//			cell.detailTextLabel?.text = historyData[indexPath.row]
-			
-			
-		}
-		else if indexPath.section == 1 {
-			cell.textLabel?.text = visitedWebsites[indexPath.row]
-			cell.detailTextLabel?.text = visitedWebsites[indexPath.row]
-		}
 		
 		return cell
 	}

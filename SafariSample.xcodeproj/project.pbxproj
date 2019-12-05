@@ -19,6 +19,8 @@
 		CC45672C238FB8B3006C1EF1 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC45672B238FB8B3006C1EF1 /* SampleData.swift */; };
 		CC5B8B2423973FC3004688A3 /* SearchResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5B8B2323973FC3004688A3 /* SearchResultsController.swift */; };
 		CC5B8B262397942A004688A3 /* history.plist in Resources */ = {isa = PBXBuildFile; fileRef = CC5B8B252397942A004688A3 /* history.plist */; };
+		CC5B8B282398C8FC004688A3 /* AlertNotiController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5B8B272398C8FC004688A3 /* AlertNotiController.swift */; };
+		CC5B8B2A2398D064004688A3 /* ForceTouchGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5B8B292398D064004688A3 /* ForceTouchGestureRecognizer.swift */; };
 		CC8698A12387A6460043D796 /* SnapshotCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A02387A6460043D796 /* SnapshotCard.swift */; };
 		CC8698A32387B4BE0043D796 /* TabsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A22387B4BE0043D796 /* TabsController.swift */; };
 		CC8698A9238B54CE0043D796 /* ReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A8238B54CE0043D796 /* ReadingList.swift */; };
@@ -55,6 +57,8 @@
 		CC45672B238FB8B3006C1EF1 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		CC5B8B2323973FC3004688A3 /* SearchResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsController.swift; sourceTree = "<group>"; };
 		CC5B8B252397942A004688A3 /* history.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = history.plist; sourceTree = "<group>"; };
+		CC5B8B272398C8FC004688A3 /* AlertNotiController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertNotiController.swift; sourceTree = "<group>"; };
+		CC5B8B292398D064004688A3 /* ForceTouchGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceTouchGestureRecognizer.swift; sourceTree = "<group>"; };
 		CC8698A02387A6460043D796 /* SnapshotCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotCard.swift; sourceTree = "<group>"; };
 		CC8698A22387B4BE0043D796 /* TabsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsController.swift; sourceTree = "<group>"; };
 		CC8698A8238B54CE0043D796 /* ReadingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingList.swift; sourceTree = "<group>"; };
@@ -125,6 +129,8 @@
 				CCB7A74F2382295E00D8B0A0 /* SceneDelegate.swift */,
 				CC456729238FACB0006C1EF1 /* CITreeViewClasses */,
 				CCB7A7512382295E00D8B0A0 /* MainVC.swift */,
+				CC5B8B272398C8FC004688A3 /* AlertNotiController.swift */,
+				CC5B8B292398D064004688A3 /* ForceTouchGestureRecognizer.swift */,
 				CC5B8B252397942A004688A3 /* history.plist */,
 				CC5B8B2323973FC3004688A3 /* SearchResultsController.swift */,
 				CCC26AAD23825EE5006E2E62 /* OpenTabsVC.swift */,
@@ -292,6 +298,7 @@
 				CC8698A9238B54CE0043D796 /* ReadingList.swift in Sources */,
 				CC8698AB238B6C460043D796 /* SegmentControlVC.swift in Sources */,
 				CC06F1B62390DD940096A6CD /* EditBookmarkVC.swift in Sources */,
+				CC5B8B282398C8FC004688A3 /* AlertNotiController.swift in Sources */,
 				CC5B8B2423973FC3004688A3 /* SearchResultsController.swift in Sources */,
 				CC45672C238FB8B3006C1EF1 /* SampleData.swift in Sources */,
 				CCC26AB023827AF1006E2E62 /* SearchTableViewController.swift in Sources */,
@@ -304,6 +311,7 @@
 				CC8698A32387B4BE0043D796 /* TabsController.swift in Sources */,
 				CC8B79162383885A0061068C /* BookmarksVC.swift in Sources */,
 				CCB7A76423823B0000D8B0A0 /* ImageViewCard.swift in Sources */,
+				CC5B8B2A2398D064004688A3 /* ForceTouchGestureRecognizer.swift in Sources */,
 				CC06F1B12390A35A0096A6CD /* FolderCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

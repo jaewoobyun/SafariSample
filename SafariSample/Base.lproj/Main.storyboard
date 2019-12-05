@@ -40,17 +40,9 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <toolbarItems>
-                        <barButtonItem title="back" image="chevron.left" catalog="system" id="8sG-45-Ll8">
-                            <connections>
-                                <action selector="backButton:" destination="BYZ-38-t0r" id="ufG-nn-Bkm"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem title="back" image="chevron.left" catalog="system" id="8sG-45-Ll8" customClass="CusBarItem" customModule="SafariSample" customModuleProvider="target"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="LaF-Wk-aik"/>
-                        <barButtonItem tag="1" title="forward" image="chevron.right" catalog="system" id="13O-Yf-iO0">
-                            <connections>
-                                <action selector="forwardButton:" destination="BYZ-38-t0r" id="zyg-4j-PQY"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem tag="1" title="forward" image="chevron.right" catalog="system" id="13O-Yf-iO0" customClass="CusBarItem" customModule="SafariSample" customModuleProvider="target"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="iGR-8a-U4j"/>
                         <barButtonItem title="share" image="square.and.arrow.up" catalog="system" id="dMB-CJ-pxV">
                             <connections>
@@ -58,25 +50,23 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="UqI-hn-b0p"/>
-                        <barButtonItem title="bookmark" image="book" catalog="system" id="DiD-Hz-Oqg">
+                        <barButtonItem title="bookmark" image="book" catalog="system" id="DiD-Hz-Oqg" customClass="CusBarItem" customModule="SafariSample" customModuleProvider="target">
                             <connections>
-                                <segue destination="x66-j2-sKh" kind="presentation" id="70N-Dq-GdT"/>
+                                <segue destination="x66-j2-sKh" kind="presentation" id="CPG-wH-Lar"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="HYu-5G-688"/>
-                        <barButtonItem title="tabs" image="square.on.square" catalog="system" id="RjH-Zo-VZ9">
-                            <connections>
-                                <action selector="openTabs:" destination="BYZ-38-t0r" id="WQT-7B-erI"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem title="tabs" image="square.on.square" catalog="system" id="RjH-Zo-VZ9" customClass="CusBarItem" customModule="SafariSample" customModuleProvider="target"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="fEF-5Z-JzD"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="backButton" destination="8sG-45-Ll8" id="DSu-9g-TjP"/>
+                        <outlet property="bookmarksButton" destination="DiD-Hz-Oqg" id="vqc-T6-ONi"/>
                         <outlet property="forwardButton" destination="13O-Yf-iO0" id="Iry-b1-s81"/>
                         <outlet property="progressView" destination="1DU-0Z-rMZ" id="FYQ-tm-wxu"/>
-                        <outlet property="tabsButton" destination="RjH-Zo-VZ9" id="SJH-hd-Tyr"/>
+                        <outlet property="shareButton" destination="dMB-CJ-pxV" id="wBn-Ae-SCR"/>
+                        <outlet property="tabsButton" destination="RjH-Zo-VZ9" id="fnE-x5-JqP"/>
                         <outlet property="webView" destination="xH4-Q6-fmg" id="JrR-X5-40n"/>
                     </connections>
                 </viewController>
@@ -154,7 +144,7 @@
         <!--Segment ControlVC-->
         <scene sceneID="a9l-FB-Mf1">
             <objects>
-                <viewController id="jXU-6R-wqH" customClass="SegmentControlVC" customModule="SafariSample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SegmentControlVC" id="jXU-6R-wqH" customClass="SegmentControlVC" customModule="SafariSample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eFH-Dx-sAX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -209,7 +199,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DA6-ug-dXN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1041" y="1532"/>
+            <point key="canvasLocation" x="1041" y="1728"/>
         </scene>
         <!--BookmarksVC-->
         <scene sceneID="qj7-Yu-LhP">
@@ -589,8 +579,9 @@
         <!--Navigation Controller-->
         <scene sceneID="b8c-HZ-zhu">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="x66-j2-sKh" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="BookmarkNav" automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="x66-j2-sKh" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="hyM-tZ-73k"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="tqi-jN-ZeP">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -606,7 +597,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R7g-mC-sBA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1041" y="846"/>
+            <point key="canvasLocation" x="1060" y="913"/>
         </scene>
     </scenes>
     <resources>
