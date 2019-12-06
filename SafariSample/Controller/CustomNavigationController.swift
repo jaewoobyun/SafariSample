@@ -15,7 +15,7 @@ class CustomNavigationController: UINavigationController {
 //		self.navigationBar.backgroundColor = UIColor.red
 //		self.navigationBar.barTintColor = UIColor.orange
 		
-		print("navigation bar frame!!!!!!!!!!!!!!!")
+		print("navigation bar frame!!!!!!")
 		print(self.navigationBar.frame)
 		print("searchbar frame!!!!!!!!!!!!")
 		print(self.navigationItem.searchController?.searchBar.frame)

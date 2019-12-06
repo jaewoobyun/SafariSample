@@ -17,12 +17,15 @@ class EditBookmarkVC: UIViewController {
 	@IBOutlet weak var addressInput: UITextField!
 	
 	
-	var data: [TreeData] = []
+//	var data: [TreeData] = []
+	var data: [BookmarksData] = []
 	var selectedFolderTitle: String?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		data = TreeData.getDefaultData() //get the default data
+//		data = TreeData.getDefaultData() //get the default data
+		BookmarksDataModel.createSampleData()
+		data = BookmarksDataModel.bookMarkDatas
 		
 		treeView.treeViewDelegate = self
 		treeView.treeViewDataSource = self
@@ -76,19 +79,17 @@ extension EditBookmarkVC: CITreeViewDelegate {
 //		if let parentNode = treeViewNode.parentNode {
 //			print("parentNode.item", parentNode.item)
 //		}
-		
 //		print("TreeViewNode: ", treeViewNode, "indexPath:", indexPath.section, indexPath.row)
-		if let selectedNodeAtIndexPath = treeViewNode.self.item as? TreeData {
-//			var selectedTitle = ""
-//			if indexPath.row != 0 {
-//				let dataObjString = selectedNodeAtIndexPath.title
-//				selectedTitle = dataObjString
-//			}
-			
-			
-			let selectedNodeItemTitle = selectedNodeAtIndexPath.title
+
+//		if let selectedNodeAtIndexPath = treeViewNode.self.item as? TreeData {
+//
+//			let selectedNodeItemTitle = selectedNodeAtIndexPath.title
+//			selectedFolderTitle = selectedNodeItemTitle
+//		}
+		
+		if let selectedNodeAtIndexPath = treeViewNode.self.item as? BookmarksData {
+			let selectedNodeItemTitle = selectedNodeAtIndexPath.titleString
 			selectedFolderTitle = selectedNodeItemTitle
-//			treeView.collapseAllRows()
 		}
 		
 	}
@@ -100,8 +101,12 @@ extension EditBookmarkVC: CITreeViewDelegate {
 //			print(parentNode.item)
 //		}
 		
-		if let selectedNodeAtIndexPath = treeViewNode.self.item as? TreeData {
-			let string = selectedNodeAtIndexPath.title
+//		if let selectedNodeAtIndexPath = treeViewNode.self.item as? TreeData {
+//			let string = selectedNodeAtIndexPath.title
+//			print(string)
+//		}
+		if let selectedNodeAtIndexPath = treeViewNode.self.item as? BookmarksData {
+			let string = selectedNodeAtIndexPath.titleString
 			print(string)
 		}
 		
@@ -113,26 +118,33 @@ extension EditBookmarkVC: CITreeViewDelegate {
 //MARK: - CITreeViewDataSource
 extension EditBookmarkVC: CITreeViewDataSource {
 	func treeViewSelectedNodeChildren(for treeViewNodeItem: AnyObject) -> [AnyObject] {
-		if let dataObj = treeViewNodeItem as? TreeData {
-			
-//			print(dataObj.title)
-			
-			
-			return dataObj.children
+//		if let dataObj = treeViewNodeItem as? TreeData {
+//
+////			print(dataObj.title)
+//
+//
+//			return dataObj.children
+//		}
+		if let dataObj = treeViewNodeItem as? BookmarksData {
+			return dataObj.child as [AnyObject]
 		}
+		
 		return []
 	}
 	
 	func treeViewDataArray() -> [AnyObject] {
-		return data
+		return data as [AnyObject]
 	}
 	
 	func treeView(_ treeView: CITreeView, atIndexPath indexPath: IndexPath, withTreeViewNode treeViewNode: CITreeViewNode) -> UITableViewCell {
 		let cell = treeView.dequeueReusableCell(withIdentifier: "folderCell") as! FolderCell
 //		let cell = treeView.dequeueReusableCell(withIdentifier: "exampleCell", for: indexPath)
 		
-		let dataObj = treeViewNode.item as! TreeData
-		cell.folderName.text = dataObj.title
+//		let dataObj = treeViewNode.item as! TreeData
+		let dataObj = treeViewNode.item as! BookmarksData
+//		cell.folderName.text = dataObj.title
+//		cell.setupCell(level: treeViewNode.level)
+		cell.folderName.text = dataObj.titleString
 		cell.setupCell(level: treeViewNode.level)
 		
 //		if indexPath.row == 0 && selectedFolderTitle != nil {

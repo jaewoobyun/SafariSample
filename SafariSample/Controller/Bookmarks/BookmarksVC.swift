@@ -10,8 +10,7 @@ import Foundation
 import UIKit
 import SwiftSoup
 
-class BookmarksVC: UIViewController {
-	
+class BookmarksVC: UIViewController{
 	
 	//MARK: - Outlets
 	@IBOutlet weak var tableView: UITableView!
@@ -32,20 +31,6 @@ class BookmarksVC: UIViewController {
 	let searchController = UISearchController(searchResultsController: nil)
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
 	let barBackgroundColor = UIColor(red: 248/255, green: 248/255, blue: 248/255, alpha: 1.0)
-	
-//	let sampleBookmarkData0 = BookmarksData.Bookmark(name: "google", href: URL(string: "www.google.com")!, icon: nil)
-//	let sampleBookmarkData1 = BookmarksData.Bookmark(name: "naver", href: URL(string: "www.m.naver.com")!, icon: nil)
-//	let sampleBookmarkData2 = BookmarksData.Bookmark(name: "facebook", href: URL(string: "www.facebook.com")!, icon: nil)
-//	let sampleBookmarkData3 = BookmarksData.Bookmark(name: "apple", href: URL(string: "www.apple.com")!, icon: nil)
-	
-//	let sampleFolderData = BookmarksData.Folders.init(folderName: "Favorites", items:
-//		[
-//		BookmarksData.Bookmark(name: "google", href: URL(string: "www.google.com")!, icon: nil),
-//		BookmarksData.Bookmark(name: "naver", href: URL(string: "www.m.naver.com")!, icon: nil),
-//		BookmarksData.Bookmark(name: "facebook", href: URL(string: "www.facebook.com")!, icon: nil),
-//		BookmarksData.Bookmark(name: "apple", href: URL(string: "www.apple.com")!, icon: nil)
-//
-//	])
 	
 	var toggle: Bool = false
 	var newFolderButton:UIBarButtonItem?
@@ -92,12 +77,11 @@ class BookmarksVC: UIViewController {
 		
 		newFolderButton = UIBarButtonItem.init(customView: btnTemp!)
 		
-		//newFolderButton = UIBarButtonItem(title: "New Folder", style: UIBarButtonItem.Style.plain, target: self, action: #selector(addNewFolder))
 		self.toolbarItems?.insert(newFolderButton!, at: 0)
 		
 		tableView.reloadData()
 		
-		
+		registerForPreviewing(with: self, sourceView: tableView)
 	}
 	
 	
@@ -260,6 +244,27 @@ class BookmarksVC: UIViewController {
 		tableView.reloadData()
 	}
 	
+	override var previewActionItems: [UIPreviewActionItem] {
+		let copyContentsAction = UIPreviewAction(title: "Copy Contents" , style: .default, handler: { [unowned self] (_, _) in
+			 //TODO: - Copy content method implement
+		})
+		
+		let openInNewTabsAction = UIPreviewAction(title: "Open in New Tabs", style: UIPreviewAction.Style.default) { [unowned self](action, vc) in
+			//TODO: - Open in New Tabs implement
+		}
+		
+		let editAction = UIPreviewAction(title: "Edit", style: UIPreviewAction.Style.default) { [unowned self](action, vc) in
+			//TODO: - Edit Folder Name implement
+			
+		}
+
+		let deleteAction = UIPreviewAction(title: "Delete", style: .destructive) { [unowned self] (_, _) in
+			 //TODO: - Delete Folder or bookmark implement
+		}
+
+		return [ copyContentsAction, openInNewTabsAction, editAction, deleteAction ]
+	}
+	
 	
 }
 
@@ -321,9 +326,7 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 			print("vc load fail")
 		}
 		
-		
-		
-		
+
 		
 	}
 	
@@ -354,3 +357,41 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 	
 	
 }
+
+extension BookmarksVC: UIViewControllerPreviewingDelegate {
+	func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+		guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
+		
+		previewingContext.sourceRect = cell.frame
+//		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+		guard let reusableVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview reusableVC")}
+//		reusableVC.title = bookmarksData[indexPath.row].titleString
+//		reusableVC.bookmarksData = bookmarksData[indexPath.row].child
+//		reusableVC.isDepthViewController = true
+		if bookmarksData[indexPath.row].isFolder {
+			print("is Folder")
+			reusableVC.navigationController?.title = bookmarksData[indexPath.row].titleString
+			reusableVC.title = bookmarksData[indexPath.row].titleString
+			reusableVC.bookmarksData = bookmarksData[indexPath.row].child
+			reusableVC.isDepthViewController = true
+			return reusableVC
+			
+		}
+		else {
+			print("isn't Folder")
+			let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
+			let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
+			alert.addAction(action)
+			self.present(alert, animated: true, completion: nil)
+		}
+		
+		return reusableVC
+	}
+	
+	func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+		navigationController?.pushViewController(viewControllerToCommit, animated: true)
+	}
+	
+	
+}
+

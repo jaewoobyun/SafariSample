@@ -83,7 +83,8 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		let searchController = UISearchController(searchResultsController: resultsController)
 		
 		searchController.delegate = self
-		searchController.searchResultsUpdater = self
+//		searchController.searchResultsUpdater = self
+		searchController.searchResultsUpdater = resultsController //!!!!!!!!!!!
 		searchController.searchBar.delegate = self
 		searchController.searchBar.placeholder = "Search or enter website name"
 		searchController.obscuresBackgroundDuringPresentation = false
@@ -466,9 +467,9 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	}
 	func shareAction() -> UIAlertAction {
 		return UIAlertAction(title: "Share…", style: .default, handler: { (alert: UIAlertAction!) -> Void in
-			let message = "Message goes here"
+//			let message = "Message goes here"
 			if let link = NSURL(string: self.searchBar.text!) {
-				let objectsToShare = [message, link] as [Any]
+				let objectsToShare = [link] as [Any]
 				let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
 				activityVC.excludedActivityTypes = []
 				self.present(activityVC, animated: true, completion: nil)
@@ -835,11 +836,20 @@ extension MainVC: WKNavigationDelegate {
 		print("didFinish")
 	}
 	
-	//	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
-	//		//TODO: -
-	//	}
-	
-	
+	//--------
+	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
+		 if let hostName = navigationAction.request.url?.host {
+			  if let preferredContentMode = contentModeToRequestForHost[hostName] {
+					preferences.preferredContentMode = preferredContentMode
+			  }
+		 } else if navigationAction.request.url?.scheme == "file" {
+			  if let preferredContentMode = contentModeToRequestForHost[hostNameForLocalFile] {
+					preferences.preferredContentMode = preferredContentMode
+			  }
+		 }
+		 decisionHandler(.allow, preferences)
+	}
+	//--------
 	
 }
 
@@ -877,6 +887,7 @@ class CusBarItem: UIBarButtonItem {
 	
 	required init?(coder: NSCoder) {
 		super.init(coder: coder)
+		self.isEnabled = super.isEnabled
 		
 		initSetting()
 	}

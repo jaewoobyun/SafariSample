@@ -107,6 +107,12 @@ class History: UITableViewController {
 		return true
 	}
 	
+	override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+		if editingStyle == .delete {
+			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+		}
+	}
+	
 	
 }
 

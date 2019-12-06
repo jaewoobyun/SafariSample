@@ -69,6 +69,15 @@ struct BookmarksData {
 		return nil
 	}
 	
+	//For Tree Sytle data
+	mutating func addChild(_ child: BookmarksData) {
+		self.child.append(child)
+	}
+	
+	mutating func removeChild(_ child: BookmarksData) {
+//		self.child = self.child.filter({ $0 !== child })
+	}
+	//------------
 }
 
 class BookmarksDataModel {
