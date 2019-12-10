@@ -80,11 +80,11 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 				
 		let storyboard = UIStoryboard(name: "Main", bundle: nil)
 		let resultsController = storyboard.instantiateViewController(identifier: "SearchResultsController") as! SearchResultsController
-		let searchController = UISearchController(searchResultsController: resultsController)
+//		let searchController = UISearchController(searchResultsController: resultsController)
 		
 		searchController.delegate = self
-//		searchController.searchResultsUpdater = self
-		searchController.searchResultsUpdater = resultsController //!!!!!!!!!!!
+		searchController.searchResultsUpdater = self
+//		searchController.searchResultsUpdater = resultsController //!!!!!!!!!!!
 		searchController.searchBar.delegate = self
 		searchController.searchBar.placeholder = "Search or enter website name"
 		searchController.obscuresBackgroundDuringPresentation = false
@@ -162,6 +162,9 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			loadStartPage()
 		}
 		setUpObservation()
+		
+		
+		
 //		self.webView.isHidden = true
 		
 //		webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { (cookies) in
@@ -204,6 +207,14 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			let storyboard = UIStoryboard(name: "Main", bundle: nil)
 			let bookmarkNav = storyboard.instantiateViewController(identifier: "BookmarkNav") as UINavigationController
 			self.navigationController?.present(bookmarkNav, animated: true, completion: nil)
+			
+//			let bookmarkVC = BookmarksVC()
+//			bookmarkVC.completionHandler = { urlString in
+//				self.loadWebViewFromBookmarksURL(urlString: urlString)
+//			}
+////			let navi = UINavigationController.init(rootViewController: bookmarkVC)
+//			let bookmarkNav = self.storyboard?.instantiateViewController(identifier: "BookmarkNav") as! UINavigationController
+//			self.present(bookmarkNav, animated: true, completion: nil)
 		}
 		
 		bookmarksButton.longEvent = {
@@ -366,6 +377,8 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	//MARK: - ViewWillAppear
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+//		print("backforwardlist.backlist")
+//		print(webView.backForwardList.backList)
 		//		navigationController?.hidesBarsOnSwipe = true
 		
 //		webView.addObserver(self, forKeyPath: #keyPath(WKWebView.title), options: NSKeyValueObservingOptions.new, context: nil)
@@ -378,12 +391,41 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		
 	}
 	
+	var receivedBookmarksDataUrl: String?
+	
+	func loadWebViewFromBookmarksURL(urlString: String?) {
+		
+		
+		guard var urlString = urlString?.lowercased() else { return }
+				if !urlString.contains("://") {
+					if urlString.contains("localhost") || urlString.contains("127.0.0.1") {
+						urlString = "http://" + urlString
+					} else {
+						urlString = "https://" + urlString
+					}
+				}
+				
+		//		if !urlString.contains(".com") {
+		//			urlString.append(contentsOf: ".com")
+		//		}
+				
+				if webView.url?.absoluteString == urlString {
+					return
+				}
+				
+				if let targetUrl = URL(string: urlString) {
+					webView.load(URLRequest(url: targetUrl))
+				}
+	}
+	
 	func loadStartPage() {
 		if let bookmarksURL = Bundle.main.url(forResource: "bookmarks_11_19_19", withExtension: "html") {
 			searchBar.text = "bookmarks_11_19_19.html"
 			webView.loadFileURL(bookmarksURL, allowingReadAccessTo: Bundle.main.bundleURL)
 		}
 	}
+	
+
 	
 	
 	
@@ -511,9 +553,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		return traitCollection.forceTouchCapability == UIForceTouchCapability.available
 		
 	}
-	
-	
-	
+
 	
 //	@IBAction func backButton(_ sender: UIBarButtonItem) {
 //		self.webView.goBack()
@@ -749,7 +789,6 @@ extension MainVC: UISearchResultsUpdating {
 		guard var urlString = searchBar.text?.lowercased() else {
 			return
 		}
-
 		if !urlString.contains("://") {
 			if urlString.contains("localhost") || urlString.contains("127.0.0.1") {
 				urlString = "http://" + urlString
@@ -757,15 +796,15 @@ extension MainVC: UISearchResultsUpdating {
 				urlString = "https://" + urlString
 			}
 		}
-		
+
 //		if !urlString.contains(".com") {
 //			urlString.append(contentsOf: ".com")
 //		}
-		
+
 		if webView.url?.absoluteString == urlString {
 			return
 		}
-		
+
 		if let targetUrl = URL(string: urlString) {
 			webView.load(URLRequest(url: targetUrl))
 		}
@@ -803,7 +842,6 @@ extension MainVC: UISearchBarDelegate {
 	}
 	
 	func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
-		//TODO: - refresh
 		print("bookmark button clicked")
 		self.webView.reload()
 		

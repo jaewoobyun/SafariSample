@@ -12,6 +12,7 @@
 		CC06F1B22390A35A0096A6CD /* FolderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CC06F1B02390A35A0096A6CD /* FolderCell.xib */; };
 		CC06F1B62390DD940096A6CD /* EditBookmarkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC06F1B52390DD930096A6CD /* EditBookmarkVC.swift */; };
 		CC06F1B82390E8CC0096A6CD /* TreeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC06F1B72390E8CC0096A6CD /* TreeData.swift */; };
+		CC1F5D54239DD9DF00AD82EF /* EditFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1F5D53239DD9DF00AD82EF /* EditFolder.swift */; };
 		CC456726238F89E1006C1EF1 /* EditFolderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC456725238F89E1006C1EF1 /* EditFolderVC.swift */; };
 		CC456728238F8C40006C1EF1 /* FolderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC456727238F8C40006C1EF1 /* FolderData.swift */; };
 		CC45672A238FACB0006C1EF1 /* CITreeViewClasses in Resources */ = {isa = PBXBuildFile; fileRef = CC456729238FACB0006C1EF1 /* CITreeViewClasses */; };
@@ -47,6 +48,7 @@
 		CC06F1B02390A35A0096A6CD /* FolderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FolderCell.xib; sourceTree = "<group>"; };
 		CC06F1B52390DD930096A6CD /* EditBookmarkVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkVC.swift; sourceTree = "<group>"; };
 		CC06F1B72390E8CC0096A6CD /* TreeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeData.swift; sourceTree = "<group>"; };
+		CC1F5D53239DD9DF00AD82EF /* EditFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolder.swift; sourceTree = "<group>"; };
 		CC456725238F89E1006C1EF1 /* EditFolderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderVC.swift; sourceTree = "<group>"; };
 		CC456727238F8C40006C1EF1 /* FolderData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderData.swift; sourceTree = "<group>"; };
 		CC456729238FACB0006C1EF1 /* CITreeViewClasses */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CITreeViewClasses; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				CC8B79152383885A0061068C /* BookmarksVC.swift */,
+				CC1F5D53239DD9DF00AD82EF /* EditFolder.swift */,
 				CC456725238F89E1006C1EF1 /* EditFolderVC.swift */,
 				CC06F1B52390DD930096A6CD /* EditBookmarkVC.swift */,
 			);
@@ -353,6 +356,7 @@
 				CC8698AB238B6C460043D796 /* SegmentControlVC.swift in Sources */,
 				CC06F1B62390DD940096A6CD /* EditBookmarkVC.swift in Sources */,
 				CC5B8B2423973FC3004688A3 /* SearchResultsController.swift in Sources */,
+				CC1F5D54239DD9DF00AD82EF /* EditFolder.swift in Sources */,
 				CC45672C238FB8B3006C1EF1 /* SampleData.swift in Sources */,
 				CCC26AB023827AF1006E2E62 /* SearchTableViewController.swift in Sources */,
 				CC8698A12387A6460043D796 /* SnapshotCard.swift in Sources */,

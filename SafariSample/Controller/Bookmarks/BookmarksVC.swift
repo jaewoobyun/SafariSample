@@ -37,6 +37,8 @@ class BookmarksVC: UIViewController{
 	
 	var btnTemp:UIButton?
 	
+	var completionHandler: ((_ urlString: String?) -> ())?
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
@@ -81,7 +83,10 @@ class BookmarksVC: UIViewController{
 		
 		tableView.reloadData()
 		
-		registerForPreviewing(with: self, sourceView: tableView)
+//		registerForPreviewing(with: self, sourceView: tableView)
+		
+		let interaction = UIContextMenuInteraction(delegate: self)
+		tableView.addInteraction(interaction)
 	}
 	
 	
@@ -102,8 +107,11 @@ class BookmarksVC: UIViewController{
 	@objc func addNewFolder() {
 		print("AddNewFolder!!")
 		let storyboard = UIStoryboard(name: "Main", bundle: nil)
-		let editFolderVC = storyboard.instantiateViewController(identifier: "EditFolderVC")
+//		let editFolderVC = storyboard.instantiateViewController(identifier: "EditFolderVC")
+//		self.navigationController?.pushViewController(editFolderVC, animated: true)
+		let editFolderVC = storyboard.instantiateViewController(identifier: "EditFolder")
 		self.navigationController?.pushViewController(editFolderVC, animated: true)
+		
 	}
 	
 	
@@ -265,6 +273,27 @@ class BookmarksVC: UIViewController{
 		return [ copyContentsAction, openInNewTabsAction, editAction, deleteAction ]
 	}
 	
+	func makeContextMenu() -> UIMenu {
+//		let copycontentsAction = UIAction(title: "Copy Contents", image: UIImage(systemName: "doc.on.doc"), identifier: nil, discoverabilityTitle: nil, attributes: UIMenuElement.Attributes.init(), state: UIMenuElement.State.mixed) { (action) in
+//		}
+		let copycontentsAction = UIAction(title: "Copy Contents", image: UIImage(systemName: "doc.on.doc")) { action in }
+//		let openInNewTabsAction = UIAction(title: "Open in New Tabs", image: UIImage(systemName: "plus.rectangle.on.rectangle"), identifier: nil, discoverabilityTitle: nil, attributes: UIMenuElement.Attributes.init(), state: UIMenuElement.State.mixed) { (action) in
+//		}
+		let openInNewTabsAction = UIAction(title: "Open in New Tabs", image: UIImage(systemName: "plus.rectangle.on.rectangle")) { action in }
+		let editAction = UIAction(title: "Edit...", image: UIImage(systemName: "square.and.pencil")) { action in }
+		
+//		let deleteAction = UIAction(title: "Delete", image: UIImage(systemName: "trash"), identifier: nil, discoverabilityTitle: "delete", attributes: UIMenuElement.Attributes.destructive, state: UIMenuElement.State.mixed) { (action) in
+//		}
+		let deleteCancel = UIAction(title: "Cancel", image: UIImage(systemName: "xmark")) { action in }
+		let deleteConfirmation = UIAction(title: "Delete", image: UIImage(systemName: "checkmark"), attributes: .destructive) { action in }
+		// The delete sub-menu is created like the top-level menu, but we also specify an image and options
+		let deleteAction = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [deleteCancel, deleteConfirmation])
+		
+		return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [copycontentsAction, openInNewTabsAction, editAction, deleteAction])
+	}
+	
+	
+	
 	
 }
 
@@ -289,10 +318,16 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 //		cell.textLabel?.text = topmostItem[indexPath.row]
 //		cell.textLabel?.text = sampleFolderData.folderName
 		
+		if bookmarksData[0].titleString == "Favorites" && bookmarksData[indexPath.row].isFolder {
+			cell.imageView?.image = UIImage(systemName: "star")
+		}
+		
 		if !bookmarksData[indexPath.row].isFolder {
 			cell.imageView?.image = UIImage(systemName: "book")
 			cell.textLabel?.text = bookmarksData[indexPath.row].titleString
 			return cell
+		} else {
+			//MARK: - cell 재활용할때 반드시 반대 케이스 명시!!!!!!!!!
 		}
 		cell.textLabel?.text = bookmarksData[indexPath.row].titleString
 		
@@ -303,8 +338,6 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 		print("didSelctRowAt \(indexPath)")
 		
 		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-		
-		
 		if let reuseableVC = storyboard.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC {
 			if bookmarksData[indexPath.row].isFolder {
 				print("is Folder")
@@ -316,11 +349,31 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 				
 			}
 			else {
-				print("isn't Folder")
-				let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
-				let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
-				alert.addAction(action)
-				self.present(alert, animated: true, completion: nil)
+//				print("isn't Folder")
+//				let alert = UIAlertController.init(title: "is folder empty~", message: "\(bookmarksData[indexPath.row])", preferredStyle: .alert)
+//				let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
+//				alert.addAction(action)
+//				self.present(alert, animated: true, completion: nil)
+				
+				//TODO: - need to send the bookmarksData[indexPath.row].urlString to MainVC's webView and load the url
+				
+					
+//					let mainVC = self.presentingViewController as! MainVC
+//					mainVC.loadWebViewFromBookmarksURL(urlString: self.bookmarksData[indexPath.row].urlString)
+					
+//				if let mainVC = self.presentingViewController as? MainVC {
+//					if let passData = bookmarksData[indexPath.row].urlString {
+////						mainVC.receivedBookmarksDataUrl = passData
+//						mainVC.loadWebViewFromBookmarksURL(urlString: passData)
+//					}
+//
+//				}
+//				completionHandler!(self.bookmarksData[indexPath.row].urlString)
+				
+				self.dismiss(animated: true, completion: nil)
+				
+				
+				
 			}
 		} else {
 			print("vc load fail")
@@ -355,43 +408,113 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 		
 	}
 	
-	
-}
-
-extension BookmarksVC: UIViewControllerPreviewingDelegate {
-	func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-		guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
-		
-		previewingContext.sourceRect = cell.frame
+	func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+//		return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (suggestedActions) -> UIMenu? in
+//			return self.makeContextMenu()
+//		}
+//		guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
 //		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
 		guard let reusableVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview reusableVC")}
-//		reusableVC.title = bookmarksData[indexPath.row].titleString
-//		reusableVC.bookmarksData = bookmarksData[indexPath.row].child
-//		reusableVC.isDepthViewController = true
 		if bookmarksData[indexPath.row].isFolder {
 			print("is Folder")
 			reusableVC.navigationController?.title = bookmarksData[indexPath.row].titleString
 			reusableVC.title = bookmarksData[indexPath.row].titleString
 			reusableVC.bookmarksData = bookmarksData[indexPath.row].child
 			reusableVC.isDepthViewController = true
-			return reusableVC
-			
 		}
 		else {
 			print("isn't Folder")
-			let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
-			let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
-			alert.addAction(action)
-			self.present(alert, animated: true, completion: nil)
+//			let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
+//			let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
+//			alert.addAction(action)
+//			self.present(alert, animated: true, completion: nil)
+			
+			//TODO: - show a preview of the link (webview).
+			
+		}
+		return UIContextMenuConfiguration(identifier: nil, previewProvider: {return reusableVC}) { (actions) -> UIMenu? in
+			return self.makeContextMenu()
 		}
 		
-		return reusableVC
 	}
 	
-	func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-		navigationController?.pushViewController(viewControllerToCommit, animated: true)
+	func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+		animator.addCompletion {
+
+		}
 	}
 	
 	
 }
 
+//extension BookmarksVC: UIViewControllerPreviewingDelegate {
+//	func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+//		guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
+//
+//		previewingContext.sourceRect = cell.frame
+////		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+//		guard let reusableVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview reusableVC")}
+//		if bookmarksData[indexPath.row].isFolder {
+//			print("is Folder")
+//			reusableVC.navigationController?.title = bookmarksData[indexPath.row].titleString
+//			reusableVC.title = bookmarksData[indexPath.row].titleString
+//			reusableVC.bookmarksData = bookmarksData[indexPath.row].child
+//			reusableVC.isDepthViewController = true
+//			return reusableVC
+//		}
+//		else {
+//			print("isn't Folder")
+//			let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
+//			let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
+//			alert.addAction(action)
+//			self.present(alert, animated: true, completion: nil)
+//		}
+//
+//		return reusableVC
+//	}
+//
+//	func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+//		navigationController?.pushViewController(viewControllerToCommit, animated: true)
+//	}
+//
+//
+//}
+
+
+extension BookmarksVC: UIContextMenuInteractionDelegate {
+	func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+				guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
+		//		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+				guard let reusableVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview reusableVC")}
+				if bookmarksData[indexPath.row].isFolder {
+					print("is Folder")
+					reusableVC.navigationController?.title = bookmarksData[indexPath.row].titleString
+					reusableVC.title = bookmarksData[indexPath.row].titleString
+					reusableVC.bookmarksData = bookmarksData[indexPath.row].child
+					reusableVC.isDepthViewController = true
+				}
+				else {
+					print("isn't Folder")
+					let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
+					let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
+					alert.addAction(action)
+					self.present(alert, animated: true, completion: nil)
+				}
+		
+		return UIContextMenuConfiguration(identifier: nil, previewProvider: {return reusableVC}) { (element) -> UIMenu? in
+			return self.makeContextMenu()
+		}
+		
+		
+	}
+	
+	func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+		animator.addCompletion {
+			if let vc = animator.previewViewController {
+				self.show(vc, sender: self)
+			}
+		}
+	}
+	
+	
+}

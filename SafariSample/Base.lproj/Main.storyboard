@@ -336,7 +336,76 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jtK-YX-uvJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3056.8000000000002" y="1011.544227886057"/>
+            <point key="canvasLocation" x="3158" y="287"/>
+        </scene>
+        <!--Edit Folder-->
+        <scene sceneID="rEx-31-J2s">
+            <objects>
+                <viewController storyboardIdentifier="EditFolder" id="THQ-pL-SZw" customClass="EditFolder" customModule="SafariSample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gy4-e8-FTA">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dGK-g7-K7g" customClass="CITreeView" customModule="CITreeView">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" systemColor="tertiarySystemFillColor" red="0.46274509800000002" green="0.46274509800000002" blue="0.50196078430000002" alpha="0.12" colorSpace="custom" customColorSpace="sRGB"/>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="B47-Fk-LGR">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IGa-Pb-dob">
+                                            <rect key="frame" x="0.0" y="30" width="375" height="40"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="40" id="H0c-wi-S5A"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                        </textField>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y4Q-Qk-WIA">
+                                            <rect key="frame" x="8" y="79" width="56" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" systemColor="tertiarySystemFillColor" red="0.46274509800000002" green="0.46274509800000002" blue="0.50196078430000002" alpha="0.12" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="IGa-Pb-dob" secondAttribute="trailing" id="WXI-Fv-Oil"/>
+                                        <constraint firstItem="IGa-Pb-dob" firstAttribute="leading" secondItem="B47-Fk-LGR" secondAttribute="leading" id="XsO-UX-vn7"/>
+                                        <constraint firstItem="IGa-Pb-dob" firstAttribute="centerY" secondItem="B47-Fk-LGR" secondAttribute="centerY" id="bbt-Vk-X40"/>
+                                    </constraints>
+                                </view>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Fci-fD-Kma">
+                                        <rect key="frame" x="0.0" y="128" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Fci-fD-Kma" id="WOJ-Vp-kOB">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="dGK-g7-K7g" firstAttribute="leading" secondItem="9Y7-pK-otr" secondAttribute="leading" id="6OF-10-Q0x"/>
+                            <constraint firstItem="dGK-g7-K7g" firstAttribute="top" secondItem="9Y7-pK-otr" secondAttribute="top" id="7f8-SB-saU"/>
+                            <constraint firstItem="9Y7-pK-otr" firstAttribute="bottom" secondItem="dGK-g7-K7g" secondAttribute="bottom" id="A1b-Ng-9n4"/>
+                            <constraint firstItem="9Y7-pK-otr" firstAttribute="trailing" secondItem="dGK-g7-K7g" secondAttribute="trailing" id="owx-RM-tmX"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="9Y7-pK-otr"/>
+                    </view>
+                    <connections>
+                        <outlet property="titleTextField" destination="IGa-Pb-dob" id="tap-IM-rRb"/>
+                        <outlet property="treeView" destination="dGK-g7-K7g" id="rRA-j6-clT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hFh-n3-uoo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3120.8000000000002" y="1039.4302848575712"/>
         </scene>
         <!--Edit Bookmark-->
         <scene sceneID="Kf2-dJ-f5p">

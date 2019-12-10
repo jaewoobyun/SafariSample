@@ -362,5 +362,146 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7DD3AB08-B31E-4D65-ABA4-AE1FFE2FF754"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SafariSample/Model/BookmarksData.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
+            landmarkName = "isFolder"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "011044FB-E8CA-4B2B-893B-1F7C310D40CF"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SafariSample/Controller/Bookmarks/EditFolder.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
+            landmarkName = "treeViewDataArray()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FD7C0578-091C-4A00-B0EC-EFE65309E899"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SafariSample/Controller/Main/MainVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "396"
+            endingLineNumber = "396"
+            landmarkName = "loadWebViewFromBookmarksURL(urlString:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D34CCFC0-2E57-4D0B-BB17-173070538803"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SafariSample/Controller/Main/MainVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "394"
+            endingLineNumber = "394"
+            landmarkName = "MainVC"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "D34CCFC0-2E57-4D0B-BB17-173070538803 - 3a413a3169beb312"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SafariSample.MainVC.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;SafariSample.MainVC&gt;"
+                  moduleName = "SafariSample"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nomad/MYAPPS/SafariSample/SafariSample/Controller/Main/MainVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "386"
+                  endingLineNumber = "386"
+                  offsetFromSymbolStart = "2136">
+               </Location>
+               <Location
+                  uuid = "D34CCFC0-2E57-4D0B-BB17-173070538803 - 954c5446ea42734b"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SafariSample.MainVC.receivedBookmarksDataUrl.getter : Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "SafariSample"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nomad/MYAPPS/SafariSample/SafariSample/Controller/Main/MainVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "386"
+                  endingLineNumber = "386"
+                  offsetFromSymbolStart = "124">
+               </Location>
+               <Location
+                  uuid = "D34CCFC0-2E57-4D0B-BB17-173070538803 - 7302d484749c2347"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SafariSample.MainVC.receivedBookmarksDataUrl.setter : Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "SafariSample"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nomad/MYAPPS/SafariSample/SafariSample/Controller/Main/MainVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "386"
+                  endingLineNumber = "386"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "D34CCFC0-2E57-4D0B-BB17-173070538803 - d53778c44cbf1eb4"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SafariSample.MainVC.receivedBookmarksDataUrl.modify : Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "SafariSample"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nomad/MYAPPS/SafariSample/SafariSample/Controller/Main/MainVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "D34CCFC0-2E57-4D0B-BB17-173070538803 - b8c27b6d81945dec"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SafariSample.MainVC.receivedBookmarksDataUrl.modify : Swift.Optional&lt;Swift.String&gt; with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "SafariSample"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nomad/MYAPPS/SafariSample/SafariSample/Controller/Main/MainVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "386"
+                  endingLineNumber = "386"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
