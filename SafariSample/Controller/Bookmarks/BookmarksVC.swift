@@ -37,7 +37,7 @@ class BookmarksVC: UIViewController{
 	
 	var btnTemp:UIButton?
 	
-	var completionHandler: ((_ urlString: String?) -> ())?
+	var completionHandler: ((_ urlString: String?) ->())?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -345,6 +345,11 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 				reuseableVC.title = bookmarksData[indexPath.row].titleString
 				reuseableVC.bookmarksData = bookmarksData[indexPath.row].child
 				reuseableVC.isDepthViewController = true
+				
+				if let cc = self.completionHandler {
+					reuseableVC.completionHandler = cc
+				}
+				
 				navigationController?.pushViewController(reuseableVC, animated: true)
 				
 			}
@@ -369,10 +374,14 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 //
 //				}
 //				completionHandler!(self.bookmarksData[indexPath.row].urlString)
+				let urlString = bookmarksData[indexPath.row].urlString
 				
+				NotificationCenter.default.post(name: MainVC.notificationName, object: nil, userInfo: ["selectedBookmarkURL": urlString])
+				
+//				if let completionHandler = self.completionHandler {
+//					completionHandler(urlString)
+//				}
 				self.dismiss(animated: true, completion: nil)
-				
-				
 				
 			}
 		} else {

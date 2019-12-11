@@ -12,6 +12,7 @@
 		CC06F1B22390A35A0096A6CD /* FolderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CC06F1B02390A35A0096A6CD /* FolderCell.xib */; };
 		CC06F1B62390DD940096A6CD /* EditBookmarkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC06F1B52390DD930096A6CD /* EditBookmarkVC.swift */; };
 		CC06F1B82390E8CC0096A6CD /* TreeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC06F1B72390E8CC0096A6CD /* TreeData.swift */; };
+		CC0E120F23A0EAD200557B67 /* NotificationGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0E120E23A0EAD200557B67 /* NotificationGroup.swift */; };
 		CC1F5D54239DD9DF00AD82EF /* EditFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1F5D53239DD9DF00AD82EF /* EditFolder.swift */; };
 		CC456726238F89E1006C1EF1 /* EditFolderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC456725238F89E1006C1EF1 /* EditFolderVC.swift */; };
 		CC456728238F8C40006C1EF1 /* FolderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC456727238F8C40006C1EF1 /* FolderData.swift */; };
@@ -48,6 +49,7 @@
 		CC06F1B02390A35A0096A6CD /* FolderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FolderCell.xib; sourceTree = "<group>"; };
 		CC06F1B52390DD930096A6CD /* EditBookmarkVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkVC.swift; sourceTree = "<group>"; };
 		CC06F1B72390E8CC0096A6CD /* TreeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeData.swift; sourceTree = "<group>"; };
+		CC0E120E23A0EAD200557B67 /* NotificationGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationGroup.swift; sourceTree = "<group>"; };
 		CC1F5D53239DD9DF00AD82EF /* EditFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolder.swift; sourceTree = "<group>"; };
 		CC456725238F89E1006C1EF1 /* EditFolderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderVC.swift; sourceTree = "<group>"; };
 		CC456727238F8C40006C1EF1 /* FolderData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderData.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 		CC5B8B2F239A360A004688A3 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				CC0E120E23A0EAD200557B67 /* NotificationGroup.swift */,
 				CCB83914238636F6005DF432 /* CustomNavigationController.swift */,
 				CC8698A22387B4BE0043D796 /* TabsController.swift */,
 				CCC26AAD23825EE5006E2E62 /* OpenTabsVC.swift */,
@@ -360,6 +363,7 @@
 				CC45672C238FB8B3006C1EF1 /* SampleData.swift in Sources */,
 				CCC26AB023827AF1006E2E62 /* SearchTableViewController.swift in Sources */,
 				CC8698A12387A6460043D796 /* SnapshotCard.swift in Sources */,
+				CC0E120F23A0EAD200557B67 /* NotificationGroup.swift in Sources */,
 				CC456726238F89E1006C1EF1 /* EditFolderVC.swift in Sources */,
 				CC8B791E2384CBC20061068C /* History.swift in Sources */,
 				CCB7A74E2382295E00D8B0A0 /* AppDelegate.swift in Sources */,

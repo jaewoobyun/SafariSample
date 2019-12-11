@@ -30,6 +30,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	
 	@IBOutlet weak var webView: WKWebView!
 	
+	static let notificationName = Notification.Name("myNotificationName")
 	var currentContentMode: WKWebpagePreferences.ContentMode?
 	var contentModeToRequestForHost: [String: WKWebpagePreferences.ContentMode] = [:]
 	var estimatedProgressObservationToken: NSKeyValueObservation?
@@ -198,6 +199,8 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			
 		}
 		
+		//
+		NotificationCenter.default.addObserver(self, selector: #selector(onNotification(notification:)), name: MainVC.notificationName, object: nil)
 
 		
 	}
@@ -207,6 +210,29 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			let storyboard = UIStoryboard(name: "Main", bundle: nil)
 			let bookmarkNav = storyboard.instantiateViewController(identifier: "BookmarkNav") as UINavigationController
 			self.navigationController?.present(bookmarkNav, animated: true, completion: nil)
+			
+//			if let segmentVC = bookmarkNav.children[0] as? SegmentControlVC {
+//				segementVC.selectedBookmarkHandler = { urlString in
+//					self.loadWebViewFromBookmarksURL(urlString: urlString)
+//				}
+//			}
+			
+			if let segmentVC = bookmarkNav.children[0] as? SegmentControlVC {
+				segmentVC.selectedBookmarkHandler = { urlString in
+					self.loadWebViewFromBookmarksURL(urlString: urlString)
+				}
+			}
+			
+//			if let segmentVC = bookmarkNav.children[0] as? SegmentControlVC {
+//				if let bookmarkVC = segmentVC.children[0] as? BookmarksVC {
+//					bookmarkVC.completionHandler = { urlString in
+//						self.loadWebViewFromBookmarksURL(urlString: urlString)
+//					}
+//				}
+//			}
+			
+			
+			
 			
 //			let bookmarkVC = BookmarksVC()
 //			bookmarkVC.completionHandler = { urlString in
@@ -391,31 +417,40 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		
 	}
 	
-	var receivedBookmarksDataUrl: String?
+	@objc func onNotification(notification: Notification) {
+		print(notification.userInfo)
+		if let url = notification.userInfo?["selectedBookmarkURL"] as? String {
+//			print(url)
+			loadWebViewFromBookmarksURL(urlString: url)
+		}
+		
+	}
 	
 	func loadWebViewFromBookmarksURL(urlString: String?) {
-		
-		
+		//http://AAA.com
+	
 		guard var urlString = urlString?.lowercased() else { return }
-				if !urlString.contains("://") {
-					if urlString.contains("localhost") || urlString.contains("127.0.0.1") {
-						urlString = "http://" + urlString
-					} else {
-						urlString = "https://" + urlString
-					}
+		guard var url: URL = URL.init(string: urlString) else {
+			//TODO: - Alert user that it is not a valid URL
+			return
+		}
+		if UIApplication.shared.canOpenURL(url) {
+			if !urlString.contains("://") {
+				if urlString.contains("localhost") || urlString.contains("127.0.0.1") {
+					urlString = "http://" + urlString
+				} else {
+					urlString = "https://" + urlString
 				}
-				
-		//		if !urlString.contains(".com") {
-		//			urlString.append(contentsOf: ".com")
-		//		}
-				
-				if webView.url?.absoluteString == urlString {
-					return
-				}
-				
-				if let targetUrl = URL(string: urlString) {
-					webView.load(URLRequest(url: targetUrl))
-				}
+			}
+			
+			if webView.url?.absoluteString == urlString {
+				return
+			}
+
+			self.webView.load(URLRequest(url: url))
+			
+		}
+		
 	}
 	
 	func loadStartPage() {

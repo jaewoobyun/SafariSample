@@ -20,14 +20,24 @@ class SegmentControlVC: UIViewController {
 	
 	@IBOutlet weak var segmentedControl: UISegmentedControl!
 	
+	var selectedBookmarkHandler: ((_ urlString: String?) -> ())?
+	
 	lazy var bookmarksViewController: BookmarksVC = {
 		//Load Storyboard
 		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
 		//Instantiate VC
-		var viewController = storyboard.instantiateViewController(identifier: "BookmarksVC") as! BookmarksVC
+		var bookmarkVC = storyboard.instantiateViewController(identifier: "BookmarksVC") as! BookmarksVC
 		// Add VC as ChildVC
-		self.add(asChildViewController: viewController)
-		return viewController
+		self.add(asChildViewController: bookmarkVC)
+		
+		bookmarkVC.completionHandler = { urlString in
+			if let completionHandler = self.selectedBookmarkHandler {
+				completionHandler(urlString)
+			}
+		}
+//		bookmarkVC.completionHandler = self.selectedBookmarkHandler
+		
+		return bookmarkVC
 	}()
 	
 	lazy var readingListViewController: ReadingList = {
@@ -141,21 +151,21 @@ class SegmentControlVC: UIViewController {
 	}
 	
 	//MARK: - PreviewActionItems
-	override var previewActionItems: [UIPreviewActionItem] {
-		let addBookmark = UIPreviewAction(title: "Add Bookmark", style: UIPreviewAction.Style.default) { [unowned self](action, viewcontroller) in
-			print("addBookmark pressed")
-		}
-
-		let addToReadingList = UIPreviewAction(title: "Add to Reading Llist", style: UIPreviewAction.Style.default) { [unowned self](previewaction, viewcontroller) in
-			print("addtoreadinglist pressed")
-		}
-
-		let cancelAction = UIPreviewAction(title: "Cancel", style: UIPreviewAction.Style.destructive) { [unowned self](action, vc) in
-			print("cancel pressed")
-		}
-
-		return [addBookmark, addToReadingList, cancelAction]
-	}
+//	override var previewActionItems: [UIPreviewActionItem] {
+//		let addBookmark = UIPreviewAction(title: "Add Bookmark", style: UIPreviewAction.Style.default) { [unowned self](action, viewcontroller) in
+//			print("addBookmark pressed")
+//		}
+//
+//		let addToReadingList = UIPreviewAction(title: "Add to Reading Llist", style: UIPreviewAction.Style.default) { [unowned self](previewaction, viewcontroller) in
+//			print("addtoreadinglist pressed")
+//		}
+//
+//		let cancelAction = UIPreviewAction(title: "Cancel", style: UIPreviewAction.Style.destructive) { [unowned self](action, vc) in
+//			print("cancel pressed")
+//		}
+//
+//		return [addBookmark, addToReadingList, cancelAction]
+//	}
 	
 	
 	
