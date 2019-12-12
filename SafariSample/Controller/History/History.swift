@@ -113,6 +113,26 @@ class History: UITableViewController {
 		}
 	}
 	
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		print("didSelctRowAt \(indexPath)")
+		let urlString = historyData[indexPath.row]
+		
+		NotificationGroup.shared.post(type: .historyURLName, userInfo: ["selectedHistoryURL": urlString])
+		self.dismiss(animated: true, completion: nil)
+		
+		
+	}
+	
+	override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+		return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (actions) -> UIMenu? in
+			return AlertsAndMenus.shared.makeContextMenu()
+		}
+	}
+	
+	override func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+		//
+	}
+	
 	
 }
 

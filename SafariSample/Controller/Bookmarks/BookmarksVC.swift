@@ -69,6 +69,7 @@ class BookmarksVC: UIViewController{
 		tableView.tableHeaderView = searchController.searchBar
 		tableView.isEditing = false
 		toggle = tableView.isEditing
+		tableView.allowsSelectionDuringEditing = true
 		
 		
 		btnTemp = UIButton.init(type: .custom)
@@ -232,6 +233,10 @@ class BookmarksVC: UIViewController{
 		navigationController?.navigationBar.barTintColor = barBackgroundColor
 		tableView.reloadData()
 		
+		if let selectedIndexPath = tableView.indexPathForSelectedRow {
+			tableView.deselectRow(at: selectedIndexPath, animated: animated)
+		}
+		
 //		if toggle == true {
 //			self.toolbarItems?.insert(newFolderButton, at: 0)
 //		}
@@ -252,26 +257,22 @@ class BookmarksVC: UIViewController{
 		tableView.reloadData()
 	}
 	
-	override var previewActionItems: [UIPreviewActionItem] {
-		let copyContentsAction = UIPreviewAction(title: "Copy Contents" , style: .default, handler: { [unowned self] (_, _) in
-			 //TODO: - Copy content method implement
-		})
-		
-		let openInNewTabsAction = UIPreviewAction(title: "Open in New Tabs", style: UIPreviewAction.Style.default) { [unowned self](action, vc) in
-			//TODO: - Open in New Tabs implement
-		}
-		
-		let editAction = UIPreviewAction(title: "Edit", style: UIPreviewAction.Style.default) { [unowned self](action, vc) in
-			//TODO: - Edit Folder Name implement
-			
-		}
-
-		let deleteAction = UIPreviewAction(title: "Delete", style: .destructive) { [unowned self] (_, _) in
-			 //TODO: - Delete Folder or bookmark implement
-		}
-
-		return [ copyContentsAction, openInNewTabsAction, editAction, deleteAction ]
-	}
+//	override var previewActionItems: [UIPreviewActionItem] {
+//		let copyContentsAction = UIPreviewAction(title: "Copy Contents" , style: .default, handler: { [unowned self] (_, _) in
+//
+//		})
+//		let openInNewTabsAction = UIPreviewAction(title: "Open in New Tabs", style: UIPreviewAction.Style.default) { [unowned self](action, vc) in
+//
+//		}
+//		let editAction = UIPreviewAction(title: "Edit", style: UIPreviewAction.Style.default) { [unowned self](action, vc) in
+//
+//		}
+//		let deleteAction = UIPreviewAction(title: "Delete", style: .destructive) { [unowned self] (_, _) in
+//
+//		}
+//
+//		return [ copyContentsAction, openInNewTabsAction, editAction, deleteAction ]
+//	}
 	
 	func makeContextMenu() -> UIMenu {
 //		let copycontentsAction = UIAction(title: "Copy Contents", image: UIImage(systemName: "doc.on.doc"), identifier: nil, discoverabilityTitle: nil, attributes: UIMenuElement.Attributes.init(), state: UIMenuElement.State.mixed) { (action) in
@@ -325,9 +326,11 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 		if !bookmarksData[indexPath.row].isFolder {
 			cell.imageView?.image = UIImage(systemName: "book")
 			cell.textLabel?.text = bookmarksData[indexPath.row].titleString
+			cell.editingAccessoryType = .disclosureIndicator
 			return cell
 		} else {
 			//MARK: - cell 재활용할때 반드시 반대 케이스 명시!!!!!!!!!
+			cell.imageView?.image = UIImage(systemName: "folder")
 		}
 		cell.textLabel?.text = bookmarksData[indexPath.row].titleString
 		
@@ -340,48 +343,45 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
 		if let reuseableVC = storyboard.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC {
 			if bookmarksData[indexPath.row].isFolder {
-				print("is Folder")
-				reuseableVC.navigationController?.title = bookmarksData[indexPath.row].titleString
-				reuseableVC.title = bookmarksData[indexPath.row].titleString
-				reuseableVC.bookmarksData = bookmarksData[indexPath.row].child
-				reuseableVC.isDepthViewController = true
-				
-				if let cc = self.completionHandler {
-					reuseableVC.completionHandler = cc
+				if tableView.isEditing {
+					if let reusableEditFolder = storyboard.instantiateViewController(identifier: "EditFolder") as? EditFolder {
+						//TODO: - something is not right
+//						reusableEditFolder.titleTextField.text = bookmarksData[indexPath.row].titleString
+						navigationController?.pushViewController(reusableEditFolder, animated: true)
+					}
 				}
-				
-				navigationController?.pushViewController(reuseableVC, animated: true)
-				
+				else {
+					print("is Folder")
+					reuseableVC.navigationController?.title = bookmarksData[indexPath.row].titleString
+					reuseableVC.title = bookmarksData[indexPath.row].titleString
+					reuseableVC.bookmarksData = bookmarksData[indexPath.row].child
+					reuseableVC.isDepthViewController = true
+					
+					if let cc = self.completionHandler {
+						reuseableVC.completionHandler = cc
+					}
+					
+					navigationController?.pushViewController(reuseableVC, animated: true)
+				}
 			}
 			else {
-//				print("isn't Folder")
-//				let alert = UIAlertController.init(title: "is folder empty~", message: "\(bookmarksData[indexPath.row])", preferredStyle: .alert)
-//				let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
-//				alert.addAction(action)
-//				self.present(alert, animated: true, completion: nil)
-				
-				//TODO: - need to send the bookmarksData[indexPath.row].urlString to MainVC's webView and load the url
-				
-					
-//					let mainVC = self.presentingViewController as! MainVC
-//					mainVC.loadWebViewFromBookmarksURL(urlString: self.bookmarksData[indexPath.row].urlString)
-					
-//				if let mainVC = self.presentingViewController as? MainVC {
-//					if let passData = bookmarksData[indexPath.row].urlString {
-////						mainVC.receivedBookmarksDataUrl = passData
-//						mainVC.loadWebViewFromBookmarksURL(urlString: passData)
-//					}
-//
-//				}
-//				completionHandler!(self.bookmarksData[indexPath.row].urlString)
 				let urlString = bookmarksData[indexPath.row].urlString
+				if tableView.isEditing {
+					let reusableEditBookmarkVC = storyboard.instantiateViewController(withIdentifier: "EditBookmarkVC") as? EditBookmarkVC
+					//TODO: - something is not right
+//					reusableEditBookmarkVC?.titleInput.text = urlString
+//					reusableEditBookmarkVC?.addressInput.text = urlString
+					navigationController?.pushViewController(reusableEditBookmarkVC!, animated: true)
+					
+				}
+				else {
+					NotificationGroup.shared.post(type: .bookmarkURLName, userInfo: ["selectedBookmarkURL": urlString])
+					//				if let completionHandler = self.completionHandler {
+					//					completionHandler(urlString)
+					//				}
+					self.dismiss(animated: true, completion: nil)
+				}
 				
-				NotificationCenter.default.post(name: MainVC.notificationName, object: nil, userInfo: ["selectedBookmarkURL": urlString])
-				
-//				if let completionHandler = self.completionHandler {
-//					completionHandler(urlString)
-//				}
-				self.dismiss(animated: true, completion: nil)
 				
 			}
 		} else {

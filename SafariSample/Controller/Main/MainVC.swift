@@ -30,7 +30,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	
 	@IBOutlet weak var webView: WKWebView!
 	
-	static let notificationName = Notification.Name("myNotificationName")
+//	static let notificationName = Notification.Name("myNotificationName")
 	var currentContentMode: WKWebpagePreferences.ContentMode?
 	var contentModeToRequestForHost: [String: WKWebpagePreferences.ContentMode] = [:]
 	var estimatedProgressObservationToken: NSKeyValueObservation?
@@ -72,7 +72,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	
 	
 	
-	//MARK: - ViewDidLoad
+	//MARK: - Life Cycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		is3dTouchAvailable(traitCollection: self.view!.traitCollection)
@@ -193,17 +193,37 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 //				data.write(toFile: plist, atomically: true)
 				
 				/// append the history data to UserDefaults
-				UserDefaults.standard.setValue(self.visitedWebSiteHistoryRecords, forKey: "HistoryData")
+			UserDefaults.standard.setValue(self.visitedWebSiteHistoryRecords, forKey: "HistoryData")
 				
 			}
 			
 		}
 		
-		//
-		NotificationCenter.default.addObserver(self, selector: #selector(onNotification(notification:)), name: MainVC.notificationName, object: nil)
-
+		NotificationGroup.shared.registerObserver(type: .bookmarkURLName, vc: self, selector: #selector(onNotification(notification:)))
+		
+		NotificationGroup.shared.registerObserver(type: .historyURLName, vc: self, selector: #selector(onHitoryNotification(notification:)))
 		
 	}
+		override func viewWillAppear(_ animated: Bool) {
+			super.viewWillAppear(animated)
+	//		print("backforwardlist.backlist")
+	//		print(webView.backForwardList.backList)
+			//		navigationController?.hidesBarsOnSwipe = true
+			
+	//		webView.addObserver(self, forKeyPath: #keyPath(WKWebView.title), options: NSKeyValueObservingOptions.new, context: nil)
+		}
+	
+		override func viewWillDisappear(_ animated: Bool) {
+			super.viewWillDisappear(animated)
+			//		navigationController?.hidesBarsOnSwipe = false
+			
+		}
+		
+		override func viewDidDisappear(_ animated: Bool) {
+			super.viewDidDisappear(animated)
+			NotificationGroup.shared.removeAllObserver(vc: self)
+		}
+	
 	
 	func setupCustomButtons() {
 		bookmarksButton.tapEvent = {
@@ -247,13 +267,13 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			print("bookmarksButton.longEvent")
 			let alertcontroller = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
 			let addBookmarkAction = UIAlertAction(title: "Add Bookmark", style: UIAlertAction.Style.default) { (action) in
-				//TODO: - implement later ADD BOOKMARK
+				//TODO: implement later ADD BOOKMARK
 			}
 			let addReadingListAction = UIAlertAction(title: "Add to Reading List", style: UIAlertAction.Style.default) { (action) in
-				//TODO: - implement later ADD TO READINGLIST
+				//TODO: implement later ADD TO READINGLIST
 			}
 			let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
-				//TODO: - implement later Cancel
+				//TODO: implement later Cancel
 			}
 			
 			alertcontroller.addAction(addBookmarkAction)
@@ -271,16 +291,16 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			print("tabsButton.longEvent!")
 			let alertcontroller = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
 			let closeThisTabAction = UIAlertAction(title: "Close This Tab", style: UIAlertAction.Style.destructive) { (action) in
-				//TODO: - implement later Close This Tab
+				//TODO: implement later Close This Tab
 			}
 			let closeAllTabsAction = UIAlertAction(title: "Close All Tabs", style: UIAlertAction.Style.destructive) { (action) in
-				//TODO: - implement later Close All Tabs
+				//TODO: implement later Close All Tabs
 			}
 			let newTabAction = UIAlertAction(title: "New Tab", style: UIAlertAction.Style.default) { (action) in
-				//TODO: - implement later ADD TO READINGLIST
+				//TODO: implement later ADD TO READINGLIST
 			}
 			let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
-				//TODO: - implement later Cancel
+				//TODO: implement later Cancel
 			}
 			
 			alertcontroller.addAction(closeAllTabsAction)
@@ -400,25 +420,18 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 //		}
 //	}
 	
-	//MARK: - ViewWillAppear
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-//		print("backforwardlist.backlist")
-//		print(webView.backForwardList.backList)
-		//		navigationController?.hidesBarsOnSwipe = true
-		
-//		webView.addObserver(self, forKeyPath: #keyPath(WKWebView.title), options: NSKeyValueObservingOptions.new, context: nil)
-	}
+
 	
-	//MARK: - ViewWillDisappear
-	override func viewWillDisappear(_ animated: Bool) {
-		super.viewWillDisappear(animated)
-		//		navigationController?.hidesBarsOnSwipe = false
+	@objc func onHitoryNotification(notification: Notification) {
+		if let url = notification.userInfo?["selectedHistoryURL"] as? String {
+			print(url)
+			loadWebViewFromBookmarksURL(urlString: url)
+		}
 		
 	}
 	
 	@objc func onNotification(notification: Notification) {
-		print(notification.userInfo)
+//		print(notification.userInfo)
 		if let url = notification.userInfo?["selectedBookmarkURL"] as? String {
 //			print(url)
 			loadWebViewFromBookmarksURL(urlString: url)
@@ -428,10 +441,10 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	
 	func loadWebViewFromBookmarksURL(urlString: String?) {
 		//http://AAA.com
+		self.searchBar.text = urlString
 	
 		guard var urlString = urlString?.lowercased() else { return }
-		guard var url: URL = URL.init(string: urlString) else {
-			//TODO: - Alert user that it is not a valid URL
+		guard let url: URL = URL.init(string: urlString) else {
 			return
 		}
 		if UIApplication.shared.canOpenURL(url) {
@@ -442,12 +455,18 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 					urlString = "https://" + urlString
 				}
 			}
-			
+
 			if webView.url?.absoluteString == urlString {
 				return
 			}
 
 			self.webView.load(URLRequest(url: url))
+			
+		}
+		else {
+			let alert = AlertsAndMenus.shared.alertNotify(title: "Not a Valid URL", message: nil, style: UIAlertController.Style.alert)
+			
+			self.present(alert, animated: true, completion: nil)
 			
 		}
 		
@@ -464,12 +483,12 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	
 	
 	
-	func searchWebSite(urlString: String) {
-		let url = URL(string: urlString)
-		let request = URLRequest(url: url!)
-		self.webView?.load(request)
-	}
-	
+//	func searchWebSite(urlString: String) {
+//		let url = URL(string: urlString)
+//		let request = URLRequest(url: url!)
+//		self.webView?.load(request)
+//	}
+
 	//	func selectWebView(selectedWebView: CustomWebView) {
 	//		for subview in view.subviews {
 	//			guard let webV = subview as? CustomWebView else {
@@ -976,7 +995,7 @@ class CusBarItem: UIBarButtonItem {
 //			}
 			
 //			touchView.backgroundColor = UIColor.red
-			touchView.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+			touchView.frame = CGRect(x: 0, y: 0, width: 27, height: 27)
 			self.customView = touchView
 			
 			imageView.frame = touchView.frame

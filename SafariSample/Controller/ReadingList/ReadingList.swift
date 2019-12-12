@@ -128,6 +128,10 @@ extension ReadingList : UITableViewDelegate, UITableViewDataSource {
 		return 100
 	}
 	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		NotificationGroup.shared.post(type: .readinglistURLName, userInfo: ["selectedReadinglistURL": "awefawefawefawef"])
+	}
+	
 	func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
 		return .delete
 	}
@@ -141,6 +145,16 @@ extension ReadingList : UITableViewDelegate, UITableViewDataSource {
 			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
 		}
 		
+	}
+	
+	func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+		return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (actions) -> UIMenu? in
+			return AlertsAndMenus.shared.makeContextMenu()
+		}
+	}
+	
+	func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+		//
 	}
 	
 	

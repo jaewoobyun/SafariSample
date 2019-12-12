@@ -382,7 +382,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "011044FB-E8CA-4B2B-893B-1F7C310D40CF"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SafariSample/Controller/Bookmarks/EditFolder.swift"
@@ -397,22 +397,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "FCF719B5-AC98-4A14-B304-9BEF39E6538A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SafariSample/Controller/Bookmarks/BookmarksVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "381"
-            endingLineNumber = "381"
-            landmarkName = "tableView(_:didSelectRowAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "BDC03F4C-7513-468D-BE95-4695BA0DC34F"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -420,8 +404,8 @@
             filePath = "SafariSample/Controller/Main/MainVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "220"
-            endingLineNumber = "220"
+            startingLineNumber = "240"
+            endingLineNumber = "240"
             landmarkName = "setupCustomButtons()"
             landmarkType = "7">
          </BreakpointContent>
@@ -436,8 +420,8 @@
             filePath = "SafariSample/Controller/Main/MainVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
             landmarkName = "setupCustomButtons()"
             landmarkType = "7">
          </BreakpointContent>
@@ -532,8 +516,8 @@
             filePath = "SafariSample/Controller/Main/MainVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "421"
-            endingLineNumber = "421"
+            startingLineNumber = "434"
+            endingLineNumber = "434"
             landmarkName = "onNotification(notification:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -541,16 +525,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "8032AC89-EFB2-46FF-A052-2DE1203F2EE5"
+            uuid = "C648D338-D22D-40EB-93CE-F55A7924E98F"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SafariSample/Controller/Main/MainVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
+            startingLineNumber = "204"
+            endingLineNumber = "204"
             landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2F089AF5-46EC-4486-9203-68719A2A0A8F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SafariSample/Controller/Main/MainVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "428"
+            endingLineNumber = "428"
+            landmarkName = "onHitoryNotification(notification:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
