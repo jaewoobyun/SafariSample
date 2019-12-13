@@ -15,7 +15,7 @@ import WebKit
 let hostNameForLocalFile = ""
 
 class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPreviewingDelegate {
-
+	
 	
 	let searchController = UISearchController(searchResultsController: nil)
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
@@ -30,7 +30,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	
 	@IBOutlet weak var webView: WKWebView!
 	
-//	static let notificationName = Notification.Name("myNotificationName")
+	//	static let notificationName = Notification.Name("myNotificationName")
 	var currentContentMode: WKWebpagePreferences.ContentMode?
 	var contentModeToRequestForHost: [String: WKWebpagePreferences.ContentMode] = [:]
 	var estimatedProgressObservationToken: NSKeyValueObservation?
@@ -39,13 +39,13 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	
 	var visitedWebSiteHistoryRecords: [String] = []
 	
-		required init?(coder: NSCoder) {
-			let configuration = WKWebViewConfiguration()
-			configuration.applicationNameForUserAgent = "Version/1.0 SafariSample/1.0"
-			webView = WKWebView(frame: .zero, configuration: configuration)
-	
-			super.init(coder: coder)
-		}
+	required init?(coder: NSCoder) {
+		let configuration = WKWebViewConfiguration()
+		configuration.applicationNameForUserAgent = "Version/1.0 SafariSample/1.0"
+		webView = WKWebView(frame: .zero, configuration: configuration)
+		
+		super.init(coder: coder)
+	}
 	
 	var isGalleryOpen = false
 	
@@ -59,15 +59,15 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	var snapshots: [UIView] = []
 	
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-		 super.traitCollectionDidChange(previousTraitCollection)
-
-		 if traitCollection.forceTouchCapability == UIForceTouchCapability.available {
+		super.traitCollectionDidChange(previousTraitCollection)
+		
+		if traitCollection.forceTouchCapability == UIForceTouchCapability.available {
 			
-		 } else  {
-			  // When force touch is not available, remove force touch gesture recognizer.
-			  // Also implement a fallback if necessary (e.g. a long press gesture recognizer)
-//			  bookmarksButton.removeGestureRecognizer()
-		 }
+		} else  {
+			// When force touch is not available, remove force touch gesture recognizer.
+			// Also implement a fallback if necessary (e.g. a long press gesture recognizer)
+			//			  bookmarksButton.removeGestureRecognizer()
+		}
 	}
 	
 	
@@ -78,14 +78,14 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		is3dTouchAvailable(traitCollection: self.view!.traitCollection)
 		
 		setupCustomButtons()
-				
+		
 		let storyboard = UIStoryboard(name: "Main", bundle: nil)
 		let resultsController = storyboard.instantiateViewController(identifier: "SearchResultsController") as! SearchResultsController
-//		let searchController = UISearchController(searchResultsController: resultsController)
+		//		let searchController = UISearchController(searchResultsController: resultsController)
 		
 		searchController.delegate = self
 		searchController.searchResultsUpdater = self
-//		searchController.searchResultsUpdater = resultsController //!!!!!!!!!!!
+		//		searchController.searchResultsUpdater = resultsController //!!!!!!!!!!!
 		searchController.searchBar.delegate = self
 		searchController.searchBar.placeholder = "Search or enter website name"
 		searchController.obscuresBackgroundDuringPresentation = false
@@ -166,34 +166,34 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		
 		
 		
-//		self.webView.isHidden = true
+		//		self.webView.isHidden = true
 		
-//		webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { (cookies) in
-//			for cookie in cookies {
-//				print("cookie.name: \(cookie.name) , cookie.value\(cookie.value)")
-//			}
-//		}
+		//		webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { (cookies) in
+		//			for cookie in cookies {
+		//				print("cookie.name: \(cookie.name) , cookie.value\(cookie.value)")
+		//			}
+		//		}
 		
-//		let websiteDataRecord = WKWebsiteDataRecord()
+		//		let websiteDataRecord = WKWebsiteDataRecord()
 		
-
+		
 		///Save the history data into hisotry PList
-//		let customPlist = "history.plist"
-//		let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-//		let path = paths[0] as NSString
-//		let plist = path.strings(byAppendingPaths: [customPlist]).first!
-//		let data = NSMutableDictionary(contentsOfFile: plist) ?? NSMutableDictionary()
+		//		let customPlist = "history.plist"
+		//		let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+		//		let path = paths[0] as NSString
+		//		let plist = path.strings(byAppendingPaths: [customPlist]).first!
+		//		let data = NSMutableDictionary(contentsOfFile: plist) ?? NSMutableDictionary()
 		
-				/// 방문한 웹사이트 리스트를 추출함.
+		/// 방문한 웹사이트 리스트를 추출함.
 		WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
 			records.forEach { (record) in
 				print("record!!!: \(record)")
 				self.visitedWebSiteHistoryRecords.append(record.displayName)
-//				data.setValue("\(record.displayName)", forKey: record.displayName)
-//				data.write(toFile: plist, atomically: true)
+				//				data.setValue("\(record.displayName)", forKey: record.displayName)
+				//				data.write(toFile: plist, atomically: true)
 				
 				/// append the history data to UserDefaults
-			UserDefaults.standard.setValue(self.visitedWebSiteHistoryRecords, forKey: "HistoryData")
+				UserDefaults.standard.setValue(self.visitedWebSiteHistoryRecords, forKey: "HistoryData")
 				
 			}
 			
@@ -204,25 +204,25 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		NotificationGroup.shared.registerObserver(type: .historyURLName, vc: self, selector: #selector(onHitoryNotification(notification:)))
 		
 	}
-		override func viewWillAppear(_ animated: Bool) {
-			super.viewWillAppear(animated)
-	//		print("backforwardlist.backlist")
-	//		print(webView.backForwardList.backList)
-			//		navigationController?.hidesBarsOnSwipe = true
-			
-	//		webView.addObserver(self, forKeyPath: #keyPath(WKWebView.title), options: NSKeyValueObservingOptions.new, context: nil)
-		}
-	
-		override func viewWillDisappear(_ animated: Bool) {
-			super.viewWillDisappear(animated)
-			//		navigationController?.hidesBarsOnSwipe = false
-			
-		}
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		//		print("backforwardlist.backlist")
+		//		print(webView.backForwardList.backList)
+		//		navigationController?.hidesBarsOnSwipe = true
 		
-		override func viewDidDisappear(_ animated: Bool) {
-			super.viewDidDisappear(animated)
-			NotificationGroup.shared.removeAllObserver(vc: self)
-		}
+		//		webView.addObserver(self, forKeyPath: #keyPath(WKWebView.title), options: NSKeyValueObservingOptions.new, context: nil)
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		//		navigationController?.hidesBarsOnSwipe = false
+		
+	}
+	
+	override func viewDidDisappear(_ animated: Bool) {
+		super.viewDidDisappear(animated)
+		NotificationGroup.shared.removeAllObserver(vc: self)
+	}
 	
 	
 	func setupCustomButtons() {
@@ -231,11 +231,11 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			let bookmarkNav = storyboard.instantiateViewController(identifier: "BookmarkNav") as UINavigationController
 			self.navigationController?.present(bookmarkNav, animated: true, completion: nil)
 			
-//			if let segmentVC = bookmarkNav.children[0] as? SegmentControlVC {
-//				segementVC.selectedBookmarkHandler = { urlString in
-//					self.loadWebViewFromBookmarksURL(urlString: urlString)
-//				}
-//			}
+			//			if let segmentVC = bookmarkNav.children[0] as? SegmentControlVC {
+			//				segementVC.selectedBookmarkHandler = { urlString in
+			//					self.loadWebViewFromBookmarksURL(urlString: urlString)
+			//				}
+			//			}
 			
 			if let segmentVC = bookmarkNav.children[0] as? SegmentControlVC {
 				segmentVC.selectedBookmarkHandler = { urlString in
@@ -243,24 +243,24 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 				}
 			}
 			
-//			if let segmentVC = bookmarkNav.children[0] as? SegmentControlVC {
-//				if let bookmarkVC = segmentVC.children[0] as? BookmarksVC {
-//					bookmarkVC.completionHandler = { urlString in
-//						self.loadWebViewFromBookmarksURL(urlString: urlString)
-//					}
-//				}
-//			}
+			//			if let segmentVC = bookmarkNav.children[0] as? SegmentControlVC {
+			//				if let bookmarkVC = segmentVC.children[0] as? BookmarksVC {
+			//					bookmarkVC.completionHandler = { urlString in
+			//						self.loadWebViewFromBookmarksURL(urlString: urlString)
+			//					}
+			//				}
+			//			}
 			
 			
 			
 			
-//			let bookmarkVC = BookmarksVC()
-//			bookmarkVC.completionHandler = { urlString in
-//				self.loadWebViewFromBookmarksURL(urlString: urlString)
-//			}
-////			let navi = UINavigationController.init(rootViewController: bookmarkVC)
-//			let bookmarkNav = self.storyboard?.instantiateViewController(identifier: "BookmarkNav") as! UINavigationController
-//			self.present(bookmarkNav, animated: true, completion: nil)
+			//			let bookmarkVC = BookmarksVC()
+			//			bookmarkVC.completionHandler = { urlString in
+			//				self.loadWebViewFromBookmarksURL(urlString: urlString)
+			//			}
+			////			let navi = UINavigationController.init(rootViewController: bookmarkVC)
+			//			let bookmarkNav = self.storyboard?.instantiateViewController(identifier: "BookmarkNav") as! UINavigationController
+			//			self.present(bookmarkNav, animated: true, completion: nil)
 		}
 		
 		bookmarksButton.longEvent = {
@@ -317,7 +317,8 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		
 		backButton.longEvent = {
 			let storyboard = UIStoryboard(name: "Main", bundle: nil)
-			let history = storyboard.instantiateViewController(identifier: "History") as! History
+//			let history = storyboard.instantiateViewController(identifier: "History") as! History
+			let history = storyboard.instantiateViewController(identifier: "HistoryNavigationController") as UINavigationController
 			self.navigationController?.present(history, animated: true, completion: nil)
 		}
 		
@@ -327,10 +328,11 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		
 		forwardButton.longEvent = {
 			let storyboard = UIStoryboard(name: "Main", bundle: nil)
-			let history = storyboard.instantiateViewController(identifier: "History") as! History
+//			let history = storyboard.instantiateViewController(identifier: "History") as! History
+			let history = storyboard.instantiateViewController(identifier: "HistoryNavigationController") as UINavigationController
 			self.navigationController?.present(history, animated: true, completion: nil)
 		}
-	
+		
 	}
 	
 	//-----------------
@@ -395,32 +397,32 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			//375 667
 			image.frame = CGRect(x: 0, y:100, width: 375, height: 667)
 			image.didSelect = selectImage
-//			self.view.addSubview(image)//
+			//			self.view.addSubview(image)//
 		}
 		var perspective = CATransform3DIdentity
 		perspective.m34 = -1.0/250.0
 		view.layer.sublayerTransform = perspective
 		
-//		for snapshot in snapshots {
-//			snapshot.layer.anchorPoint.y = 0.0
-//			snapshot.frame = CGRect(x: 0, y: 44, width: 375, height: 667)
-//			self.view.addSubview(snapshot)
-//		}
-//		var perspectvie = CATransform3DIdentity
-//		perspectvie.m34 = -1.0/250.0
-//		view.layer.sublayerTransform = perspectvie
+		//		for snapshot in snapshots {
+		//			snapshot.layer.anchorPoint.y = 0.0
+		//			snapshot.frame = CGRect(x: 0, y: 44, width: 375, height: 667)
+		//			self.view.addSubview(snapshot)
+		//		}
+		//		var perspectvie = CATransform3DIdentity
+		//		perspectvie.m34 = -1.0/250.0
+		//		view.layer.sublayerTransform = perspectvie
 		
 	}
 	
-//	override class func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-//		if keyPath == "title" {
-//			if let title = webView.title {
-//				print(title)
-//			}
-//		}
-//	}
+	//	override class func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+	//		if keyPath == "title" {
+	//			if let title = webView.title {
+	//				print(title)
+	//			}
+	//		}
+	//	}
 	
-
+	
 	
 	@objc func onHitoryNotification(notification: Notification) {
 		if let url = notification.userInfo?["selectedHistoryURL"] as? String {
@@ -431,9 +433,9 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	}
 	
 	@objc func onNotification(notification: Notification) {
-//		print(notification.userInfo)
+		//		print(notification.userInfo)
 		if let url = notification.userInfo?["selectedBookmarkURL"] as? String {
-//			print(url)
+			//			print(url)
 			loadWebViewFromBookmarksURL(urlString: url)
 		}
 		
@@ -442,34 +444,30 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	func loadWebViewFromBookmarksURL(urlString: String?) {
 		//http://AAA.com
 		self.searchBar.text = urlString
-	
+		
 		guard var urlString = urlString?.lowercased() else { return }
 		guard let url: URL = URL.init(string: urlString) else {
 			return
 		}
 		if UIApplication.shared.canOpenURL(url) {
-			if !urlString.contains("://") {
-				if urlString.contains("localhost") || urlString.contains("127.0.0.1") {
-					urlString = "http://" + urlString
-				} else {
-					urlString = "https://" + urlString
-				}
-			}
-
-			if webView.url?.absoluteString == urlString {
-				return
-			}
-
+			//TODO: - Not sure
 			self.webView.load(URLRequest(url: url))
-			
-		}
-		else {
-			let alert = AlertsAndMenus.shared.alertNotify(title: "Not a Valid URL", message: nil, style: UIAlertController.Style.alert)
-			
-			self.present(alert, animated: true, completion: nil)
-			
 		}
 		
+		if !urlString.contains("://") {
+			if urlString.contains("localhost") || urlString.contains("127.0.0.1") {
+				urlString = "http://" + urlString
+			} else {
+				urlString = "https://" + urlString
+			}
+		}
+		if webView.url?.absoluteString == urlString {
+			return
+		}
+		if let targetURL = URL(string: urlString) {
+			webView.load(URLRequest(url: targetURL))
+		}
+	
 	}
 	
 	func loadStartPage() {
@@ -479,16 +477,16 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		}
 	}
 	
-
 	
 	
 	
-//	func searchWebSite(urlString: String) {
-//		let url = URL(string: urlString)
-//		let request = URLRequest(url: url!)
-//		self.webView?.load(request)
-//	}
-
+	
+	//	func searchWebSite(urlString: String) {
+	//		let url = URL(string: urlString)
+	//		let request = URLRequest(url: url!)
+	//		self.webView?.load(request)
+	//	}
+	
 	//	func selectWebView(selectedWebView: CustomWebView) {
 	//		for subview in view.subviews {
 	//			guard let webV = subview as? CustomWebView else {
@@ -548,7 +546,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 				popoverController.sourceRect = leftBarButtonItem.accessibilityFrame
 			}
 			
-//			popoverController.sourceRect = navigationItem.leftBarButtonItem?.accessibilityFrame!
+			//			popoverController.sourceRect = navigationItem.leftBarButtonItem?.accessibilityFrame!
 			popoverController.sourceView = self.view
 			popoverController.permittedArrowDirections = .up
 		}
@@ -563,7 +561,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	}
 	func shareAction() -> UIAlertAction {
 		return UIAlertAction(title: "Share…", style: .default, handler: { (alert: UIAlertAction!) -> Void in
-//			let message = "Message goes here"
+			//			let message = "Message goes here"
 			if let link = NSURL(string: self.searchBar.text!) {
 				let objectsToShare = [link] as [Any]
 				let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
@@ -607,19 +605,19 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		return traitCollection.forceTouchCapability == UIForceTouchCapability.available
 		
 	}
-
 	
-//	@IBAction func backButton(_ sender: UIBarButtonItem) {
-//		self.webView.goBack()
-//	}
-//	@IBAction func forwardButton(_ sender: UIBarButtonItem) {
-//		self.webView.goForward()
-//	}
+	
+	//	@IBAction func backButton(_ sender: UIBarButtonItem) {
+	//		self.webView.goBack()
+	//	}
+	//	@IBAction func forwardButton(_ sender: UIBarButtonItem) {
+	//		self.webView.goForward()
+	//	}
 	
 	@IBAction func shareButton(_ sender: UIBarButtonItem) {
-		let message = "Message goes here"
+//		let message = "Message goes here"
 		if let link = NSURL(string: self.searchBar.text!) {
-			let objectsToShare = [message, link] as [Any]
+			let objectsToShare = [link] as [Any]
 			let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
 			activityVC.excludedActivityTypes = []
 			self.present(activityVC, animated: true, completion: nil)
@@ -629,137 +627,137 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	
 	
 	
-//	@IBAction func openTabs(_ sender: Any) {
-//
-//		//TODO: - !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-////		var snapshot = webView.snapshotView(afterScreenUpdates: true)
-////		snapshot?.frame = webView.frame //???
-////
-////		self.snapshots.append(snapshot!)
-//////		self.view.addSubview(snapshot!)
-////		self.webView.stopLoading()
-////		self.webView.backgroundColor = UIColor.black
-////		self.webView.removeFromSuperview()
-////
-////		if isGalleryOpen {
-////			for subview in view.subviews {
-////				guard let snapshotView = subview as? SnapshotCard else {
-////					continue
-////				}
-////				webView.scrollView
-////			}
-////		}
-//
-//
-//		if isGalleryOpen {
-//			for subview in view.subviews {
-//				guard let image = subview as? ImageViewCard else {
-//					continue
-//				}
-//				let animation = CABasicAnimation(keyPath: "transform")
-//				animation.fromValue = NSValue(caTransform3D: image.layer.transform)
-//				animation.toValue = NSValue(caTransform3D: CATransform3DIdentity)
-//				animation.duration = 0.33
-//
-//				image.layer.add(animation, forKey: nil)
-//				image.layer.transform = CATransform3DIdentity
-//			}
-//			isGalleryOpen = false
-//			return
-//		}
-//
-//		var imageYOffset: CGFloat = 50.0
-//
-//		for subview in view.subviews {
-//			guard let image = subview as? ImageViewCard else {
-//				continue
-//			}
-//			//
-//			var imageTransform = CATransform3DIdentity
-//			//1
-//			imageTransform = CATransform3DTranslate(imageTransform, 0.0, imageYOffset, 0.0)
-//			//2
-//			imageTransform = CATransform3DScale(imageTransform, 0.95, 0.6, 1.0)
-//			//3
-//			imageTransform = CATransform3DRotate(imageTransform, .pi/8, -1.0, 0.0, 0.0)
-//
-//			let animation = CABasicAnimation(keyPath: "transform")
-//			animation.fromValue = NSValue(caTransform3D: image.layer.transform)
-//			animation.toValue = NSValue(caTransform3D: imageTransform)
-//			animation.duration = 0.33
-//			image.layer.add(animation, forKey: nil)
-//
-//			image.layer.transform = imageTransform
-//
-//			imageYOffset += view.frame.height / CGFloat(images.count)
-//
-//		}
-//		isGalleryOpen = true
-//
-//		// ------------------------------------------------------------------
-//
-////		var imageYOffset: CGFloat = 50.0
-////		self.webView.stopLoading()
-////		self.webView.removeFromSuperview()
-////		self.view.addSubview(snapshot!)
-////		for subview in view.subviews {
-////			var imageTransform = CATransform3DIdentity
-////			imageTransform = CATransform3DTranslate(imageTransform, 0.0, imageYOffset, 0.0)
-////			imageTransform = CATransform3DScale(imageTransform, 0.95, 0.6, 1.0)
-////			imageTransform = CATransform3DRotate(imageTransform, .pi/8, -1.0, 0.0, 0.0)
-////			let animation = CABasicAnimation(keyPath: "transform")
-////			animation.fromValue = NSValue(caTransform3D: subview.layer.transform)
-////			animation.toValue = NSValue(caTransform3D: imageTransform)
-////			animation.duration = 0.33
-////			subview.layer.add(animation, forKey: nil)
-////			subview.layer.transform = imageTransform
-////			imageYOffset += view.frame.height / CGFloat(snapshots.count)
-////		}
-////		isGalleryOpen = true
-////		if isGalleryOpen {
-////			print("gallery is open")
-////		}
-//
-//		//		if isGalleryOpen {
-//		//			for subview in view.subviews {
-//		//				guard let image = subview as? CustomWebView else {
-//		//					continue
-//		//				}
-//		//				let animation = CABasicAnimation(keyPath: "transform")
-//		//				animation.fromValue = NSValue(caTransform3D: image.layer.transform)
-//		//				animation.toValue = NSValue(caTransform3D: CATransform3DIdentity)
-//		//				animation.duration = 0.33
-//		//			}
-//		//			isGalleryOpen = false
-//		//			return
-//		//		}
-//		//
-//		//		var imageYOffset: CGFloat = 50.0
-//		//
-//		//		for subview in view.subviews {
-//		//			guard let webV = subview as? CustomWebView else {
-//		//				continue
-//		//			}
-//		//			var imageTransform = CATransform3DIdentity
-//		//			//1
-//		//			imageTransform = CATransform3DTranslate(imageTransform, 0.0, imageYOffset, 0.0)
-//		//			//2
-//		//			imageTransform = CATransform3DScale(imageTransform, 0.95, 0.6, 1.0)
-//		//			//3
-//		//			imageTransform = CATransform3DRotate(imageTransform, .pi/8, -1.0, 0.0, 0.0)
-//		//
-//		//			let animation = CABasicAnimation(keyPath: "transform")
-//		//			animation.fromValue = NSValue(caTransform3D: webV.layer.transform)
-//		//			animation.toValue = NSValue(caTransform3D: imageTransform)
-//		//			animation.duration = 0.33
-//		//			webV.layer.transform = imageTransform
-//		//
-//		//			imageYOffset += view.frame.height / CGFloat(customWebViews.count)
-//		//
-//		//		}
-//		//		isGalleryOpen = true
-//
-//	}
+	//	@IBAction func openTabs(_ sender: Any) {
+	//
+	//		//TODO: - !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	////		var snapshot = webView.snapshotView(afterScreenUpdates: true)
+	////		snapshot?.frame = webView.frame //???
+	////
+	////		self.snapshots.append(snapshot!)
+	//////		self.view.addSubview(snapshot!)
+	////		self.webView.stopLoading()
+	////		self.webView.backgroundColor = UIColor.black
+	////		self.webView.removeFromSuperview()
+	////
+	////		if isGalleryOpen {
+	////			for subview in view.subviews {
+	////				guard let snapshotView = subview as? SnapshotCard else {
+	////					continue
+	////				}
+	////				webView.scrollView
+	////			}
+	////		}
+	//
+	//
+	//		if isGalleryOpen {
+	//			for subview in view.subviews {
+	//				guard let image = subview as? ImageViewCard else {
+	//					continue
+	//				}
+	//				let animation = CABasicAnimation(keyPath: "transform")
+	//				animation.fromValue = NSValue(caTransform3D: image.layer.transform)
+	//				animation.toValue = NSValue(caTransform3D: CATransform3DIdentity)
+	//				animation.duration = 0.33
+	//
+	//				image.layer.add(animation, forKey: nil)
+	//				image.layer.transform = CATransform3DIdentity
+	//			}
+	//			isGalleryOpen = false
+	//			return
+	//		}
+	//
+	//		var imageYOffset: CGFloat = 50.0
+	//
+	//		for subview in view.subviews {
+	//			guard let image = subview as? ImageViewCard else {
+	//				continue
+	//			}
+	//			//
+	//			var imageTransform = CATransform3DIdentity
+	//			//1
+	//			imageTransform = CATransform3DTranslate(imageTransform, 0.0, imageYOffset, 0.0)
+	//			//2
+	//			imageTransform = CATransform3DScale(imageTransform, 0.95, 0.6, 1.0)
+	//			//3
+	//			imageTransform = CATransform3DRotate(imageTransform, .pi/8, -1.0, 0.0, 0.0)
+	//
+	//			let animation = CABasicAnimation(keyPath: "transform")
+	//			animation.fromValue = NSValue(caTransform3D: image.layer.transform)
+	//			animation.toValue = NSValue(caTransform3D: imageTransform)
+	//			animation.duration = 0.33
+	//			image.layer.add(animation, forKey: nil)
+	//
+	//			image.layer.transform = imageTransform
+	//
+	//			imageYOffset += view.frame.height / CGFloat(images.count)
+	//
+	//		}
+	//		isGalleryOpen = true
+	//
+	//		// ------------------------------------------------------------------
+	//
+	////		var imageYOffset: CGFloat = 50.0
+	////		self.webView.stopLoading()
+	////		self.webView.removeFromSuperview()
+	////		self.view.addSubview(snapshot!)
+	////		for subview in view.subviews {
+	////			var imageTransform = CATransform3DIdentity
+	////			imageTransform = CATransform3DTranslate(imageTransform, 0.0, imageYOffset, 0.0)
+	////			imageTransform = CATransform3DScale(imageTransform, 0.95, 0.6, 1.0)
+	////			imageTransform = CATransform3DRotate(imageTransform, .pi/8, -1.0, 0.0, 0.0)
+	////			let animation = CABasicAnimation(keyPath: "transform")
+	////			animation.fromValue = NSValue(caTransform3D: subview.layer.transform)
+	////			animation.toValue = NSValue(caTransform3D: imageTransform)
+	////			animation.duration = 0.33
+	////			subview.layer.add(animation, forKey: nil)
+	////			subview.layer.transform = imageTransform
+	////			imageYOffset += view.frame.height / CGFloat(snapshots.count)
+	////		}
+	////		isGalleryOpen = true
+	////		if isGalleryOpen {
+	////			print("gallery is open")
+	////		}
+	//
+	//		//		if isGalleryOpen {
+	//		//			for subview in view.subviews {
+	//		//				guard let image = subview as? CustomWebView else {
+	//		//					continue
+	//		//				}
+	//		//				let animation = CABasicAnimation(keyPath: "transform")
+	//		//				animation.fromValue = NSValue(caTransform3D: image.layer.transform)
+	//		//				animation.toValue = NSValue(caTransform3D: CATransform3DIdentity)
+	//		//				animation.duration = 0.33
+	//		//			}
+	//		//			isGalleryOpen = false
+	//		//			return
+	//		//		}
+	//		//
+	//		//		var imageYOffset: CGFloat = 50.0
+	//		//
+	//		//		for subview in view.subviews {
+	//		//			guard let webV = subview as? CustomWebView else {
+	//		//				continue
+	//		//			}
+	//		//			var imageTransform = CATransform3DIdentity
+	//		//			//1
+	//		//			imageTransform = CATransform3DTranslate(imageTransform, 0.0, imageYOffset, 0.0)
+	//		//			//2
+	//		//			imageTransform = CATransform3DScale(imageTransform, 0.95, 0.6, 1.0)
+	//		//			//3
+	//		//			imageTransform = CATransform3DRotate(imageTransform, .pi/8, -1.0, 0.0, 0.0)
+	//		//
+	//		//			let animation = CABasicAnimation(keyPath: "transform")
+	//		//			animation.fromValue = NSValue(caTransform3D: webV.layer.transform)
+	//		//			animation.toValue = NSValue(caTransform3D: imageTransform)
+	//		//			animation.duration = 0.33
+	//		//			webV.layer.transform = imageTransform
+	//		//
+	//		//			imageYOffset += view.frame.height / CGFloat(customWebViews.count)
+	//		//
+	//		//		}
+	//		//		isGalleryOpen = true
+	//
+	//	}
 	
 }
 
@@ -850,15 +848,15 @@ extension MainVC: UISearchResultsUpdating {
 				urlString = "https://" + urlString
 			}
 		}
-
-//		if !urlString.contains(".com") {
-//			urlString.append(contentsOf: ".com")
-//		}
-
+		
+		//		if !urlString.contains(".com") {
+		//			urlString.append(contentsOf: ".com")
+		//		}
+		
 		if webView.url?.absoluteString == urlString {
 			return
 		}
-
+		
 		if let targetUrl = URL(string: urlString) {
 			webView.load(URLRequest(url: targetUrl))
 		}
@@ -900,7 +898,7 @@ extension MainVC: UISearchBarDelegate {
 		self.webView.reload()
 		
 	}
-
+	
 	
 }
 
@@ -923,6 +921,7 @@ extension MainVC: WKNavigationDelegate {
 				searchBar.text = url.lastPathComponent
 			}
 		}
+		currentContentMode = navigation.effectiveContentMode
 	}
 	func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
 		print("didFinish")
@@ -930,16 +929,16 @@ extension MainVC: WKNavigationDelegate {
 	
 	//--------
 	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
-		 if let hostName = navigationAction.request.url?.host {
-			  if let preferredContentMode = contentModeToRequestForHost[hostName] {
-					preferences.preferredContentMode = preferredContentMode
-			  }
-		 } else if navigationAction.request.url?.scheme == "file" {
-			  if let preferredContentMode = contentModeToRequestForHost[hostNameForLocalFile] {
-					preferences.preferredContentMode = preferredContentMode
-			  }
-		 }
-		 decisionHandler(.allow, preferences)
+		if let hostName = navigationAction.request.url?.host {
+			if let preferredContentMode = contentModeToRequestForHost[hostName] {
+				preferences.preferredContentMode = preferredContentMode
+			}
+		} else if navigationAction.request.url?.scheme == "file" {
+			if let preferredContentMode = contentModeToRequestForHost[hostNameForLocalFile] {
+				preferences.preferredContentMode = preferredContentMode
+			}
+		}
+		decisionHandler(.allow, preferences)
 	}
 	//--------
 	
@@ -990,11 +989,11 @@ class CusBarItem: UIBarButtonItem {
 		} else {
 			print("cus nil");
 			
-//			if let image = self.backgroundImage(for: .normal, barMetrics: .default) {
-//
-//			}
+			//			if let image = self.backgroundImage(for: .normal, barMetrics: .default) {
+			//
+			//			}
 			
-//			touchView.backgroundColor = UIColor.red
+			//			touchView.backgroundColor = UIColor.red
 			touchView.frame = CGRect(x: 0, y: 0, width: 27, height: 27)
 			self.customView = touchView
 			
@@ -1017,15 +1016,15 @@ class CusBarItem: UIBarButtonItem {
 	}
 	
 	@objc func tap() {
-
+		
 		if let tapEvent = self.tapEvent {
 			tapEvent()
 		}
 		
 	}
-
+	
 	@objc func long() {
-
+		
 		if let longEvent = self.longEvent {
 			longEvent()
 		}

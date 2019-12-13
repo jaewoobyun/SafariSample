@@ -12,6 +12,8 @@ import CITreeView
 
 class EditFolder: UIViewController {
 	
+	var folderTitle: String?
+	
 	@IBOutlet weak var titleTextField: UITextField!
 	@IBOutlet weak var treeView: CITreeView!
 	
@@ -23,6 +25,8 @@ class EditFolder: UIViewController {
 		super.viewDidLoad()
 		BookmarksDataModel.createSampleData()
 		data = BookmarksDataModel.bookMarkDatas
+		
+		titleTextField.text = folderTitle
 		
 		titleTextField.delegate = self
 		

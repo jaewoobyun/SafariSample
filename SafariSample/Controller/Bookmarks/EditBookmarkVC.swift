@@ -10,6 +10,10 @@ import UIKit
 import CITreeView
 
 class EditBookmarkVC: UIViewController {
+	
+	var bookmarkTitle: String?
+	var address: String?
+	
 	//MARK: - Outlets
 	@IBOutlet weak var treeView: CITreeView!
 	@IBOutlet weak var iconImageView: UIImageView!
@@ -23,6 +27,12 @@ class EditBookmarkVC: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		titleInput.textColor = .gray
+		addressInput.textColor = .gray
+		
+		titleInput.text = bookmarkTitle
+		addressInput.text = address
+		
 //		data = TreeData.getDefaultData() //get the default data
 		BookmarksDataModel.createSampleData()
 		data = BookmarksDataModel.bookMarkDatas

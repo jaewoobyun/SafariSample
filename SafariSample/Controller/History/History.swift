@@ -34,6 +34,8 @@ class History: UITableViewController {
 		UserDefaults.standard.setValue(krDateTime, forKey: "Date")
 		
 		dates = [(UserDefaults.standard.object(forKey: "Date") as? String ?? "Today")]
+//		let library_path = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0]
+//		print("library path is \(library_path)")
 		
 		tableView.delegate = self
 		tableView.dataSource = self

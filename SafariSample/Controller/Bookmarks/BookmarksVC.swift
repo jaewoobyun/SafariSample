@@ -345,8 +345,7 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 			if bookmarksData[indexPath.row].isFolder {
 				if tableView.isEditing {
 					if let reusableEditFolder = storyboard.instantiateViewController(identifier: "EditFolder") as? EditFolder {
-						//TODO: - something is not right
-//						reusableEditFolder.titleTextField.text = bookmarksData[indexPath.row].titleString
+						reusableEditFolder.folderTitle = bookmarksData[indexPath.item].titleString
 						navigationController?.pushViewController(reusableEditFolder, animated: true)
 					}
 				}
@@ -360,18 +359,17 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 					if let cc = self.completionHandler {
 						reuseableVC.completionHandler = cc
 					}
-					
 					navigationController?.pushViewController(reuseableVC, animated: true)
 				}
 			}
 			else {
 				let urlString = bookmarksData[indexPath.row].urlString
 				if tableView.isEditing {
-					let reusableEditBookmarkVC = storyboard.instantiateViewController(withIdentifier: "EditBookmarkVC") as? EditBookmarkVC
-					//TODO: - something is not right
-//					reusableEditBookmarkVC?.titleInput.text = urlString
-//					reusableEditBookmarkVC?.addressInput.text = urlString
-					navigationController?.pushViewController(reusableEditBookmarkVC!, animated: true)
+					if let reusableEditBookmarkVC = storyboard.instantiateViewController(withIdentifier: "EditBookmarkVC") as? EditBookmarkVC {
+						reusableEditBookmarkVC.bookmarkTitle = urlString
+						reusableEditBookmarkVC.address = urlString
+						navigationController?.pushViewController(reusableEditBookmarkVC, animated: true)
+					}
 					
 				}
 				else {

@@ -14,6 +14,7 @@
 		CC06F1B82390E8CC0096A6CD /* TreeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC06F1B72390E8CC0096A6CD /* TreeData.swift */; };
 		CC0E120F23A0EAD200557B67 /* NotificationGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0E120E23A0EAD200557B67 /* NotificationGroup.swift */; };
 		CC0E121123A1EA5900557B67 /* AlertsAndMenus.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0E121023A1EA5900557B67 /* AlertsAndMenus.swift */; };
+		CC0E121423A3565A00557B67 /* BookmarkModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CC0E121223A3565A00557B67 /* BookmarkModel.xcdatamodeld */; };
 		CC1F5D54239DD9DF00AD82EF /* EditFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1F5D53239DD9DF00AD82EF /* EditFolder.swift */; };
 		CC456726238F89E1006C1EF1 /* EditFolderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC456725238F89E1006C1EF1 /* EditFolderVC.swift */; };
 		CC456728238F8C40006C1EF1 /* FolderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC456727238F8C40006C1EF1 /* FolderData.swift */; };
@@ -52,6 +53,7 @@
 		CC06F1B72390E8CC0096A6CD /* TreeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeData.swift; sourceTree = "<group>"; };
 		CC0E120E23A0EAD200557B67 /* NotificationGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationGroup.swift; sourceTree = "<group>"; };
 		CC0E121023A1EA5900557B67 /* AlertsAndMenus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsAndMenus.swift; sourceTree = "<group>"; };
+		CC0E121323A3565A00557B67 /* BookmarkModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BookmarkModel.xcdatamodel; sourceTree = "<group>"; };
 		CC1F5D53239DD9DF00AD82EF /* EditFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolder.swift; sourceTree = "<group>"; };
 		CC456725238F89E1006C1EF1 /* EditFolderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderVC.swift; sourceTree = "<group>"; };
 		CC456727238F8C40006C1EF1 /* FolderData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderData.swift; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				CCB7A7532382295E00D8B0A0 /* Main.storyboard */,
+				CC0E121223A3565A00557B67 /* BookmarkModel.xcdatamodeld */,
 				CCB7A74D2382295E00D8B0A0 /* AppDelegate.swift */,
 				CCB7A74F2382295E00D8B0A0 /* SceneDelegate.swift */,
 				CC456729238FACB0006C1EF1 /* CITreeViewClasses */,
@@ -365,6 +368,7 @@
 				CC1F5D54239DD9DF00AD82EF /* EditFolder.swift in Sources */,
 				CC45672C238FB8B3006C1EF1 /* SampleData.swift in Sources */,
 				CCC26AB023827AF1006E2E62 /* SearchTableViewController.swift in Sources */,
+				CC0E121423A3565A00557B67 /* BookmarkModel.xcdatamodeld in Sources */,
 				CC8698A12387A6460043D796 /* SnapshotCard.swift in Sources */,
 				CC0E120F23A0EAD200557B67 /* NotificationGroup.swift in Sources */,
 				CC456726238F89E1006C1EF1 /* EditFolderVC.swift in Sources */,
@@ -576,6 +580,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		CC0E121223A3565A00557B67 /* BookmarkModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				CC0E121323A3565A00557B67 /* BookmarkModel.xcdatamodel */,
+			);
+			currentVersion = CC0E121323A3565A00557B67 /* BookmarkModel.xcdatamodel */;
+			path = BookmarkModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = CCB7A7422382295E00D8B0A0 /* Project object */;
 }
