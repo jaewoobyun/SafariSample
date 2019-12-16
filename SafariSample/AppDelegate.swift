@@ -31,6 +31,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //		 }
 //	}
 	
+	let now = Date()
+	let date = DateFormatter()
+	
+	
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
@@ -38,6 +42,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //		window = UIWindow(frame: UIScreen.main.bounds)
 //		window?.makeKeyAndVisible()
 //		window?.rootViewController = UINavigationController(rootViewController: MainVC(coder: NSCoder))
+		
+		date.locale = Locale(identifier: "ko_kr")
+		date.dateFormat = "EEEE, MMMM d"
+		let krDateTime = date.string(from: now)
+		print(krDateTime)
+		
+		UserDefaults.standard.setValue(krDateTime, forKey: "Date")
+		
+//		UserDefaults.standard.setPersistentDomain(<#T##domain: [String : Any]##[String : Any]#>, forName: <#T##String#>)
 		
 		
 		return true

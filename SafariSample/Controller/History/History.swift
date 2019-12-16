@@ -17,6 +17,7 @@ class History: UITableViewController {
 //	var Dates: [String] = ["Tuesday Afternoon", "Monday, November 18", "Saturday, November 16", "awefawef"]
 	
 	var dates: [String] = []
+//	var dates = UserDefaults.standard.stringArray(forKey: "Date") ?? [String]()
 	
 	let historyData = UserDefaults.standard.stringArray(forKey: "HistoryData") ?? [String]()
 	
@@ -25,15 +26,21 @@ class History: UITableViewController {
 		self.title = "History"
 		self.navigationController?.navigationBar.isHidden = false
 		
-		let now = Date()
-		let date = DateFormatter()
-		date.locale = Locale(identifier: "ko_kr")
-		date.dateFormat = "EEEE, MMMM d"
-		let krDateTime = date.string(from: now)
+//		let now = Date()
+//		let date = DateFormatter()
+//		date.locale = Locale(identifier: "ko_kr")
+//		date.dateFormat = "EEEE, MMMM d"
+//		let krDateTime = date.string(from: now)
 		
-		UserDefaults.standard.setValue(krDateTime, forKey: "Date")
+//		UserDefaults.standard.setValue(krDateTime, forKey: "Date")
 		
-		dates = [(UserDefaults.standard.object(forKey: "Date") as? String ?? "Today")]
+//		UserDefaults.standard.mutableSetValue(forKey: <#T##String#>)
+//		UserDefaults.standard.setValue(<#T##value: Any?##Any?#>, forKey: <#T##String#>)
+//		dates = [(UserDefaults.standard.object(forKey: "Date") as? String ?? "Today")]
+		
+		let testString = UserDefaults.standard.string(forKey: "testString")
+		print(testString)
+		
 //		let library_path = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0]
 //		print("library path is \(library_path)")
 		
@@ -44,6 +51,10 @@ class History: UITableViewController {
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "historycellsample")
 		
 		
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		dates = [(UserDefaults.standard.object(forKey: "Date") as? String ?? "Today")]
 	}
 	
 	
