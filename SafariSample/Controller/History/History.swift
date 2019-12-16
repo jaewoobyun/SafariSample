@@ -19,7 +19,9 @@ class History: UITableViewController {
 	var dates: [String] = []
 //	var dates = UserDefaults.standard.stringArray(forKey: "Date") ?? [String]()
 	
-	let historyData = UserDefaults.standard.stringArray(forKey: "HistoryData") ?? [String]()
+//	var historyData = UserDefaults.standard.stringArray(forKey: "HistoryData") ?? [String]()
+	
+	var historyData: [String] = []
 	
 	//MARK: - ViewDidLoad
 	override func viewDidLoad() {
@@ -37,12 +39,13 @@ class History: UITableViewController {
 //		UserDefaults.standard.mutableSetValue(forKey: <#T##String#>)
 //		UserDefaults.standard.setValue(<#T##value: Any?##Any?#>, forKey: <#T##String#>)
 //		dates = [(UserDefaults.standard.object(forKey: "Date") as? String ?? "Today")]
+		historyData = (UserDefaults.standard.array(forKey: "HistoryData") as? [String] ?? [String]())
 		
 		let testString = UserDefaults.standard.string(forKey: "testString")
 		print(testString)
 		
-//		let library_path = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0]
-//		print("library path is \(library_path)")
+		let library_path = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0]
+		print("library path is \(library_path)")
 		
 		tableView.delegate = self
 		tableView.dataSource = self
@@ -62,16 +65,20 @@ class History: UITableViewController {
 	@IBAction func clearButton(_ sender: UIBarButtonItem) {
 		let alertController = UIAlertController(title: nil, message: "Clearing will remove history, cookies, and other browsing data. History will be cleared from devices signed into your iCloud Account. Clear from:", preferredStyle: UIAlertController.Style.actionSheet)
 		let lastHour = UIAlertAction(title: "The last hour", style: UIAlertAction.Style.destructive) { (alertaction) in
-			//
+			//??
 		}
 		let today = UIAlertAction(title: "Today", style: UIAlertAction.Style.destructive) { (action) in
-			//
+			//??
 		}
 		let todayAndYesterday = UIAlertAction(title: "Today and Yesterday", style: UIAlertAction.Style.destructive) { (action) in
-			//
+			//??
+			
 		}
 		let allTime = UIAlertAction(title: "All Time", style: UIAlertAction.Style.destructive) { (action) in
-			//
+			//??
+			self.historyData.removeAll()
+			UserDefaults.standard.removeObject(forKey: "HistoryData")
+			self.tableView.reloadData()
 		}
 		let cancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
 			//
@@ -122,6 +129,8 @@ class History: UITableViewController {
 	
 	override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == .delete {
+			historyData.remove(at: indexPath.row)
+			UserDefaults.standard.setValue(historyData, forKey: "HistoryData")
 			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
 		}
 	}

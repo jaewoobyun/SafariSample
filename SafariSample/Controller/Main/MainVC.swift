@@ -167,16 +167,12 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		
 		
 		//		self.webView.isHidden = true
-		
 		//		webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { (cookies) in
 		//			for cookie in cookies {
 		//				print("cookie.name: \(cookie.name) , cookie.value\(cookie.value)")
 		//			}
 		//		}
-		
 		//		let websiteDataRecord = WKWebsiteDataRecord()
-		
-		
 		///Save the history data into hisotry PList
 		//		let customPlist = "history.plist"
 		//		let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
@@ -186,46 +182,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		
 		
 		
-		//목적 1. 원본데이터가 없을때 웹뷰 데이터 스토어에서 원본데이터를 가져온다.
-		//   2. 가져온 데이터가 있으면 해당 데이터를 기준으로 사용한다.
-		
-		
-		
-		// 1. 옵셔널 벨류가 널인가? 아닌가?
-		// 2. 널이 아니라면 리콰이어드 변수에 담는다.
-		// 3. 이프문 안쪽에서는 옵셔널 벨류를 리콰이어드 벨류로 사용할 수 있다.
-//		if let required = (optional != nil) {
-//			print(required)
-//		}
-		
-		
-		if let historyD = UserDefaults.standard.array(forKey: "HistoryData") as? [String], historyD.count != 0 {
-			// UserDefault에 "HistoryData"란 키 값으로 저장된 밸류가 있고, 그 갯수가 0이 아닐때.
-			//   2. 가져온 데이터가 있으면 해당 데이터를 기준으로 사용한다.
-			
-			self.visitedWebSiteHistoryRecords = historyD
-			
-			
-		} else {
-			// UserDefault에 historyD 가 nil 이거나 historyD 의 갯수가 0일때.
-			//목적 1. 원본데이터가 없을때 웹뷰 데이터 스토어에서 원본데이터를 가져온다.
-			
-			/// 방문한 웹사이트 리스트를 추출함.
-			/// 앱 내에서 웹뷰가 로딩 요청이 들어가면 WKWebsiteDataStore 에 값이 저장된다.
-			WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
-				records.forEach { (record) in
-					print("record!!!: \(record)")
-					self.visitedWebSiteHistoryRecords.append(record.displayName)
-				}
-				
-				/// append the history data to UserDefaults
-				print(self.visitedWebSiteHistoryRecords)
-				UserDefaults.standard.setValue(self.visitedWebSiteHistoryRecords, forKey: "HistoryData")
-
-				//					let hd = UserDefaults.standard.array(forKey: "HistoryData")
-				//					print(hd)
-			}
-		}
+		extractHistoryData()
 		
 		
 		
@@ -254,6 +211,41 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		NotificationGroup.shared.removeAllObserver(vc: self)
 	}
 	
+	/// 방문한 웹사이트 리스트를 추출함.
+	func extractHistoryData() {
+		//목적 1. 원본데이터가 없을때 웹뷰 데이터 스토어에서 원본데이터를 가져온다.
+		//목적 2. 가져온 데이터가 있으면 해당 데이터를 기준으로 사용한다.
+				
+		// 1. 옵셔널 벨류가 널인가? 아닌가?
+		// 2. 널이 아니라면 리콰이어드 변수에 담는다.
+		// 3. 이프문 안쪽에서는 옵셔널 벨류를 리콰이어드 벨류로 사용할 수 있다.
+		//		if let required = (optional != nil) {
+		//			print(required)
+		//		}
+		if let historyD = UserDefaults.standard.array(forKey: "HistoryData") as? [String], historyD.count != 0 {
+			// UserDefault에 "HistoryData"란 키 값으로 저장된 밸류가 있고, 그 갯수가 0이 아닐때.
+			//   2. 가져온 데이터가 있으면 해당 데이터를 기준으로 사용한다.
+			
+			self.visitedWebSiteHistoryRecords = historyD
+			
+			
+		} else {
+			// UserDefault에 historyD 가 nil 이거나 historyD 의 갯수가 0일때.
+			//목적 1. 원본데이터가 없을때 웹뷰 데이터 스토어에서 원본데이터를 가져온다.
+			
+			/// 앱 내에서 웹뷰가 로딩 요청이 들어가면 WKWebsiteDataStore 에 값이 저장된다.
+			WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
+				records.forEach { (record) in
+					print("record!!!: \(record)")
+					self.visitedWebSiteHistoryRecords.append(record.displayName)
+				}
+				
+				/// append the history data to UserDefaults
+				print(self.visitedWebSiteHistoryRecords)
+				UserDefaults.standard.setValue(self.visitedWebSiteHistoryRecords, forKey: "HistoryData")
+			}
+		}
+	}
 	
 	func setupCustomButtons() {
 		bookmarksButton.tapEvent = {
