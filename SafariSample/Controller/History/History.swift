@@ -14,35 +14,17 @@ class History: UITableViewController {
 	let searchController = UISearchController(searchResultsController: nil)
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
 	
-//	var Dates: [String] = ["Tuesday Afternoon", "Monday, November 18", "Saturday, November 16", "awefawef"]
+	let dateFormatter = DateFormatter()
+	let calendar = Calendar(identifier: .gregorian)
+	let ud = UserDefaults.standard
 	
 	var dates: [String] = []
-//	var dates = UserDefaults.standard.stringArray(forKey: "Date") ?? [String]()
-	
-//	var historyData = UserDefaults.standard.stringArray(forKey: "HistoryData") ?? [String]()
-	
-	var historyData: [String] = []
+	var historyData: [HistoryData] = []
 	
 	//MARK: - ViewDidLoad
 	override func viewDidLoad() {
 		self.title = "History"
 		self.navigationController?.navigationBar.isHidden = false
-		
-//		let now = Date()
-//		let date = DateFormatter()
-//		date.locale = Locale(identifier: "ko_kr")
-//		date.dateFormat = "EEEE, MMMM d"
-//		let krDateTime = date.string(from: now)
-		
-//		UserDefaults.standard.setValue(krDateTime, forKey: "Date")
-		
-//		UserDefaults.standard.mutableSetValue(forKey: <#T##String#>)
-//		UserDefaults.standard.setValue(<#T##value: Any?##Any?#>, forKey: <#T##String#>)
-//		dates = [(UserDefaults.standard.object(forKey: "Date") as? String ?? "Today")]
-		historyData = (UserDefaults.standard.array(forKey: "HistoryData") as? [String] ?? [String]())
-		
-		let testString = UserDefaults.standard.string(forKey: "testString")
-		print(testString)
 		
 		let library_path = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0]
 		print("library path is \(library_path)")
@@ -53,11 +35,21 @@ class History: UITableViewController {
 		
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "historycellsample")
 		
-		
+	}
+	
+	func sortDatesBySection() {
+//		for i in historyData {
+//			if i.date
+//		}
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
-		dates = [(UserDefaults.standard.object(forKey: "Date") as? String ?? "Today")]
+		guard let historyD = UserDefaultsManager.shared.loadWebHistoryArray() else { return }
+		
+		historyData = historyD
+		
+//		dates = [(UserDefaults.standard.object(forKey: "Date") as? String ?? "Today")]
+		dates = UserDefaults.standard.stringArray(forKey: "Date") ?? ["Today"]
 	}
 	
 	
@@ -78,6 +70,9 @@ class History: UITableViewController {
 			//??
 			self.historyData.removeAll()
 			UserDefaults.standard.removeObject(forKey: "HistoryData")
+			self.dates.removeAll()
+			UserDefaults.standard.removeObject(forKey: "Date")
+//			UserDefaults.standard.removeObject(forKey: "jsonKey")
 			self.tableView.reloadData()
 		}
 		let cancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
@@ -112,8 +107,15 @@ class History: UITableViewController {
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "prototype", for: indexPath)
-		cell.textLabel?.text = historyData[indexPath.row]
-		cell.detailTextLabel?.text = historyData[indexPath.row]
+		cell.textLabel?.text = historyData[indexPath.row].urlString
+		if let visitedDate = historyData[indexPath.row].date {
+//			print(visitedDate)
+			dateFormatter.locale = Locale(identifier: "ko_kr")
+			dateFormatter.dateFormat = "EEEE, MMMM d HH:mm" //"화요일, 12월 17"
+			let dt = dateFormatter.string(from: visitedDate)
+			cell.detailTextLabel?.text = dt
+		}
+		
 		cell.detailTextLabel?.textColor = UIColor.gray
 		
 		return cell
@@ -137,7 +139,7 @@ class History: UITableViewController {
 	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		print("didSelctRowAt \(indexPath)")
-		let urlString = historyData[indexPath.row]
+		let urlString = historyData[indexPath.row].urlString
 		
 		NotificationGroup.shared.post(type: .historyURLName, userInfo: ["selectedHistoryURL": urlString])
 		self.dismiss(animated: true, completion: nil)

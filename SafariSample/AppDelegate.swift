@@ -32,25 +32,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //	}
 	
 	let now = Date()
-	let date = DateFormatter()
+	let dateFormatter = DateFormatter()
+	let calendar = Calendar(identifier: .gregorian)
+	var dates: [String] = []
 	
+	let ud = UserDefaults.standard
 	
+	let tomorrow = Date(timeIntervalSinceNow: 86400)
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-		// Override point for customization after application launch.
 		
 //		window = UIWindow(frame: UIScreen.main.bounds)
 //		window?.makeKeyAndVisible()
 //		window?.rootViewController = UINavigationController(rootViewController: MainVC(coder: NSCoder))
 		
-		date.locale = Locale(identifier: "ko_kr")
-		date.dateFormat = "EEEE, MMMM d"
-		let krDateTime = date.string(from: now)
-		print(krDateTime)
+		/// 앱이 실행되었을 때의 날짜 시간을 userdefaults 에 저장한다.
+		dateFormatter.locale = Locale(identifier: "ko_kr")
+		dateFormatter.dateFormat = "EEEE, MMMM d" //"화요일, 12월 17"
+		let krTodayDateTime = dateFormatter.string(from: now)
+
+//		if let arr = UserDefaults.standard.stringArray(forKey: "Date") {
+//			var arrValues = arr as! [String]
+//			arrValues.append(krTodayDateTime)
+//			self.ud.setValue(arrValues, forKey: "Date")
+//			self.ud.synchronize()
+//			print(arr)
+//		}
+//		else {
+//			self.ud.setValue([krTodayDateTime], forKey: "Date")
+//		}
 		
-		UserDefaults.standard.setValue(krDateTime, forKey: "Date")
+		dates.append(krTodayDateTime)
+		ud.setValue(dates, forKey: "Date")
 		
-//		UserDefaults.standard.setPersistentDomain(<#T##domain: [String : Any]##[String : Any]#>, forName: <#T##String#>)
 		
 		
 		return true

@@ -37,7 +37,13 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	var canGoBackObservationToken: NSKeyValueObservation?
 	var canGoForwardObservationToken: NSKeyValueObservation?
 	
-	var visitedWebSiteHistoryRecords: [String] = []
+	
+	//	struct HistoryData {
+	//		var urlString:String?
+	//		var date:Date?
+	//	}
+	
+	var visitedWebSiteHistoryRecords: [HistoryData] = []
 	
 	required init?(coder: NSCoder) {
 		let configuration = WKWebViewConfiguration()
@@ -184,6 +190,8 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		
 		extractHistoryData()
 		
+		saveHistoryData()
+		
 		
 		
 		NotificationGroup.shared.registerObserver(type: .bookmarkURLName, vc: self, selector: #selector(onNotification(notification:)))
@@ -193,6 +201,21 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	}
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+		
+		print("!!!!!!!!!!!backforwardList")
+		print(webView.backForwardList)
+		
+		print("!!!!!!!!!!!back")
+		print(webView.backForwardList.backList)
+		print(webView.backForwardList.backItem?.url)
+		
+		print("!!!!!!!!!!!forwardList")
+		print(webView.backForwardList.forwardList)
+		print(webView.backForwardList.forwardItem?.url)
+		
+		
+		
+		//		extractHistoryData()
 		//		print("backforwardlist.backlist")
 		//		print(webView.backForwardList.backList)
 		//		navigationController?.hidesBarsOnSwipe = true
@@ -211,23 +234,27 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		NotificationGroup.shared.removeAllObserver(vc: self)
 	}
 	
+	func saveHistoryData() {
+		self.webView.backForwardList.currentItem?.url
+		
+	}
+	
 	/// 방문한 웹사이트 리스트를 추출함.
 	func extractHistoryData() {
 		//목적 1. 원본데이터가 없을때 웹뷰 데이터 스토어에서 원본데이터를 가져온다.
 		//목적 2. 가져온 데이터가 있으면 해당 데이터를 기준으로 사용한다.
-				
+		
 		// 1. 옵셔널 벨류가 널인가? 아닌가?
 		// 2. 널이 아니라면 리콰이어드 변수에 담는다.
 		// 3. 이프문 안쪽에서는 옵셔널 벨류를 리콰이어드 벨류로 사용할 수 있다.
 		//		if let required = (optional != nil) {
 		//			print(required)
 		//		}
-		if let historyD = UserDefaults.standard.array(forKey: "HistoryData") as? [String], historyD.count != 0 {
+		if let historyD = UserDefaults.standard.array(forKey: "HistoryData") as? [HistoryData], historyD.count != 0 {
 			// UserDefault에 "HistoryData"란 키 값으로 저장된 밸류가 있고, 그 갯수가 0이 아닐때.
 			//   2. 가져온 데이터가 있으면 해당 데이터를 기준으로 사용한다.
 			
 			self.visitedWebSiteHistoryRecords = historyD
-			
 			
 		} else {
 			// UserDefault에 historyD 가 nil 이거나 historyD 의 갯수가 0일때.
@@ -237,12 +264,18 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
 				records.forEach { (record) in
 					print("record!!!: \(record)")
-					self.visitedWebSiteHistoryRecords.append(record.displayName)
+			
+					let now = Date()
+					self.visitedWebSiteHistoryRecords.append(HistoryData(urlString: record.displayName, date: now))
 				}
 				
 				/// append the history data to UserDefaults
 				print(self.visitedWebSiteHistoryRecords)
-				UserDefaults.standard.setValue(self.visitedWebSiteHistoryRecords, forKey: "HistoryData")
+				
+				let isSaveSuccess = UserDefaultsManager.shared.saveWebHistoryArray(arr: self.visitedWebSiteHistoryRecords)
+				print(isSaveSuccess)
+				
+				
 			}
 		}
 	}

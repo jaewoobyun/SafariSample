@@ -124,7 +124,7 @@ class BookmarksDataModel {
 		let tempBookmark = BookmarksData.init(urlString: "http://???.com", titleString: "This is a bookmark", indexPath: dataIndex)
 //		bookMarkDatas.append(tempBookmark)
 		temp.append(tempBookmark)
-		print(temp)
+//		print(temp)
 		
 		bookMarkDatas.removeAll()
 //		bookMarkDatas.append(contentsOf: temp)
