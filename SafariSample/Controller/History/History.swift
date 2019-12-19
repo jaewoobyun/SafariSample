@@ -15,10 +15,12 @@ class History: UITableViewController {
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
 	
 	let dateFormatter = DateFormatter()
-	let calendar = Calendar(identifier: .gregorian)
+	
 	let ud = UserDefaults.standard
 	
 	var dates: [String] = []
+	
+	var sectionDates: [Date] = []
 	var historyData: [HistoryData] = []
 	
 	//MARK: - ViewDidLoad
@@ -35,19 +37,48 @@ class History: UITableViewController {
 		
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "historycellsample")
 		
+		
+		
 	}
 	
+	struct Section {
+		var date: Date
+		var cells: [HistoryData]
+	}
+	var sections: [Section] = []
+	
 	func sortDatesBySection() {
-//		for i in historyData {
-//			if i.date
-//		}
+		
+		var comparableDate: Date
+		let calendar = Calendar(identifier: .gregorian)
+		
+		for item in historyData {
+			guard let itemdate = item.date else { return }
+			/// comparableDate 에 현재 아이템이 추가된 시간을 할당.
+			comparableDate = itemdate
+			/// 만약 comparableDate 가 다음에 올 itemDate 와 같은 날에 있다면 sectionDate 를 갱신한다.
+			
+			if calendar.isDate(comparableDate, inSameDayAs: itemdate) {
+				sectionDates = [comparableDate]
+				/// 같은 날짜에 들어간 history 들을 section하나로 묶고,  그 안에 해당 데이터들을 넣는다.
+//				sections.append(History.Section(date: comparableDate, cells: [item]))
+			}
+			else { //만약 다른 날짜라고 하면 sectionDates에 다른 날짜를 추가해준다.
+				sectionDates.append(itemdate)
+				/// 다른 날짜면, section 이 바뀌어야 하니까 section 에 다른 Section 타입의 데이터를 추가해준다.
+//				sections.append(History.Section(date: itemdate, cells: [item]))
+			}
+		}
+		
+		
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		guard let historyD = UserDefaultsManager.shared.loadWebHistoryArray() else { return }
 		
 		historyData = historyD
-		
+		sortDatesBySection()
+		tableView.reloadData()
 //		dates = [(UserDefaults.standard.object(forKey: "Date") as? String ?? "Today")]
 		dates = UserDefaults.standard.stringArray(forKey: "Date") ?? ["Today"]
 	}
@@ -93,30 +124,45 @@ class History: UITableViewController {
 	
 	
 	override func numberOfSections(in tableView: UITableView) -> Int {
-		return dates.count
+//		return dates.count
+		return sectionDates.count
 	}
 	
 	override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		return dates[section]
+//		return dates[section]
+		
+		dateFormatter.locale = Locale(identifier: "ko_kr")
+		dateFormatter.dateFormat = "EEEE, MMMM d HH:mm" //"화요일, 12월 17"
+		let dateString = dateFormatter.string(from: sectionDates[section])
+		return dateString
+//		let dateString = dateFormatter.string(from: sections[section].date)
+//		return dateString
 	}
 	
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//		return visitedWebsites.count
 		return historyData.count
+//		return sections[section].cells.count
 	}
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "prototype", for: indexPath)
 		cell.textLabel?.text = historyData[indexPath.row].urlString
+
 		if let visitedDate = historyData[indexPath.row].date {
-//			print(visitedDate)
 			dateFormatter.locale = Locale(identifier: "ko_kr")
 			dateFormatter.dateFormat = "EEEE, MMMM d HH:mm" //"화요일, 12월 17"
 			let dt = dateFormatter.string(from: visitedDate)
 			cell.detailTextLabel?.text = dt
 		}
-		
+
 		cell.detailTextLabel?.textColor = UIColor.gray
+		
+//		cell.textLabel?.text = sections[indexPath.section].cells[indexPath.row].urlString
+//		if let visitedDate = sections[indexPath.section].cells[indexPath.row].date {
+//			dateFormatter.locale = Locale(identifier: "ko_kr")
+//			dateFormatter.dateFormat = "EEEE, MMMM d HH:mm" //"화요일, 12월 17"
+//			cell.detailTextLabel?.text = dateFormatter.string(from: visitedDate)
+//		}
 		
 		return cell
 	}
@@ -131,8 +177,12 @@ class History: UITableViewController {
 	
 	override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == .delete {
-			historyData.remove(at: indexPath.row)
-			UserDefaults.standard.setValue(historyData, forKey: "HistoryData")
+			historyData.remove(at: indexPath.row) /// <- 이거 아님??!!!!!!!!!!!
+//			UserDefaults.standard.setValue(historyData, forKey: "HistoryData")
+			
+//			sections[indexPath.section].cells.remove(at: indexPath.row)
+			
+			UserDefaultsManager.shared.saveWebHistoryArray(arr: self.historyData) /// <- 여기 로직 틀린듯!!!!!!!!!!!!!!!!
 			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
 		}
 	}

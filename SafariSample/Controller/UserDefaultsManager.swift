@@ -24,8 +24,8 @@ class UserDefaultsManager {
 		let encoder = JSONEncoder()
 		do {
 			let temp = try encoder.encode(arr)
-			UserDefaults.standard.set(temp, forKey: "HistoryData")
-			UserDefaults.standard.synchronize() //////?????????
+			userdefaultstandard.set(temp, forKey: "HistoryData")
+			userdefaultstandard.synchronize() //////?????????
 		} catch let error {
 			print(error)
 			return false
@@ -36,9 +36,9 @@ class UserDefaultsManager {
 	func loadWebHistoryArray() -> [HistoryData]? {
 		let decoder = JSONDecoder()
 		
-		if let jsonObject = UserDefaults.standard.object(forKey: "HistoryData") {
+		if let jsonObject = userdefaultstandard.object(forKey: "HistoryData") {
 //			let historyD = try? JSONDecoder().decode([HistoryData].self, from: jsonObject as! Data)
-			UserDefaults.standard.synchronize() ///?????????
+			userdefaultstandard.synchronize() ///?????????
 			do {
 				let historyD = try decoder.decode([HistoryData].self, from: jsonObject as! Data)
 				

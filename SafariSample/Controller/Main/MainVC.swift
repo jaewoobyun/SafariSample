@@ -188,10 +188,8 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		
 		
 		
-		extractHistoryData()
-		
+//		extractHistoryData()
 		saveHistoryData()
-		
 		
 		
 		NotificationGroup.shared.registerObserver(type: .bookmarkURLName, vc: self, selector: #selector(onNotification(notification:)))
@@ -201,19 +199,6 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	}
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		
-		print("!!!!!!!!!!!backforwardList")
-		print(webView.backForwardList)
-		
-		print("!!!!!!!!!!!back")
-		print(webView.backForwardList.backList)
-		print(webView.backForwardList.backItem?.url)
-		
-		print("!!!!!!!!!!!forwardList")
-		print(webView.backForwardList.forwardList)
-		print(webView.backForwardList.forwardItem?.url)
-		
-		
 		
 		//		extractHistoryData()
 		//		print("backforwardlist.backlist")
@@ -234,50 +219,44 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		NotificationGroup.shared.removeAllObserver(vc: self)
 	}
 	
-	func saveHistoryData() {
-		self.webView.backForwardList.currentItem?.url
-		
-	}
 	
-	/// 방문한 웹사이트 리스트를 추출함.
-	func extractHistoryData() {
-		//목적 1. 원본데이터가 없을때 웹뷰 데이터 스토어에서 원본데이터를 가져온다.
-		//목적 2. 가져온 데이터가 있으면 해당 데이터를 기준으로 사용한다.
+	
+	/// 유저가 방문을 한 웹사이트의 url 들을 userdefault 에 저장해준다. 데이터는 webview.backForwarkList 의 현재 진입한 페이지 url 하나를 userdefault 에 저장한다.
+	func saveHistoryData() {
+		let backForwardList = self.webView.backForwardList.self
+//		let currentItemUrl = backForwardList.currentItem?.url /// not sure if I should use .initialUrl
+//		var currentUrlString: String = ""
+//		if let currentUrl = currentItemUrl {
+//			currentUrlString = currentUrl.absoluteString
+//		}
 		
-		// 1. 옵셔널 벨류가 널인가? 아닌가?
-		// 2. 널이 아니라면 리콰이어드 변수에 담는다.
-		// 3. 이프문 안쪽에서는 옵셔널 벨류를 리콰이어드 벨류로 사용할 수 있다.
-		//		if let required = (optional != nil) {
-		//			print(required)
-		//		}
-		if let historyD = UserDefaults.standard.array(forKey: "HistoryData") as? [HistoryData], historyD.count != 0 {
-			// UserDefault에 "HistoryData"란 키 값으로 저장된 밸류가 있고, 그 갯수가 0이 아닐때.
-			//   2. 가져온 데이터가 있으면 해당 데이터를 기준으로 사용한다.
-			
-			self.visitedWebSiteHistoryRecords = historyD
-			
-		} else {
-			// UserDefault에 historyD 가 nil 이거나 historyD 의 갯수가 0일때.
-			//목적 1. 원본데이터가 없을때 웹뷰 데이터 스토어에서 원본데이터를 가져온다.
-			
-			/// 앱 내에서 웹뷰가 로딩 요청이 들어가면 WKWebsiteDataStore 에 값이 저장된다.
-			WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
-				records.forEach { (record) in
-					print("record!!!: \(record)")
-			
-					let now = Date()
-					self.visitedWebSiteHistoryRecords.append(HistoryData(urlString: record.displayName, date: now))
-				}
-				
-				/// append the history data to UserDefaults
-				print(self.visitedWebSiteHistoryRecords)
-				
-				let isSaveSuccess = UserDefaultsManager.shared.saveWebHistoryArray(arr: self.visitedWebSiteHistoryRecords)
-				print(isSaveSuccess)
-				
-				
-			}
+		guard let currentItemUrlString = backForwardList.currentItem?.url.absoluteString else {
+			return
 		}
+		print(currentItemUrlString)
+		print(backForwardList.currentItem?.title)
+		
+		if let historyDatum = UserDefaultsManager.shared.loadWebHistoryArray(), historyDatum.count != 0 {
+			//UserDefaults 에 값이 이미 있으면 있는 만큼을 채워준다.
+			if visitedWebSiteHistoryRecords.count == 0 {
+				self.visitedWebSiteHistoryRecords = historyDatum
+			}
+			else {
+				//추가할 생성될 historydata 를 원본에 쌓아준다.
+				let now = Date()
+				self.visitedWebSiteHistoryRecords.append(HistoryData(urlString: currentItemUrlString, date: now))
+			}
+			
+		}
+		else {
+			//UserDefaults 에 값이 없으면 (제일 처음 탄다)
+			let now = Date()
+			self.visitedWebSiteHistoryRecords.append(HistoryData(urlString: currentItemUrlString, date: now))
+		}
+		
+		let isSaveSuccess = UserDefaultsManager.shared.saveWebHistoryArray(arr: visitedWebSiteHistoryRecords)
+		print("saving history records success? \(isSaveSuccess)")
+		
 	}
 	
 	func setupCustomButtons() {
@@ -916,6 +895,7 @@ extension MainVC: UISearchResultsUpdating {
 			webView.load(URLRequest(url: targetUrl))
 		}
 		
+		
 	}
 	
 	func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
@@ -980,6 +960,7 @@ extension MainVC: WKNavigationDelegate {
 	}
 	func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
 		print("didFinish")
+		saveHistoryData()
 	}
 	
 	//--------
