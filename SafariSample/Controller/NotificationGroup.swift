@@ -20,6 +20,9 @@ class NotificationGroup {
 		case bookmarkURLName
 		case readinglistURLName
 		case historyURLName
+		case historyDataInstance
+		case backListData
+		case forwardListData
 		
 		func getNotificationName() -> Notification.Name? {
 			switch self {
@@ -29,6 +32,16 @@ class NotificationGroup {
 				return Notification.Name.init("readinglistURLName")
 			case .historyURLName:
 				return Notification.Name.init("historyURLName")
+			///우리가 추출하고 싶은 방문기록
+			case .historyDataInstance:
+				return Notification.Name.init("historyDataInstance")
+			/// 백 버튼을 눌렀을때 쌓이는 과거 기록들
+			case .backListData:
+				return Notification.Name.init("backListData")
+			/// 앞으로 버튼 눌렀을때 쌓이는 기록들
+			case .forwardListData:
+				return Notification.Name.init("forwardListData")
+				
 			default:
 				return nil
 			}
@@ -55,6 +68,14 @@ class NotificationGroup {
 	
 	func removeAllObserver(vc: UIViewController) {
 		NotificationCenter.default.removeObserver(vc)
+	}
+	
+	func registerHistoryObserver(type: NotiType, selector: Selector) {
+		guard let name = type.getNotificationName() else {
+			return
+		}
+		NotificationCenter.default.addObserver(UserDefaultsManager.shared, selector: selector, name: name, object: nil)
+		
 	}
 	
 	

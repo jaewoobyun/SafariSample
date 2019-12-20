@@ -30,7 +30,6 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	
 	@IBOutlet weak var webView: WKWebView!
 	
-	//	static let notificationName = Notification.Name("myNotificationName")
 	var currentContentMode: WKWebpagePreferences.ContentMode?
 	var contentModeToRequestForHost: [String: WKWebpagePreferences.ContentMode] = [:]
 	var estimatedProgressObservationToken: NSKeyValueObservation?
@@ -190,7 +189,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		
 //		extractHistoryData()
 		saveHistoryData()
-		
+//		initHistoryData()
 		
 		NotificationGroup.shared.registerObserver(type: .bookmarkURLName, vc: self, selector: #selector(onNotification(notification:)))
 		
@@ -219,9 +218,18 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		NotificationGroup.shared.removeAllObserver(vc: self)
 	}
 	
+	func initHistoryData(urlString: String) {
+		
+		
+		
+		
+	}
 	
+	func insertCurrentHistoryData(urlString: String) {
+		
+	}
 	
-	/// 유저가 방문을 한 웹사이트의 url 들을 userdefault 에 저장해준다. 데이터는 webview.backForwarkList 의 현재 진입한 페이지 url 하나를 userdefault 에 저장한다.
+		/// 유저가 방문을 한 웹사이트의 url 들을 userdefault 에 저장해준다. 데이터는 webview.backForwarkList 의 현재 진입한 페이지 url 하나를 userdefault 에 저장한다.
 	func saveHistoryData() {
 		let backForwardList = self.webView.backForwardList.self
 //		let currentItemUrl = backForwardList.currentItem?.url /// not sure if I should use .initialUrl
@@ -238,6 +246,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		
 		if let historyDatum = UserDefaultsManager.shared.loadWebHistoryArray(), historyDatum.count != 0 {
 			//UserDefaults 에 값이 이미 있으면 있는 만큼을 채워준다.
+			
 			if visitedWebSiteHistoryRecords.count == 0 {
 				self.visitedWebSiteHistoryRecords = historyDatum
 			}
@@ -258,6 +267,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		print("saving history records success? \(isSaveSuccess)")
 		
 	}
+
 	
 	func setupCustomButtons() {
 		bookmarksButton.tapEvent = {
@@ -960,7 +970,21 @@ extension MainVC: WKNavigationDelegate {
 	}
 	func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
 		print("didFinish")
-		saveHistoryData()
+//		saveHistoryData()
+//		insertCurrentPage()
+		
+		let backForwardList = self.webView.backForwardList.self
+		guard let currentItemUrl = backForwardList.currentItem?.url else { return }
+		guard let currentItemInitialUrl = backForwardList.currentItem?.initialURL else { return }
+		guard let currentItemTitle = backForwardList.currentItem?.title else { return }
+		guard let currentItemUrlString = backForwardList.currentItem?.url.absoluteString else { return }
+		let now = Date()
+		
+		let historyDataInstance = HistoryData(url: currentItemUrl, initialUrl: currentItemInitialUrl, title: currentItemTitle, urlString: currentItemUrlString, date: now)
+		
+		UserDefaultsManager.shared.insertCurrentPage(historyData: historyDataInstance)
+		
+		//NotificationGroup.shared.post(type: .historyDataInstance, userInfo: ["historyDataInstance": historyDataInstance])
 	}
 	
 	//--------

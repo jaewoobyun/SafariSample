@@ -57,7 +57,6 @@ class History: UITableViewController {
 			/// comparableDate 에 현재 아이템이 추가된 시간을 할당.
 			comparableDate = itemdate
 			/// 만약 comparableDate 가 다음에 올 itemDate 와 같은 날에 있다면 sectionDate 를 갱신한다.
-			
 			if calendar.isDate(comparableDate, inSameDayAs: itemdate) {
 				sectionDates = [comparableDate]
 				/// 같은 날짜에 들어간 history 들을 section하나로 묶고,  그 안에 해당 데이터들을 넣는다.
