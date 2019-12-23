@@ -502,7 +502,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "515"
             endingLineNumber = "515"
-            landmarkName = "loadWebViewFromBookmarksURL(urlString:)"
+            landmarkName = "selectImage(selectedImage:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -518,7 +518,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "509"
             endingLineNumber = "509"
-            landmarkName = "loadWebViewFromBookmarksURL(urlString:)"
+            landmarkName = "selectImage(selectedImage:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -534,8 +534,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "543"
             endingLineNumber = "543"
-            landmarkName = "MainVC"
-            landmarkType = "3">
+            landmarkName = "presentPopoverWithActions(actions:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -557,22 +557,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "47F2E0D0-9FB4-4B83-A6E9-1C61B145B9C0"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SafariSample/Controller/History/History.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "75"
-            endingLineNumber = "75"
-            landmarkName = "viewWillAppear(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "D196D7DE-A333-4D9E-A483-55C2F5BB5882"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -582,40 +566,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "134"
             endingLineNumber = "134"
-            landmarkName = "tableView(_:titleForHeaderInSection:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "5042FB61-AC21-4D7A-AD67-77B398E483F3"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SafariSample/Controller/History/History.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
-            landmarkName = "viewWillAppear(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "3F92BE6D-D510-4190-9390-FAF976E9AE69"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SafariSample/Controller/History/History.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
-            landmarkName = "sortDatesBySection()"
-            landmarkType = "7">
+            landmarkName = "History"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

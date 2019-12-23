@@ -185,11 +185,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		//		let plist = path.strings(byAppendingPaths: [customPlist]).first!
 		//		let data = NSMutableDictionary(contentsOfFile: plist) ?? NSMutableDictionary()
 		
-		
-		
-//		extractHistoryData()
-		saveHistoryData()
-//		initHistoryData()
+		UserDefaultsManager.shared.initDatas()
 		
 		NotificationGroup.shared.registerObserver(type: .bookmarkURLName, vc: self, selector: #selector(onNotification(notification:)))
 		
@@ -218,57 +214,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		NotificationGroup.shared.removeAllObserver(vc: self)
 	}
 	
-	func initHistoryData(urlString: String) {
-		
-		
-		
-		
-	}
-	
-	func insertCurrentHistoryData(urlString: String) {
-		
-	}
-	
-		/// 유저가 방문을 한 웹사이트의 url 들을 userdefault 에 저장해준다. 데이터는 webview.backForwarkList 의 현재 진입한 페이지 url 하나를 userdefault 에 저장한다.
-	func saveHistoryData() {
-		let backForwardList = self.webView.backForwardList.self
-//		let currentItemUrl = backForwardList.currentItem?.url /// not sure if I should use .initialUrl
-//		var currentUrlString: String = ""
-//		if let currentUrl = currentItemUrl {
-//			currentUrlString = currentUrl.absoluteString
-//		}
-		
-		guard let currentItemUrlString = backForwardList.currentItem?.url.absoluteString else {
-			return
-		}
-		print(currentItemUrlString)
-		print(backForwardList.currentItem?.title)
-		
-		if let historyDatum = UserDefaultsManager.shared.loadWebHistoryArray(), historyDatum.count != 0 {
-			//UserDefaults 에 값이 이미 있으면 있는 만큼을 채워준다.
-			
-			if visitedWebSiteHistoryRecords.count == 0 {
-				self.visitedWebSiteHistoryRecords = historyDatum
-			}
-			else {
-				//추가할 생성될 historydata 를 원본에 쌓아준다.
-				let now = Date()
-				self.visitedWebSiteHistoryRecords.append(HistoryData(urlString: currentItemUrlString, date: now))
-			}
-			
-		}
-		else {
-			//UserDefaults 에 값이 없으면 (제일 처음 탄다)
-			let now = Date()
-			self.visitedWebSiteHistoryRecords.append(HistoryData(urlString: currentItemUrlString, date: now))
-		}
-		
-		let isSaveSuccess = UserDefaultsManager.shared.saveWebHistoryArray(arr: visitedWebSiteHistoryRecords)
-		print("saving history records success? \(isSaveSuccess)")
-		
-	}
 
-	
 	func setupCustomButtons() {
 		bookmarksButton.tapEvent = {
 			let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -970,8 +916,6 @@ extension MainVC: WKNavigationDelegate {
 	}
 	func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
 		print("didFinish")
-//		saveHistoryData()
-//		insertCurrentPage()
 		
 		let backForwardList = self.webView.backForwardList.self
 		guard let currentItemUrl = backForwardList.currentItem?.url else { return }

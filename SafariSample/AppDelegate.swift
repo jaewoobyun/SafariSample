@@ -31,14 +31,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //		 }
 //	}
 	
-	let now = Date()
-	let dateFormatter = DateFormatter()
-	let calendar = Calendar(identifier: .gregorian)
-	var dates: [String] = []
-	
-	let ud = UserDefaults.standard
-	
-	let tomorrow = Date(timeIntervalSinceNow: 86400)
+//	let now = Date()
+//	let dateFormatter = DateFormatter()
+//	let calendar = Calendar(identifier: .gregorian)
+//	var dates: [String] = []
+//	
+//	let ud = UserDefaults.standard
+//
+//	let tomorrow = Date(timeIntervalSinceNow: 86400)
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		
@@ -46,10 +46,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //		window?.makeKeyAndVisible()
 //		window?.rootViewController = UINavigationController(rootViewController: MainVC(coder: NSCoder))
 		
-		/// 앱이 실행되었을 때의 날짜 시간을 userdefaults 에 저장한다.
-		dateFormatter.locale = Locale(identifier: "ko_kr")
-		dateFormatter.dateFormat = "EEEE, MMMM d" //"화요일, 12월 17"
-		let krTodayDateTime = dateFormatter.string(from: now)
+//		/// 앱이 실행되었을 때의 날짜 시간을 userdefaults 에 저장한다.
+//		dateFormatter.locale = Locale(identifier: "ko_kr")
+//		dateFormatter.dateFormat = "EEEE, MMMM d" //"화요일, 12월 17"
+//		let krTodayDateTime = dateFormatter.string(from: now)
 
 //		if let arr = UserDefaults.standard.stringArray(forKey: "Date") {
 //			var arrValues = arr as! [String]
@@ -61,9 +61,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //		else {
 //			self.ud.setValue([krTodayDateTime], forKey: "Date")
 //		}
+//		dates.append(krTodayDateTime)
+//		ud.setValue(dates, forKey: "Date")
 		
-		dates.append(krTodayDateTime)
-		ud.setValue(dates, forKey: "Date")
+//		if let arr = ud.stringArray(forKey: "Date") {
+//			dates = arr
+//			dates.insert(krTodayDateTime, at: 0)
+//
+//			ud.setValue(dates, forKey: "Date")
+//			ud.synchronize()
+//		}
+		
 		
 		
 		

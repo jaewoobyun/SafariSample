@@ -44,8 +44,6 @@ class UserDefaultsManager {
 		let decoder = JSONDecoder()
 		
 		if let jsonObject = userdefaultstandard.object(forKey: "HistoryData") {
-//			let historyD = try? JSONDecoder().decode([HistoryData].self, from: jsonObject as! Data)
-//			userdefaultstandard.synchronize() ///?????????
 			do {
 				let historyD = try decoder.decode([HistoryData].self, from: jsonObject as! Data)
 				
@@ -53,14 +51,7 @@ class UserDefaultsManager {
 			} catch let error {
 				print(error)
 			}
-			
-			
-//			if let content = historyD?.first {
-//				let awef = content.date
-//				print(awef!)
-//				let jio = content.urlString
-//			}
-			
+
 		}
 		return nil
 		
@@ -75,7 +66,6 @@ class UserDefaultsManager {
 	
 	func initDatas() {
 		if let jsonData = userdefaultstandard.object(forKey: "HistoryData") {
-//			userdefaultstandard.synchronize()
 			do {
 				visitedWebSiteHistoryRecords = try decoder.decode([HistoryData].self, from: jsonData as! Data)
 			} catch let error {
@@ -89,6 +79,7 @@ class UserDefaultsManager {
 	func updateDatasNoti() {
 		//데이터가 변경됬을떄. 기존 데이터들을 쓰는 아가들에게 변경됬음을 공지한다.
 		//옵저버로 post.
+		
 	}
 	
 	
@@ -126,9 +117,35 @@ class UserDefaultsManager {
 		
 	}
 	
-	@objc func insertDataIntoUD () {
-		
+	func removeHistoryItemAtIndexPath(historyData: HistoryData, indexPath: IndexPath) {
+		//1. UserDefault 에 있는 데이터를 로드해온다. 데이터가 없으면 빈 배열 반환
+		var datas = self.loadWebHistoryArray() ?? []
+		//2. 지우려고 하는 indexPath.row 의 데이터를 지운다.
+		datas.remove(at: indexPath.row)
+		//3. 기존의 ud d 어레이를 업데이트한다.
+		let isSaveSuccess = self.saveWebHistoryArray(arr: datas)
+		if !isSaveSuccess {
+			print("저장 실패함!!")
+		}
+		visitedWebSiteHistoryRecords.removeAll()
+		visitedWebSiteHistoryRecords.append(contentsOf: datas)
+		//4. 삭제 성공
+		self.updateDatasNoti() //?????????
 	}
+	
+	func removeAll() {
+		var datas = self.loadWebHistoryArray() ?? []
+		datas.removeAll()
+		let isSaveSuccess = self.saveWebHistoryArray(arr: datas)
+		if !isSaveSuccess {
+			print("UserDefaults 의 데이터를 전부 다 날리고 저장하려고 하는데 실패!!??")
+		}
+		visitedWebSiteHistoryRecords.removeAll()
+		//
+		self.updateDatasNoti() //?????????
+	}
+	
+	
 	
 //	deinit {
 //		NotificationGroup.shared.

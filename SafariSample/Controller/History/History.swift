@@ -15,8 +15,7 @@ class History: UITableViewController {
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
 	
 	let dateFormatter = DateFormatter()
-	
-	let ud = UserDefaults.standard
+	let calendar = Calendar(identifier: .gregorian)
 	
 	var dates: [String] = []
 	
@@ -37,8 +36,6 @@ class History: UITableViewController {
 		
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "historycellsample")
 		
-		
-		
 	}
 	
 	struct Section {
@@ -48,24 +45,35 @@ class History: UITableViewController {
 	var sections: [Section] = []
 	
 	func sortDatesBySection() {
+//		var comparableDate: Date
+//		for item in historyData {
+//			guard let itemdate = item.date else { return }
+//			/// comparableDate 에 현재 아이템이 추가된 시간을 할당.
+//			comparableDate = itemdate
+//			/// 만약 comparableDate 가 다음에 올 itemDate 와 같은 날에 있다면 sectionDate 를 갱신한다.
+//			if calendar.isDate(comparableDate, inSameDayAs: itemdate) {
+//				sectionDates = [comparableDate]
+//				/// 같은 날짜에 들어간 history 들을 section하나로 묶고,  그 안에 해당 데이터들을 넣는다.
+////				sections.append(History.Section(date: comparableDate, cells: [item]))
+//			}
+//			else { //만약 다른 날짜라고 하면 sectionDates에 다른 날짜를 추가해준다.
+//				sectionDates.append(itemdate)
+//				/// 다른 날짜면, section 이 바뀌어야 하니까 section 에 다른 Section 타입의 데이터를 추가해준다.
+////				sections.append(History.Section(date: itemdate, cells: [item]))
+//			}
+//		}
 		
-		var comparableDate: Date
-		let calendar = Calendar(identifier: .gregorian)
-		
-		for item in historyData {
-			guard let itemdate = item.date else { return }
-			/// comparableDate 에 현재 아이템이 추가된 시간을 할당.
-			comparableDate = itemdate
-			/// 만약 comparableDate 가 다음에 올 itemDate 와 같은 날에 있다면 sectionDate 를 갱신한다.
-			if calendar.isDate(comparableDate, inSameDayAs: itemdate) {
-				sectionDates = [comparableDate]
-				/// 같은 날짜에 들어간 history 들을 section하나로 묶고,  그 안에 해당 데이터들을 넣는다.
-//				sections.append(History.Section(date: comparableDate, cells: [item]))
-			}
-			else { //만약 다른 날짜라고 하면 sectionDates에 다른 날짜를 추가해준다.
-				sectionDates.append(itemdate)
-				/// 다른 날짜면, section 이 바뀌어야 하니까 section 에 다른 Section 타입의 데이터를 추가해준다.
-//				sections.append(History.Section(date: itemdate, cells: [item]))
+
+		for comparisonItem in historyData {
+			guard let citemDate = comparisonItem.date else { return }
+			for item in historyData {
+				guard let itemdate = item.date else { return }
+				if calendar.isDate(citemDate, inSameDayAs: itemdate) {
+					sections.append(Section(date: citemDate, cells: [item]))
+				}
+				else {
+					sections.append(Section(date: citemDate, cells: [comparisonItem]))
+				}
 			}
 		}
 		
@@ -78,8 +86,7 @@ class History: UITableViewController {
 		historyData = historyD
 		sortDatesBySection()
 		tableView.reloadData()
-//		dates = [(UserDefaults.standard.object(forKey: "Date") as? String ?? "Today")]
-		dates = UserDefaults.standard.stringArray(forKey: "Date") ?? ["Today"]
+//		dates = UserDefaults.standard.stringArray(forKey: "Date") ?? ["Today"]
 	}
 	
 	
@@ -165,6 +172,16 @@ class History: UITableViewController {
 		
 		return cell
 	}
+
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		print("didSelctRowAt \(indexPath)")
+		let urlString = historyData[indexPath.row].urlString
+		
+		NotificationGroup.shared.post(type: .historyURLName, userInfo: ["selectedHistoryURL": urlString])
+		self.dismiss(animated: true, completion: nil)
+		
+		
+	}
 	
 	override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
 		return .delete
@@ -185,16 +202,7 @@ class History: UITableViewController {
 			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
 		}
 	}
-	
-	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		print("didSelctRowAt \(indexPath)")
-		let urlString = historyData[indexPath.row].urlString
-		
-		NotificationGroup.shared.post(type: .historyURLName, userInfo: ["selectedHistoryURL": urlString])
-		self.dismiss(animated: true, completion: nil)
-		
-		
-	}
+
 	
 	override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
 		return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (actions) -> UIMenu? in
