@@ -32,7 +32,7 @@ class UserDefaultsManager {
 		do {
 			let temp = try encoder.encode(arr)
 			userdefaultstandard.set(temp, forKey: "HistoryData")
-			userdefaultstandard.synchronize() //////?????????
+			userdefaultstandard.synchronize()
 		} catch let error {
 			print(error)
 			return false
@@ -40,8 +40,8 @@ class UserDefaultsManager {
 		return true
 	}
 	
+	//데이터를 불러오고, 직접 반환한다.
 	func loadWebHistoryArray() -> [HistoryData]? {
-		let decoder = JSONDecoder()
 		
 		if let jsonObject = userdefaultstandard.object(forKey: "HistoryData") {
 			do {
@@ -54,15 +54,28 @@ class UserDefaultsManager {
 
 		}
 		return nil
-		
 	}
+	
+	//데이터를 불러오고, update noti를 날린다.
+	func loadUserHistoryData() {
+		if let jsonData = userdefaultstandard.object(forKey: "HistoryData") {
+					do {
+						
+						visitedWebSiteHistoryRecords = try decoder.decode([HistoryData].self, from: jsonData as! Data)
+					} catch let error {
+						print(error)
+					}
+				}
+		
+		self.updateDatasNoti()
+	}
+	
+	
 	//-----------------------------------------------------------------
 	
 //	enum BackForwardListData {
 //
 //	}
-	
-	
 	
 	func initDatas() {
 		if let jsonData = userdefaultstandard.object(forKey: "HistoryData") {
@@ -72,16 +85,29 @@ class UserDefaultsManager {
 				print(error)
 			}
 		}
+	}
+	
+	
+	///히스토리 데이터의 업데이트를 수신하는 vc들은 이 함수로 구독신청.
+	func registerHistoryDataObserver(vc:UIViewController, selector: Selector) {
+		
+		NotificationGroup.shared.registerObserver(type: .HistoryDataUpdate, vc: vc, selector: selector)
+	}
+	
+	func removeHistoryDataObserver() {
+		//단일. history data Observer 만 지워주세요.
+		print("RemoveHistoryDataObserver")
+		//TODO: ???? not sure
+		NotificationCenter.default.removeObserver(self, name: NotificationGroup.NotiType.HistoryDataUpdate.getNotificationName(), object: nil)
 		
 	}
 	
 	
+	///데이터가 변경됬을떄. 기존 데이터들을 쓰는 아가들에게 변경됬음을 공지한다.
 	func updateDatasNoti() {
-		//데이터가 변경됬을떄. 기존 데이터들을 쓰는 아가들에게 변경됬음을 공지한다.
 		//옵저버로 post.
-		
+		NotificationGroup.shared.post(type: .HistoryDataUpdate)
 	}
-	
 	
 	/// HistoryData 를 받아서 UD 있는 데이터에 첫번째에 삽입한다. 데이터가 업데이트를 공지하는 updateDatsNoti 를 호출한다.
 	func insertCurrentPage(historyData: HistoryData) {
@@ -103,19 +129,6 @@ class UserDefaultsManager {
 		self.updateDatasNoti()
 	}
 	
-	func loadUserHistoryData() -> [HistoryData] {
-		if let jsonData = userdefaultstandard.object(forKey: "HistoryData") {
-		//			userdefaultstandard.synchronize()
-					do {
-						visitedWebSiteHistoryRecords = try decoder.decode([HistoryData].self, from: jsonData as! Data)
-						return visitedWebSiteHistoryRecords
-					} catch let error {
-						print(error)
-					}
-				}
-		return visitedWebSiteHistoryRecords // wrong
-		
-	}
 	
 	func removeHistoryItemAtIndexPath(historyData: HistoryData, indexPath: IndexPath) {
 		//1. UserDefault 에 있는 데이터를 로드해온다. 데이터가 없으면 빈 배열 반환
@@ -130,19 +143,12 @@ class UserDefaultsManager {
 		visitedWebSiteHistoryRecords.removeAll()
 		visitedWebSiteHistoryRecords.append(contentsOf: datas)
 		//4. 삭제 성공
-		self.updateDatasNoti() //?????????
+		self.updateDatasNoti()
 	}
 	
-	func removeAll() {
-		var datas = self.loadWebHistoryArray() ?? []
-		datas.removeAll()
-		let isSaveSuccess = self.saveWebHistoryArray(arr: datas)
-		if !isSaveSuccess {
-			print("UserDefaults 의 데이터를 전부 다 날리고 저장하려고 하는데 실패!!??")
-		}
+	func removeAllHistoryData() {
+		userdefaultstandard.removeObject(forKey: "HistoryData")
 		visitedWebSiteHistoryRecords.removeAll()
-		//
-		self.updateDatasNoti() //?????????
 	}
 	
 	

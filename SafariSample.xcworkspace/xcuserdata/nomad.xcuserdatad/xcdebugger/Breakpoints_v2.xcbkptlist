@@ -404,8 +404,8 @@
             filePath = "SafariSample/Controller/Main/MainVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "319"
-            endingLineNumber = "319"
+            startingLineNumber = "262"
+            endingLineNumber = "262"
             landmarkName = "setupCustomButtons()"
             landmarkType = "7">
          </BreakpointContent>
@@ -420,8 +420,8 @@
             filePath = "SafariSample/Controller/Main/MainVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "321"
-            endingLineNumber = "321"
+            startingLineNumber = "264"
+            endingLineNumber = "264"
             landmarkName = "setupCustomButtons()"
             landmarkType = "7">
          </BreakpointContent>
@@ -500,10 +500,10 @@
             filePath = "SafariSample/Controller/Main/MainVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "515"
-            endingLineNumber = "515"
-            landmarkName = "selectImage(selectedImage:)"
-            landmarkType = "7">
+            startingLineNumber = "456"
+            endingLineNumber = "456"
+            landmarkName = "MainVC"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -516,9 +516,9 @@
             filePath = "SafariSample/Controller/Main/MainVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "509"
-            endingLineNumber = "509"
-            landmarkName = "selectImage(selectedImage:)"
+            startingLineNumber = "450"
+            endingLineNumber = "450"
+            landmarkName = "loadStartPage()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -532,10 +532,10 @@
             filePath = "SafariSample/Controller/Main/MainVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "543"
-            endingLineNumber = "543"
-            landmarkName = "presentPopoverWithActions(actions:)"
-            landmarkType = "7">
+            startingLineNumber = "480"
+            endingLineNumber = "480"
+            landmarkName = "MainVC"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -548,26 +548,26 @@
             filePath = "SafariSample/Controller/Main/MainVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "546"
-            endingLineNumber = "546"
-            landmarkName = "MainVC"
-            landmarkType = "3">
+            startingLineNumber = "483"
+            endingLineNumber = "483"
+            landmarkName = "selectImage(selectedImage:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D196D7DE-A333-4D9E-A483-55C2F5BB5882"
-            shouldBeEnabled = "Yes"
+            uuid = "553A1C17-58F2-4EB2-BE62-6A779F054432"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SafariSample/Controller/History/History.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
-            landmarkName = "History"
-            landmarkType = "3">
+            startingLineNumber = "210"
+            endingLineNumber = "210"
+            landmarkName = "tableView(_:commit:forRowAt:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

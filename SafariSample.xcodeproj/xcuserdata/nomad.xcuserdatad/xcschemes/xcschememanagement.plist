@@ -9,6 +9,24 @@
 			<key>orderHint</key>
 			<integer>3</integer>
 		</dict>
+		<key>SafariSampleTests.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>CC5F4D2B23B5D07B00B8C9B8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CCB7A7492382295E00D8B0A0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 	</dict>
 </dict>
 </plist>

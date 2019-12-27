@@ -168,9 +168,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			loadStartPage()
 		}
 		setUpObservation()
-		
-		
-		
+	
 		//		self.webView.isHidden = true
 		//		webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { (cookies) in
 		//			for cookie in cookies {
@@ -188,7 +186,6 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		UserDefaultsManager.shared.initDatas()
 		
 		NotificationGroup.shared.registerObserver(type: .bookmarkURLName, vc: self, selector: #selector(onNotification(notification:)))
-		
 		NotificationGroup.shared.registerObserver(type: .historyURLName, vc: self, selector: #selector(onHitoryNotification(notification:)))
 		
 	}
@@ -240,8 +237,6 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			//					}
 			//				}
 			//			}
-			
-			
 			
 			
 			//			let bookmarkVC = BookmarksVC()
@@ -412,8 +407,6 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	//		}
 	//	}
 	
-	
-	
 	@objc func onHitoryNotification(notification: Notification) {
 		if let url = notification.userInfo?["selectedHistoryURL"] as? String {
 			print(url)
@@ -466,11 +459,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			webView.loadFileURL(bookmarksURL, allowingReadAccessTo: Bundle.main.bundleURL)
 		}
 	}
-	
-	
-	
-	
-	
+
 	//	func searchWebSite(urlString: String) {
 	//		let url = URL(string: urlString)
 	//		let request = URLRequest(url: url!)
@@ -880,8 +869,7 @@ extension MainVC: UISearchBarDelegate {
 		//		searchBar.showsCancelButton = false
 		searchBar.resignFirstResponder()
 		resignFirstResponder()
-		hideKeyboardWhenTappedAround() //??????
-		//FIXME: - keyboard 내려가야됨
+		hideKeyboardWhenTappedAround()
 	}
 	
 	func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
@@ -889,8 +877,7 @@ extension MainVC: UISearchBarDelegate {
 		self.webView.reload()
 		
 	}
-	
-	
+
 }
 
 //MARK: - WKNavigationDelegate
@@ -996,7 +983,6 @@ class CusBarItem: UIBarButtonItem {
 			//			if let image = self.backgroundImage(for: .normal, barMetrics: .default) {
 			//
 			//			}
-			
 			//			touchView.backgroundColor = UIColor.red
 			touchView.frame = CGRect(x: 0, y: 0, width: 27, height: 27)
 			self.customView = touchView
@@ -1020,15 +1006,12 @@ class CusBarItem: UIBarButtonItem {
 	}
 	
 	@objc func tap() {
-		
 		if let tapEvent = self.tapEvent {
 			tapEvent()
 		}
-		
 	}
 	
 	@objc func long() {
-		
 		if let longEvent = self.longEvent {
 			longEvent()
 		}

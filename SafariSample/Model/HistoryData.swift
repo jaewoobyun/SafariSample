@@ -15,6 +15,7 @@ struct HistoryData: Codable {
 	var title: String? //구글
 	var urlString: String?
 	var date: Date? //방문한 시각
+	var uuid: String = UUID.init().uuidString
 	
 	init(url: URL, initialUrl: URL, title: String, urlString: String, date: Date) {
 		self.url = url
