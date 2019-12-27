@@ -102,7 +102,6 @@ class UserDefaultsManager {
 		
 	}
 	
-	
 	///데이터가 변경됬을떄. 기존 데이터들을 쓰는 아가들에게 변경됬음을 공지한다.
 	func updateDatasNoti() {
 		//옵저버로 post.
@@ -146,9 +145,48 @@ class UserDefaultsManager {
 		self.updateDatasNoti()
 	}
 	
+	
+	func removeHistoryItemAtUUID(_ uuid:String) {
+		
+		visitedWebSiteHistoryRecords = visitedWebSiteHistoryRecords.filter { (item) -> Bool in
+			if item.uuid == uuid {
+				return false
+			}
+			
+			return true
+		}
+		
+		let isSuccess = self.saveWebHistoryArray(arr: visitedWebSiteHistoryRecords)
+		print("isSuccess : \(isSuccess)")
+		
+		self.updateDatasNoti()
+	}
+	
+	func removeHistoryDataAtLastHour(_ withHour:Int) {
+		
+		guard let deleteHour = Calendar.current.date(byAdding: .hour, value: -withHour, to: Date()) else {
+			return
+		}
+		
+		visitedWebSiteHistoryRecords = visitedWebSiteHistoryRecords.filter { (item) -> Bool in
+			if deleteHour < (item.date ?? Date()) {
+				return false
+			}
+			
+			return true
+		}
+
+		let isSuccess = self.saveWebHistoryArray(arr: visitedWebSiteHistoryRecords)
+		print("isSuccess : \(isSuccess)")
+		
+		self.updateDatasNoti()
+	}
+	
 	func removeAllHistoryData() {
 		userdefaultstandard.removeObject(forKey: "HistoryData")
 		visitedWebSiteHistoryRecords.removeAll()
+		
+		self.updateDatasNoti()
 	}
 	
 	

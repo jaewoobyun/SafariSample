@@ -57,6 +57,9 @@ class History: UITableViewController {
 	
 	///원본 데이터를 화면에 뿌리기 좋게 가공한다.
 	func sectionize() {
+		
+		sections.removeAll()
+		
 		sortHistoryDataDatesByTopNewBottomOld()
 		var beforeItem: HistoryData? = nil
 		
@@ -94,7 +97,9 @@ class History: UITableViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		UserDefaultsManager.shared.registerHistoryDataObserver(vc: self, selector: #selector(updateHistoryDatas))
+
 		UserDefaultsManager.shared.loadUserHistoryData()
+		
 		
 	}
 	
@@ -109,8 +114,10 @@ class History: UITableViewController {
 		print("historyVC updateHistoryDatas")
 		historyData.removeAll()
 		historyData = UserDefaultsManager.shared.visitedWebSiteHistoryRecords
+		
 		sectionize()
-	
+		
+		tableView.isUserInteractionEnabled = true
 		tableView.reloadData()
 		
 	}
@@ -119,20 +126,25 @@ class History: UITableViewController {
 	@IBAction func clearButton(_ sender: UIBarButtonItem) {
 		let alertController = UIAlertController(title: nil, message: "Clearing will remove history, cookies, and other browsing data. History will be cleared from devices signed into your iCloud Account. Clear from:", preferredStyle: UIAlertController.Style.actionSheet)
 		let lastHour = UIAlertAction(title: "The last hour", style: UIAlertAction.Style.destructive) { (alertaction) in
-			//??
+			
+			UserDefaultsManager.shared.removeHistoryDataAtLastHour(1)
 		}
 		let today = UIAlertAction(title: "Today", style: UIAlertAction.Style.destructive) { (action) in
-			//??
+			
+			UserDefaultsManager.shared.removeHistoryDataAtLastHour(24)
 		}
 		let todayAndYesterday = UIAlertAction(title: "Today and Yesterday", style: UIAlertAction.Style.destructive) { (action) in
-			//??
 			
+			UserDefaultsManager.shared.removeHistoryDataAtLastHour(48)
 		}
 		let allTime = UIAlertAction(title: "All Time", style: UIAlertAction.Style.destructive) { (action) in
 			//HistoryVC 에 있는 데이터도 날리고 UserDefaults에 persist 하고 있는 데이터도 모두 날린다.
-			self.historyData.removeAll()
+//			self.historyData.removeAll()
+//			self.sections.removeAll()
+//			self.tableView.reloadData()
+			
 			UserDefaultsManager.shared.removeAllHistoryData()
-			self.tableView.reloadData()
+			
 		}
 		let cancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
 			//
@@ -201,20 +213,24 @@ class History: UITableViewController {
 	
 	override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == .delete {
-			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
 			
-//			UserDefaultsManager.shared.removeHistoryItemAtIndexPath(historyData: <#T##HistoryData#>, indexPath: <#T##IndexPath#>)
-			
+			///아이디는 먼저 뺴돌리고
 			let selectedItemUUID = sections[indexPath.section].cells[indexPath.row].uuid
 			
-			for item in historyData {
-				if item.uuid == selectedItemUUID {
-					UserDefaultsManager.shared.visitedWebSiteHistoryRecords.removeAll { (hd) -> Bool in
-						hd.uuid == selectedItemUUID
-					}
-				}
+			//디스플레이 데이터를 기반으로 애니메이션 실행.
+			self.sections[indexPath.section].cells.remove(at: indexPath.row)
+			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+			
+			tableView.isUserInteractionEnabled = false
+			
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+				//		실물데이터에서 삭제요청.
+				UserDefaultsManager.shared.removeHistoryItemAtUUID(selectedItemUUID)
+				
+				//??
 			}
-			sections[indexPath.section].cells.remove(at: indexPath.row)
+			
+			
 		}
 	}
 
