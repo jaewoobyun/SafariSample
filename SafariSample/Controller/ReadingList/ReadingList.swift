@@ -20,7 +20,8 @@ class ReadingList: UIViewController {
 	let searchController = UISearchController(searchResultsController: nil)
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
 	
-	var dataSample = ["One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten"]
+//	var dataSample = ["One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten"]
+	var readingListDatas : [ReadingListData] = []
 	
 	var deleteButton: UIButton?
 	var deleteBarButton: UIBarButtonItem?
@@ -36,7 +37,8 @@ class ReadingList: UIViewController {
 		tableView.tableHeaderView = searchController.searchBar
 		tableView.isEditing = false
 		toggle = tableView.isEditing
-		tableView.allowsMultipleSelectionDuringEditing = true
+		
+		tableView.register(UINib(nibName: "ReadingListCell", bundle: nil), forCellReuseIdentifier: "ReadingListCell")
 		
 		deleteButton = UIButton.init(type: UIButton.ButtonType.close)
 //		deleteButton?.setTitle("delete", for: UIControl.State.normal)
@@ -50,6 +52,25 @@ class ReadingList: UIViewController {
 		
 	}
 	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		UserDefaultsManager.shared.registerReadingListDataObserver(vc: self, selector: #selector(updateReadingListDatas))
+		UserDefaultsManager.shared.loadUserReadingListData()
+	}
+	
+	override func viewDidDisappear(_ animated: Bool) {
+		super.viewDidDisappear(animated)
+		UserDefaultsManager.shared.removeReadingListDataObserver()
+	}
+	
+	@objc func updateReadingListDatas() {
+		print("readinglistVC updateReadinglistDatas")
+		self.readingListDatas.removeAll()
+		readingListDatas = UserDefaultsManager.shared.readingListDataSave
+		
+		tableView.reloadData()
+	}
+	
 	
 	@IBAction func editButtonAction(_ sender: UIBarButtonItem) {
 		print("Edit!")
@@ -57,6 +78,7 @@ class ReadingList: UIViewController {
 		if toggle == true {
 			sender.title = "Done"
 			tableView.isEditing = true
+			tableView.allowsMultipleSelectionDuringEditing = true
 			deleteButton?.isHidden = false
 			
 		} else {
@@ -71,16 +93,26 @@ class ReadingList: UIViewController {
 		print("deletebutton pressed!!")
 		if let selectedRows = tableView.indexPathsForSelectedRows {
 			//1
-			var items = [String]()
+//			var items = [String]()
+			var items = [ReadingListData]()
 			for indexPath in selectedRows {
-				items.append(dataSample[indexPath.row])
+//				items.append(dataSample[indexPath.row])
+				items.append(readingListDatas[indexPath.row])
+				print("indexpath: \(indexPath)")
+				
+				UserDefaultsManager.shared.removeReadingListItemAtIndexPath(readingListData: readingListDatas[indexPath.row], indexPath: indexPath)
 			}
 			//2
 			for item in items {
-				if let index = dataSample.firstIndex(of: item) {
-					dataSample.remove(at: index)
-					print("selected index: \(index)")
-				}
+//				if let index = dataSample.firstIndex(of: item) {
+//					dataSample.remove(at: index)
+//					print("selected index: \(index)")
+//				}
+				
+				print("item", item)
+//				UserDefaultsManager.shared.removeReadingListItemAtIndexPath(readingListData: <#T##ReadingListData#>, indexPath: <#T##IndexPath#>)
+				
+				
 			}
 			//3
 			tableView.beginUpdates()
@@ -112,14 +144,18 @@ extension ReadingList: UISearchResultsUpdating {
 
 extension ReadingList : UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 5
+		return readingListDatas.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: "readinglistprototype", for: indexPath)
-		cell.textLabel?.text = dataSample[indexPath.row]
-		cell.detailTextLabel?.text = dataSample[indexPath.row]
-//		cell.imageView?.image =
+//		let cell = tableView.dequeueReusableCell(withIdentifier: "readinglistprototype", for: indexPath)
+		let cell = tableView.dequeueReusableCell(withIdentifier: "ReadingListCell", for: indexPath) as! ReadingListCell
+		let data = readingListDatas[indexPath.row]
+		cell.setCellData(data)
+		
+//		cell.textLabel?.text = readingListDatas[indexPath.row].title
+//		cell.detailTextLabel?.text = readingListDatas[indexPath.row].urlString
+//		cell.imageView?.image = readingListDatas[indexPath.row]
 		
 		return cell
 	}
@@ -129,7 +165,10 @@ extension ReadingList : UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		NotificationGroup.shared.post(type: .readinglistURLName, userInfo: ["selectedReadinglistURL": "awefawefawefawef"])
+		print("didSelectRowAt \(indexPath)")
+		let urlString = self.readingListDatas[indexPath.row].urlString
+		NotificationGroup.shared.post(type: .readinglistURLName, userInfo: ["selectedReadinglistURL": urlString])
+		self.dismiss(animated: true, completion: nil)
 	}
 	
 	func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {

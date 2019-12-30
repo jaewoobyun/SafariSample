@@ -21,6 +21,7 @@ class UserDefaultsManager {
 	var visitedWebSiteHistoryRecords: [HistoryData] = []
 	var backList:[URL] = []
 	var forwardList:[URL] = []
+	var readingListDataSave: [ReadingListData] = []
 	
 	init() {
 		
@@ -28,7 +29,6 @@ class UserDefaultsManager {
 	
 	//-------------------------------------------------------------------
 	func saveWebHistoryArray(arr: [HistoryData]) -> Bool {
-		let encoder = JSONEncoder()
 		do {
 			let temp = try encoder.encode(arr)
 			userdefaultstandard.set(temp, forKey: "HistoryData")
@@ -40,7 +40,7 @@ class UserDefaultsManager {
 		return true
 	}
 	
-	//데이터를 불러오고, 직접 반환한다.
+	///데이터를 불러오고, 직접 반환한다.
 	func loadWebHistoryArray() -> [HistoryData]? {
 		
 		if let jsonObject = userdefaultstandard.object(forKey: "HistoryData") {
@@ -56,7 +56,7 @@ class UserDefaultsManager {
 		return nil
 	}
 	
-	//데이터를 불러오고, update noti를 날린다.
+	///데이터를 불러오고, update noti를 날린다.
 	func loadUserHistoryData() {
 		if let jsonData = userdefaultstandard.object(forKey: "HistoryData") {
 					do {
@@ -110,7 +110,6 @@ class UserDefaultsManager {
 	
 	/// HistoryData 를 받아서 UD 있는 데이터에 첫번째에 삽입한다. 데이터가 업데이트를 공지하는 updateDatsNoti 를 호출한다.
 	func insertCurrentPage(historyData: HistoryData) {
-		
 		var datas = self.loadWebHistoryArray() ?? []
 		//2, 새로운 데이터를 추가한다,
 		datas.insert(historyData, at: 0)
@@ -187,6 +186,87 @@ class UserDefaultsManager {
 		visitedWebSiteHistoryRecords.removeAll()
 		
 		self.updateDatasNoti()
+	}
+	
+	
+	//MARK: - ReadingListData CRUD methods
+	func registerReadingListDataObserver(vc: UIViewController, selector: Selector) {
+		NotificationGroup.shared.registerObserver(type: .ReadingListDataUpdate, vc: vc, selector: selector)
+	}
+	
+	func removeReadingListDataObserver() {
+		print("Removing ReadingListData Observer")
+		NotificationCenter.default.removeObserver(self, name: NotificationGroup.NotiType.ReadingListDataUpdate.getNotificationName(), object: nil)
+	}
+	
+	func updateReadingListDataNoti() {
+		NotificationGroup.shared.post(type: .ReadingListDataUpdate)
+	}
+	
+	func saveReadingListData(rld: [ReadingListData]) -> Bool {
+		do {
+			let encodedReadingListData = try encoder.encode(rld)
+			userdefaultstandard.set(encodedReadingListData, forKey: "ReadingListData")
+			userdefaultstandard.synchronize()
+		} catch let error {
+			print(error)
+			return false
+		}
+		return true
+	}
+	
+	///데이터를 불러오고, update noti를 날린다.
+	func loadUserReadingListData() {
+		if let jsonData = userdefaultstandard.object(forKey: "ReadingListData") {
+					do {
+						self.readingListDataSave = try decoder.decode([ReadingListData].self, from: jsonData as! Data)
+					} catch let error {
+						print(error)
+					}
+				}
+		
+		self.updateReadingListDataNoti()
+	}
+	
+	func loadReadingListArray() -> [ReadingListData]? {
+		if let jsonObject = userdefaultstandard.object(forKey: "ReadingListData") {
+			do {
+				let readinglistD = try decoder.decode([ReadingListData].self, from: jsonObject as! Data)
+				
+				return readinglistD
+			} catch let error {
+				print(error)
+			}
+		}
+		return nil
+	}
+	
+	func insertCurrentItemToReadingList(readingListData: ReadingListData) {
+		var data = self.loadReadingListArray() ?? []
+		data.insert(readingListData, at: 0)
+		let isSaveSuccess = self.saveReadingListData(rld: data)
+		
+		if !isSaveSuccess {
+			print("ReadingList 저장에 실패함!!")
+		}
+		self.readingListDataSave.removeAll()
+		self.readingListDataSave.append(contentsOf: data)
+		
+		self.updateReadingListDataNoti()
+	}
+	
+	
+	func removeReadingListItemAtIndexPath(readingListData: ReadingListData, indexPath: IndexPath) {
+		var data = self.loadReadingListArray() ?? []
+		data.remove(at: indexPath.row)
+		let isSaveSuccess = self.saveReadingListData(rld: data)
+		if !isSaveSuccess {
+			print("ReadingList 저장 실패.")
+		}
+		self.readingListDataSave.removeAll()
+		self.readingListDataSave.append(contentsOf: data)
+		
+		self.updateReadingListDataNoti()
 	}
 	
 	

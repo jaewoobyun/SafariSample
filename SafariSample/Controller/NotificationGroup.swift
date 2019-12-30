@@ -25,6 +25,8 @@ class NotificationGroup {
 		case forwardListData
 		///히스토리 데이터가 업데이트 됬을때 사용한다.
 		case HistoryDataUpdate
+		///리딩 리스트 데이터가 업데이트 됬을때 사용한다.
+		case ReadingListDataUpdate
 		
 		func getNotificationName() -> Notification.Name? {
 			switch self {
@@ -46,6 +48,9 @@ class NotificationGroup {
 				
 			case .HistoryDataUpdate:
 				return Notification.Name.init("HistoryDataUpdate")
+			
+			case .ReadingListDataUpdate:
+				return Notification.Name.init("ReadingListDataUpdate")
 				
 			default:
 				return nil

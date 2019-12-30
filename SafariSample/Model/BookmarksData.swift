@@ -41,8 +41,7 @@ struct BookmarksData {
 			return temp
 		}
 	}
-	
-	
+
 	/// initializing BOOKMARK Data
 	init(urlString: String, titleString: String, iconUrlString: String = "", indexPath:[Int]) {
 		self.urlString = urlString

@@ -188,6 +188,8 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		NotificationGroup.shared.registerObserver(type: .bookmarkURLName, vc: self, selector: #selector(onNotification(notification:)))
 		NotificationGroup.shared.registerObserver(type: .historyURLName, vc: self, selector: #selector(onHitoryNotification(notification:)))
 		
+		NotificationGroup.shared.registerObserver(type: .readinglistURLName, vc: self, selector: #selector(onReadingListNotification(notification:)))
+		
 	}
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -256,6 +258,19 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			}
 			let addReadingListAction = UIAlertAction(title: "Add to Reading List", style: UIAlertAction.Style.default) { (action) in
 				//TODO: implement later ADD TO READINGLIST
+				let backForwardList = self.webView.backForwardList.self
+				guard let currentItemUrl = backForwardList.currentItem?.url else { return }
+				guard let currentItemInitialUrl = backForwardList.currentItem?.initialURL else { return }
+				guard let currentItemTitle = backForwardList.currentItem?.title else { return }
+				guard let currentItemUrlString = backForwardList.currentItem?.url.absoluteString else { return }
+				let now = Date()
+				
+//				backForwardList.currentItem?.initialURL
+				
+				let readingListDataInstance = ReadingListData(url: currentItemUrl, initialUrl: currentItemInitialUrl, title: currentItemTitle, urlString: currentItemUrlString, date: now)
+				
+				UserDefaultsManager.shared.insertCurrentItemToReadingList(readingListData: readingListDataInstance)
+				
 			}
 			let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
 				//TODO: implement later Cancel
@@ -422,6 +437,12 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			loadWebViewFromBookmarksURL(urlString: url)
 		}
 		
+	}
+	
+	@objc func onReadingListNotification(notification: Notification) {
+		if let url = notification.userInfo?["selectedReadinglistURL"] as? String {
+			loadWebViewFromBookmarksURL(urlString: url)
+		}
 	}
 	
 	func loadWebViewFromBookmarksURL(urlString: String?) {

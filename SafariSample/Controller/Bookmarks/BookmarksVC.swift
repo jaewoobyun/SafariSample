@@ -172,8 +172,6 @@ class BookmarksVC: UIViewController{
 //				let aText = try a.text()
 //				print(aText)
 //				topmostItem.append(aText)
-//
-//
 //			}
 			
 			//-------------------------------------
