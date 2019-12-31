@@ -8,6 +8,7 @@
 
 import UIKit
 import CITreeView
+import FavIcon
 
 class EditBookmarkVC: UIViewController {
 	
@@ -34,8 +35,27 @@ class EditBookmarkVC: UIViewController {
 		addressInput.text = address
 		
 //		data = TreeData.getDefaultData() //get the default data
-		BookmarksDataModel.createSampleData()
-		data = BookmarksDataModel.bookMarkDatas
+		
+//		BookmarksDataModel.createSampleData()
+//		data = BookmarksDataModel.bookMarkDatas
+		
+		if address != nil {
+			do {
+				try FavIcon.downloadPreferred(address!, completion: { (result) in
+					if case let .success(image) = result {
+						self.iconImageView.image = image
+					}
+					else if case let .failure(error) = result {
+						print("failed to download preferred favicon for \(String(describing: self.address)): \(error)")
+					}
+				})
+			}
+			catch let error {
+				print("failed to download preferred favicon for \(String(describing: self.address)): \(error)")
+			}
+		}
+		
+		data = UserDefaultsManager.shared.loadUserBookMarkListData()
 		
 		treeView.treeViewDelegate = self
 		treeView.treeViewDataSource = self

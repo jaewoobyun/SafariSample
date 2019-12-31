@@ -51,7 +51,7 @@ class UserDefaultsManager {
 			} catch let error {
 				print(error)
 			}
-
+			
 		}
 		return nil
 	}
@@ -59,13 +59,13 @@ class UserDefaultsManager {
 	///데이터를 불러오고, update noti를 날린다.
 	func loadUserHistoryData() {
 		if let jsonData = userdefaultstandard.object(forKey: "HistoryData") {
-					do {
-						
-						visitedWebSiteHistoryRecords = try decoder.decode([HistoryData].self, from: jsonData as! Data)
-					} catch let error {
-						print(error)
-					}
-				}
+			do {
+				
+				visitedWebSiteHistoryRecords = try decoder.decode([HistoryData].self, from: jsonData as! Data)
+			} catch let error {
+				print(error)
+			}
+		}
 		
 		self.updateDatasNoti()
 	}
@@ -73,9 +73,9 @@ class UserDefaultsManager {
 	
 	//-----------------------------------------------------------------
 	
-//	enum BackForwardListData {
-//
-//	}
+	//	enum BackForwardListData {
+	//
+	//	}
 	
 	func initDatas() {
 		if let jsonData = userdefaultstandard.object(forKey: "HistoryData") {
@@ -174,7 +174,7 @@ class UserDefaultsManager {
 			
 			return true
 		}
-
+		
 		let isSuccess = self.saveWebHistoryArray(arr: visitedWebSiteHistoryRecords)
 		print("isSuccess : \(isSuccess)")
 		
@@ -218,12 +218,12 @@ class UserDefaultsManager {
 	///데이터를 불러오고, update noti를 날린다.
 	func loadUserReadingListData() {
 		if let jsonData = userdefaultstandard.object(forKey: "ReadingListData") {
-					do {
-						self.readingListDataSave = try decoder.decode([ReadingListData].self, from: jsonData as! Data)
-					} catch let error {
-						print(error)
-					}
-				}
+			do {
+				self.readingListDataSave = try decoder.decode([ReadingListData].self, from: jsonData as! Data)
+			} catch let error {
+				print(error)
+			}
+		}
 		
 		self.updateReadingListDataNoti()
 	}
@@ -271,10 +271,39 @@ class UserDefaultsManager {
 	
 	
 	
-//	deinit {
-//		NotificationGroup.shared.
-//	}
-
+	//	deinit {
+	//		NotificationGroup.shared.
+	//	}
+	
+	
+	
+	//MARK: - BookmarkData CRUD methods
+	
+	func saveBookMarkListData(bookmarkD: [BookmarksData]) -> Bool {
+		do {
+			let encodedReadingListData = try encoder.encode(bookmarkD)
+			userdefaultstandard.set(encodedReadingListData, forKey: "BookMarkListData")
+			userdefaultstandard.synchronize()
+		} catch let error {
+			print(error)
+			return false
+		}
+		return true
+	}
+	
+	///데이터를 불러오고, update noti를 날린다.
+	func loadUserBookMarkListData() -> [BookmarksData] {
+		if let jsonData = userdefaultstandard.object(forKey: "BookMarkListData") {
+			do {
+				let datas = try decoder.decode([BookmarksData].self, from: jsonData as! Data)
+				return datas
+			} catch let error {
+				print(error)
+			}
+		}
+		
+		return []
+	}
 }
 
 

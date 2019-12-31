@@ -1,20 +1,24 @@
 PODS:
   - CITreeView (1.6.1)
+  - FavIcon (3.0.6)
   - SwiftSoup (2.2.2)
 
 DEPENDENCIES:
   - CITreeView (~> 1.6.1)
+  - FavIcon (~> 3.0.0)
   - SwiftSoup
 
 SPEC REPOS:
   trunk:
     - CITreeView
+    - FavIcon
     - SwiftSoup
 
 SPEC CHECKSUMS:
   CITreeView: f7bcaa750a6d9e1a646f057bc581c4f146badb3b
+  FavIcon: e07ba9dd3cac1f76b81ccaa08fc2b41baa000b07
   SwiftSoup: 77147d707df716eb6dbd06c5c24d35ad5ba62ee1
 
-PODFILE CHECKSUM: d78f73c50aceaf99a9abda915a99e086ffa85c38
+PODFILE CHECKSUM: fe9c57c1926cc6d4016e3fc91885e305c3c278d6
 
 COCOAPODS: 1.8.4

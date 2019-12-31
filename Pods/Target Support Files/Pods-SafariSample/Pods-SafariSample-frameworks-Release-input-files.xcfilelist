@@ -1,3 +1,4 @@
 ${PODS_ROOT}/Target Support Files/Pods-SafariSample/Pods-SafariSample-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/CITreeView/CITreeView.framework
+${BUILT_PRODUCTS_DIR}/FavIcon/FavIcon.framework
 ${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework

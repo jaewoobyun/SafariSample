@@ -20,11 +20,13 @@ class EditFolder: UIViewController {
 	var data: [BookmarksData] = []
 	var selectedFolderTitle: String?
 	
+	
 	override func viewDidLoad() {
 		self.title = "Edit Folder"
 		super.viewDidLoad()
-		BookmarksDataModel.createSampleData()
-		data = BookmarksDataModel.bookMarkDatas
+//		BookmarksDataModel.createSampleData()
+//		data = BookmarksDataModel.bookMarkDatas
+		data = UserDefaultsManager.shared.loadUserBookMarkListData()
 		
 		titleTextField.text = folderTitle
 		
@@ -43,7 +45,12 @@ class EditFolder: UIViewController {
 //MARK: - TextField Delegate
 extension EditFolder: UITextFieldDelegate {
 	func textFieldDidEndEditing(_ textField: UITextField) {
-		print("done!!")
+		print("textfieldDidEndEditing!!")
+		guard let titleString = self.titleTextField.text else { return }
+		let newFolder = BookmarksData.init(titleString: titleString, child: [], indexPath: [0])
+		
+		data.append(newFolder)
+		UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: data)
 	}
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {

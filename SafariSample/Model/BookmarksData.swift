@@ -25,7 +25,7 @@ import UIKit
 //}
 
 
-struct BookmarksData {
+struct BookmarksData: Codable {
 	let urlString: String?
 	let titleString: String?
 	let iconUrlString: String?

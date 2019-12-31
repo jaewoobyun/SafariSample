@@ -47,9 +47,10 @@ class BookmarksVC: UIViewController{
 		
 		if bookmarksData.count == 0, !isDepthViewController {
 			self.title = "Bookmarks"
-			BookmarksDataModel.createSampleData()
-			let bookmarksArray = BookmarksDataModel.bookMarkDatas
-			bookmarksData = bookmarksArray
+//			BookmarksDataModel.createSampleData()
+//			let bookmarksArray = BookmarksDataModel.bookMarkDatas
+//			bookmarksData = bookmarksArray
+			bookmarksData = UserDefaultsManager.shared.loadUserBookMarkListData()
 		}
 		
 		
@@ -73,8 +74,9 @@ class BookmarksVC: UIViewController{
 		
 		
 		btnTemp = UIButton.init(type: .custom)
-		btnTemp = UIButton.init(type: UIButton.ButtonType.contactAdd)
-//		btnTemp?.setTitle("New Folder", for: .normal) //title
+//		btnTemp = UIButton.init(type: UIButton.ButtonType.contactAdd)
+		btnTemp?.setTitle("New Folder", for: .normal) //title
+		btnTemp?.setTitleColor(.blue, for: .normal)
 		btnTemp?.addTarget(self, action: #selector(addNewFolder), for: UIControl.Event.touchUpInside)
 		btnTemp?.isHidden = true
 		
@@ -317,19 +319,20 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 //		cell.textLabel?.text = topmostItem[indexPath.row]
 //		cell.textLabel?.text = sampleFolderData.folderName
 		
-		if bookmarksData[0].titleString == "Favorites" && bookmarksData[indexPath.row].isFolder {
-			cell.imageView?.image = UIImage(systemName: "star")
-		}
-		
 		if !bookmarksData[indexPath.row].isFolder {
 			cell.imageView?.image = UIImage(systemName: "book")
 			cell.textLabel?.text = bookmarksData[indexPath.row].titleString
 			cell.editingAccessoryType = .disclosureIndicator
 			return cell
-		} else {
-			//MARK: - cell 재활용할때 반드시 반대 케이스 명시!!!!!!!!!
+		}
+		else if bookmarksData[0].titleString == "Favorites" && bookmarksData[indexPath.row].isFolder {
+			cell.imageView?.image = UIImage(systemName: "star")
+		}
+		else {
+			//cell 재활용할때 반드시 반대 케이스 명시!!!!!!!!!
 			cell.imageView?.image = UIImage(systemName: "folder")
 		}
+		
 		cell.textLabel?.text = bookmarksData[indexPath.row].titleString
 		
 		return cell
@@ -399,6 +402,9 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == .delete {
 			//TODO: - delete the row from the data source
+			
+			
+			
 			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
 		}
 	}

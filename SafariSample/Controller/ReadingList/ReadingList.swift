@@ -153,10 +153,6 @@ extension ReadingList : UITableViewDelegate, UITableViewDataSource {
 		let data = readingListDatas[indexPath.row]
 		cell.setCellData(data)
 		
-//		cell.textLabel?.text = readingListDatas[indexPath.row].title
-//		cell.detailTextLabel?.text = readingListDatas[indexPath.row].urlString
-//		cell.imageView?.image = readingListDatas[indexPath.row]
-		
 		return cell
 	}
 	

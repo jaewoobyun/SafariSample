@@ -255,7 +255,30 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			let alertcontroller = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
 			let addBookmarkAction = UIAlertAction(title: "Add Bookmark", style: UIAlertAction.Style.default) { (action) in
 				//TODO: implement later ADD BOOKMARK
+				let urlString = self.webView.url?.absoluteString ?? ""
+				var title = self.webView.backForwardList.currentItem?.title ?? ""
+				if title.isEmpty {
+					title = urlString
+				}
+				
+				let storyboard = UIStoryboard(name: "Main", bundle: nil)
+				let editBookmarkVC = storyboard.instantiateViewController(withIdentifier: "EditBookmarkVC") as! EditBookmarkVC
+				let navController = UINavigationController(rootViewController: editBookmarkVC)
+//				navController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: UIBarButtonItem.Style.done, target: nil, action: nil)
+				editBookmarkVC.bookmarkTitle = title
+				editBookmarkVC.address = urlString
+				
+				self.present(navController, animated: true, completion: nil)
+				
+				//TODO: - put the following code into EditBookmarkVC
+				
+//				let saveData = BookmarksData.init(urlString: urlString, titleString: title, iconUrlString: "", indexPath: [0])
+//				var array = UserDefaultsManager.shared.loadUserBookMarkListData()
+//				array.append(saveData)
+//
+//				UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: array)
 			}
+			
 			let addReadingListAction = UIAlertAction(title: "Add to Reading List", style: UIAlertAction.Style.default) { (action) in
 				//TODO: implement later ADD TO READINGLIST
 				let backForwardList = self.webView.backForwardList.self

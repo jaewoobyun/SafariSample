@@ -30,6 +30,7 @@ class ReadingListCell: UITableViewCell {
 			titleLabel.text = data.title
 			detailLabel.text = data.urlString
 			iconInitialLetter.text = data.getFirstIconLetter()
+			iconImage.backgroundColor = data.getIconLetterColor()
 		} else {
 			titleLabel.text = ""
 			detailLabel.text = ""
