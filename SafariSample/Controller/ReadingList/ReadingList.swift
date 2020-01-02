@@ -39,6 +39,7 @@ class ReadingList: UIViewController {
 		toggle = tableView.isEditing
 		
 		tableView.register(UINib(nibName: "ReadingListCell", bundle: nil), forCellReuseIdentifier: "ReadingListCell")
+		tableView.allowsMultipleSelectionDuringEditing = true
 		
 		deleteButton = UIButton.init(type: UIButton.ButtonType.close)
 //		deleteButton?.setTitle("delete", for: UIControl.State.normal)
@@ -78,7 +79,9 @@ class ReadingList: UIViewController {
 		if toggle == true {
 			sender.title = "Done"
 			tableView.isEditing = true
-			tableView.allowsMultipleSelectionDuringEditing = true
+//			tableView.allowsMultipleSelectionDuringEditing = true
+//			UserDefaultsManager.shared.removeReadingListDataObserver()
+			
 			deleteButton?.isHidden = false
 			
 		} else {
@@ -94,30 +97,33 @@ class ReadingList: UIViewController {
 		if let selectedRows = tableView.indexPathsForSelectedRows {
 			//1
 //			var items = [String]()
-			var items = [ReadingListData]()
+			var uuids: [String] = []
+			
+			//지우고싶은, 선택된 아이템을 걸러낸다.
 			for indexPath in selectedRows {
-//				items.append(dataSample[indexPath.row])
-				items.append(readingListDatas[indexPath.row])
-				print("indexpath: \(indexPath)")
-				
-				UserDefaultsManager.shared.removeReadingListItemAtIndexPath(readingListData: readingListDatas[indexPath.row], indexPath: indexPath)
+				uuids.append(readingListDatas[indexPath.row].uuid)
 			}
-			//2
-			for item in items {
-//				if let index = dataSample.firstIndex(of: item) {
-//					dataSample.remove(at: index)
-//					print("selected index: \(index)")
-//				}
-				
-				print("item", item)
-//				UserDefaultsManager.shared.removeReadingListItemAtIndexPath(readingListData: <#T##ReadingListData#>, indexPath: <#T##IndexPath#>)
-				
-				
-			}
+			
 			//3
+			/// 이 vc 에서 쓰는 데이터도 지워야 하기 때문에 readingListData 도 필터해 지운다.
+			self.readingListDatas = self.readingListDatas.filter({ (data) -> Bool in
+				for removeItem in uuids {
+					if removeItem == data.uuid {
+						return false
+					}
+				}
+				
+				return true
+			})
+			
 			tableView.beginUpdates()
 			tableView.deleteRows(at: selectedRows, with: UITableView.RowAnimation.automatic)
 			tableView.endUpdates()
+			
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+				UserDefaultsManager.shared.removeReadingListItemWithUUID(uuids: uuids)
+			}
+			
 		}
 
 	}
@@ -163,8 +169,16 @@ extension ReadingList : UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		print("didSelectRowAt \(indexPath)")
 		let urlString = self.readingListDatas[indexPath.row].urlString
-		NotificationGroup.shared.post(type: .readinglistURLName, userInfo: ["selectedReadinglistURL": urlString])
-		self.dismiss(animated: true, completion: nil)
+		
+		if tableView.isEditing == true {
+			print("tableview is editing")
+			
+		}
+		else {
+			NotificationGroup.shared.post(type: .readinglistURLName, userInfo: ["selectedReadinglistURL": urlString])
+			self.dismiss(animated: true, completion: nil)
+		}
+		
 	}
 	
 	func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -177,6 +191,7 @@ extension ReadingList : UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == .delete {
+			UserDefaultsManager.shared.removeReadingListItemAtIndexPath(indexPath: indexPath)
 			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
 		}
 		
@@ -222,7 +237,7 @@ extension ReadingList : UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 		let deleteAction = UIContextualAction(style: UIContextualAction.Style.destructive, title: "Delete") { (ac: UIContextualAction, view: UIView, success: (Bool) -> Void) in
 			// Call edit action
-			
+			UserDefaultsManager.shared.removeReadingListItemAtIndexPath(indexPath: indexPath)
 			//Reset state
 			
 			success(true)

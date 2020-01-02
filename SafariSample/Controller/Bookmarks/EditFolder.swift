@@ -41,6 +41,10 @@ class EditFolder: UIViewController {
 		
 	}
 	
+	func insertFolderAtSelectedLocation() {
+		
+	}
+	
 }
 //MARK: - TextField Delegate
 extension EditFolder: UITextFieldDelegate {
@@ -50,6 +54,7 @@ extension EditFolder: UITextFieldDelegate {
 		let newFolder = BookmarksData.init(titleString: titleString, child: [], indexPath: [0])
 		
 		data.append(newFolder)
+		//
 		UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: data)
 	}
 	
@@ -91,6 +96,7 @@ extension EditFolder: CITreeViewDelegate {
 		}
 	}
 	
+	
 	func treeView(_ treeView: CITreeView, heightForRowAt indexPath: IndexPath, withTreeViewNode treeViewNode: CITreeViewNode) -> CGFloat {
 		return 40
 	}
@@ -105,6 +111,7 @@ extension EditFolder: CITreeViewDelegate {
 //					selectedCell.accessoryType = .checkmark
 //				}
 //			}
+			
 			
 		}
 		
@@ -151,14 +158,6 @@ extension EditFolder: CITreeViewDataSource {
 			}
 			return temp
 		}
-		
-//		let filteredData = data.filter { (item) -> Bool in
-//			let temp = item.isFolder
-//			if !temp {
-//				print("asdsadas")
-//			}
-//			return temp
-//		}
 
 		return filteredData as [AnyObject]
 //		return data as [AnyObject]

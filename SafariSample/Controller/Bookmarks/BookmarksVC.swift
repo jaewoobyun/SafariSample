@@ -345,8 +345,8 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 		if let reuseableVC = storyboard.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC {
 			if bookmarksData[indexPath.row].isFolder {
 				if tableView.isEditing {
-					if let reusableEditFolder = storyboard.instantiateViewController(identifier: "EditFolder") as? EditFolder {
-						reusableEditFolder.folderTitle = bookmarksData[indexPath.item].titleString
+					if let reusableEditFolder = storyboard.instantiateViewController(identifier: "EditFolder") as? EditFolder { //FIXME: - EditFolder
+//						reusableEditFolder.folderTitle = bookmarksData[indexPath.item].titleString
 						navigationController?.pushViewController(reusableEditFolder, animated: true)
 					}
 				}
@@ -506,10 +506,11 @@ extension BookmarksVC: UIContextMenuInteractionDelegate {
 				}
 				else {
 					print("isn't Folder")
-					let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
-					let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
-					alert.addAction(action)
-					self.present(alert, animated: true, completion: nil)
+					//TODO: - folder 가 아니라 bookmark 이기 때문에 preview 로 해당 url 이 보여야 한다 ??
+//					let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
+//					let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
+//					alert.addAction(action)
+//					self.present(alert, animated: true, completion: nil)
 				}
 		
 		return UIContextMenuConfiguration(identifier: nil, previewProvider: {return reusableVC}) { (element) -> UIMenu? in

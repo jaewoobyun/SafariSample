@@ -256,7 +256,7 @@ class UserDefaultsManager {
 	}
 	
 	
-	func removeReadingListItemAtIndexPath(readingListData: ReadingListData, indexPath: IndexPath) {
+	func removeReadingListItemAtIndexPath(indexPath: IndexPath) {
 		var data = self.loadReadingListArray() ?? []
 		data.remove(at: indexPath.row)
 		let isSaveSuccess = self.saveReadingListData(rld: data)
@@ -270,6 +270,28 @@ class UserDefaultsManager {
 	}
 	
 	
+	func removeReadingListItemWithUUID(uuids: [String]) {
+		
+		let arrNew = (self.loadReadingListArray() ?? []).filter { (item) -> Bool in
+			for uuid in uuids {
+				if item.uuid == uuid {
+					return false
+				}
+			}
+			return true
+		}
+		
+		let isSaveSuccess = self.saveReadingListData(rld: arrNew)
+		if !isSaveSuccess {
+			print("ReadingList 저장 실패.")
+		}
+		
+		self.readingListDataSave.removeAll()
+		self.readingListDataSave.append(contentsOf: arrNew)
+		
+		self.updateReadingListDataNoti()
+	}
+	
 	
 	//	deinit {
 	//		NotificationGroup.shared.
@@ -278,7 +300,7 @@ class UserDefaultsManager {
 	
 	
 	//MARK: - BookmarkData CRUD methods
-	
+	/// Save
 	func saveBookMarkListData(bookmarkD: [BookmarksData]) -> Bool {
 		do {
 			let encodedReadingListData = try encoder.encode(bookmarkD)
@@ -303,6 +325,19 @@ class UserDefaultsManager {
 		}
 		
 		return []
+	}
+	
+	/// Insert
+	func insertFolder(folder: BookmarksData, indexPath: IndexPath) {
+		var bookmarkDatas = self.loadUserBookMarkListData()
+		
+		
+		
+	}
+	
+	/// 데이터를 해당 indexPath 에서 지운다.
+	func removeBookmarkItemAtIndexPath() {
+		
 	}
 }
 
