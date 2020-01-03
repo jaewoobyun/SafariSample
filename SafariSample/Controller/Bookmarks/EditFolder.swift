@@ -19,8 +19,10 @@ class EditFolder: UIViewController {
 	
 	var data: [BookmarksData] = []
 	var selectedFolderTitle: String?
+	var selectedNode: CITreeViewNode? //
+	var selectedIndexPath: IndexPath? //
 	
-	
+	//MARK: - Life Cycle
 	override func viewDidLoad() {
 		self.title = "Edit Folder"
 		super.viewDidLoad()
@@ -41,8 +43,22 @@ class EditFolder: UIViewController {
 		
 	}
 	
-	func insertFolderAtSelectedLocation() {
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+	}
+	
+	override func viewDidDisappear(_ animated: Bool) {
+		super.viewDidDisappear(animated)
+	}
+	
+	func insertFolderAtSelectedLocation(indexPath: IndexPath, selectedNode: CITreeViewNode, title: String) {
+		let newFolder = BookmarksData.init(titleString: title, child: [], indexPath: [indexPath.row])
+		self.treeView.beginUpdates()
+		data.insert(newFolder, at: indexPath.row)
+		self.treeView.endUpdates()
 		
+		
+		UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: data)
 	}
 	
 }
@@ -51,18 +67,13 @@ extension EditFolder: UITextFieldDelegate {
 	func textFieldDidEndEditing(_ textField: UITextField) {
 		print("textfieldDidEndEditing!!")
 		guard let titleString = self.titleTextField.text else { return }
-		let newFolder = BookmarksData.init(titleString: titleString, child: [], indexPath: [0])
+		guard let selectedIndexPath = self.selectedIndexPath else { return }
 		
-		data.append(newFolder)
-		//
-		UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: data)
+//		insertFolderAtSelectedLocation(indexPath: selectedIndexPath, selectedNode: <#T##CITreeViewNode#>, title: titleString)
+		
 	}
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//		self.view.endEditing(true) //
-		
-//		return false
-		
 		textField.resignFirstResponder()
 		return true
 	}
@@ -154,7 +165,7 @@ extension EditFolder: CITreeViewDataSource {
 		let filteredData = data.filter { (item) -> Bool in
 			let temp = item.isFolder
 			if !temp {
-				print("asdsadas")
+				print("isn't folder")
 			}
 			return temp
 		}

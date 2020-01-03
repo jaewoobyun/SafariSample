@@ -16,7 +16,7 @@ let hostNameForLocalFile = ""
 
 class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPreviewingDelegate {
 	
-	
+	/// 검색 결과를 표시할 searchController
 	let searchController = UISearchController(searchResultsController: nil)
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
 	
@@ -35,12 +35,6 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	var estimatedProgressObservationToken: NSKeyValueObservation?
 	var canGoBackObservationToken: NSKeyValueObservation?
 	var canGoForwardObservationToken: NSKeyValueObservation?
-	
-	
-	//	struct HistoryData {
-	//		var urlString:String?
-	//		var date:Date?
-	//	}
 	
 	var visitedWebSiteHistoryRecords: [HistoryData] = []
 	
@@ -101,21 +95,6 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		
 		if #available(iOS 11.0, *) {
 			searchBar = searchController.searchBar
-			
-			//			if let navigationbar = self.navigationController?.navigationBar {
-			//				navigationbar.isHidden = true
-			//			}
-			//			for subview in (self.navigationController?.navigationBar.subviews)! {
-			//				if NSStringFromClass(subview.classForCoder).contains("BarBackground") {
-			//					  var subViewFrame: CGRect = subview.frame
-			//					  // subViewFrame.origin.y = -20;
-			//					  subViewFrame.size.height = 200
-			//					  subview.frame = subViewFrame
-			//
-			//				 }
-			//
-			//			}
-			
 			navigationItem.searchController = searchController
 			navigationItem.hidesSearchBarWhenScrolling = false
 			navigationItem.prompt = nil
@@ -135,26 +114,6 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "textformat.size"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(showPopover))
 		navigationItem.leftBarButtonItem = leftBarButton
 		
-		//		navigationController?.navigationBar.isHidden = true
-		//		self.view.addSubview(searchBar)
-		//		searchBar.translatesAutoresizingMaskIntoConstraints = false
-		//		searchBar.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor).isActive = true
-		//		searchBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
-		//		searchBar.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor).isActive = true
-		//		searchBar.widthAnchor.constraint(equalToConstant: 30).isActive = true
-		//
-		//		searchBar.searchBarStyle = .minimal
-		//		navigationItem.searchController = searchController
-		//
-		//		let appearance = UINavigationBarAppearance()
-		//		appearance.titlePositionAdjustment = UIOffset(horizontal: 0.0, vertical: -5.0)
-		//		self.navigationController?.navigationBar.standardAppearance = appearance
-		//		self.navigationController?.navigationBar.standardAppearance = standard
-		//		let appearance = navigationController?.navigationBar.standardAppearance.copy()
-		//		let appearance = navigationController?.navigationBar.compactAppearance?.copy()
-		////configure appearance
-		//		navigationItem.standardAppearance = appearance
-		
 		var loadedExistingURL = false
 		if let lastCommittedURLStringString = UserDefaults.standard.object(forKey: "LastCommittedURLString") as? String {
 			if let url = URL(string: lastCommittedURLStringString) {
@@ -168,43 +127,20 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			loadStartPage()
 		}
 		setUpObservation()
-	
-		//		self.webView.isHidden = true
-		//		webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { (cookies) in
-		//			for cookie in cookies {
-		//				print("cookie.name: \(cookie.name) , cookie.value\(cookie.value)")
-		//			}
-		//		}
-		//		let websiteDataRecord = WKWebsiteDataRecord()
-		///Save the history data into hisotry PList
-		//		let customPlist = "history.plist"
-		//		let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-		//		let path = paths[0] as NSString
-		//		let plist = path.strings(byAppendingPaths: [customPlist]).first!
-		//		let data = NSMutableDictionary(contentsOfFile: plist) ?? NSMutableDictionary()
-		
 		UserDefaultsManager.shared.initDatas()
 		
 		NotificationGroup.shared.registerObserver(type: .bookmarkURLName, vc: self, selector: #selector(onNotification(notification:)))
 		NotificationGroup.shared.registerObserver(type: .historyURLName, vc: self, selector: #selector(onHitoryNotification(notification:)))
-		
 		NotificationGroup.shared.registerObserver(type: .readinglistURLName, vc: self, selector: #selector(onReadingListNotification(notification:)))
 		
 	}
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		//		extractHistoryData()
-		//		print("backforwardlist.backlist")
-		//		print(webView.backForwardList.backList)
-		//		navigationController?.hidesBarsOnSwipe = true
-		
-		//		webView.addObserver(self, forKeyPath: #keyPath(WKWebView.title), options: NSKeyValueObservingOptions.new, context: nil)
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
-		//		navigationController?.hidesBarsOnSwipe = false
 		
 	}
 	
@@ -217,48 +153,24 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		self.dismiss(animated: true, completion: nil)
 	}
 	
-
+	/// Back , Forward , Share, Bookmarks, Tabs
 	func setupCustomButtons() {
+		//MARK: Bookmarks
 		bookmarksButton.tapEvent = {
 			let storyboard = UIStoryboard(name: "Main", bundle: nil)
 			let bookmarkNav = storyboard.instantiateViewController(identifier: "BookmarkNav") as UINavigationController
 			self.navigationController?.present(bookmarkNav, animated: true, completion: nil)
-			
-			//			if let segmentVC = bookmarkNav.children[0] as? SegmentControlVC {
-			//				segementVC.selectedBookmarkHandler = { urlString in
-			//					self.loadWebViewFromBookmarksURL(urlString: urlString)
-			//				}
-			//			}
 			
 			if let segmentVC = bookmarkNav.children[0] as? SegmentControlVC {
 				segmentVC.selectedBookmarkHandler = { urlString in
 					self.loadWebViewFromBookmarksURL(urlString: urlString)
 				}
 			}
-			
-			//			if let segmentVC = bookmarkNav.children[0] as? SegmentControlVC {
-			//				if let bookmarkVC = segmentVC.children[0] as? BookmarksVC {
-			//					bookmarkVC.completionHandler = { urlString in
-			//						self.loadWebViewFromBookmarksURL(urlString: urlString)
-			//					}
-			//				}
-			//			}
-			
-			
-			//			let bookmarkVC = BookmarksVC()
-			//			bookmarkVC.completionHandler = { urlString in
-			//				self.loadWebViewFromBookmarksURL(urlString: urlString)
-			//			}
-			////			let navi = UINavigationController.init(rootViewController: bookmarkVC)
-			//			let bookmarkNav = self.storyboard?.instantiateViewController(identifier: "BookmarkNav") as! UINavigationController
-			//			self.present(bookmarkNav, animated: true, completion: nil)
 		}
-		
 		bookmarksButton.longEvent = {
 			print("bookmarksButton.longEvent")
 			let alertcontroller = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
 			let addBookmarkAction = UIAlertAction(title: "Add Bookmark", style: UIAlertAction.Style.default) { (action) in
-				//TODO: implement later ADD BOOKMARK
 				let urlString = self.webView.url?.absoluteString ?? ""
 				var title = self.webView.backForwardList.currentItem?.title ?? ""
 				if title.isEmpty {
@@ -277,7 +189,6 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			}
 			
 			let addReadingListAction = UIAlertAction(title: "Add to Reading List", style: UIAlertAction.Style.default) { (action) in
-				//TODO: implement later ADD TO READINGLIST
 				let backForwardList = self.webView.backForwardList.self
 				guard let currentItemUrl = backForwardList.currentItem?.url else { return }
 				guard let currentItemInitialUrl = backForwardList.currentItem?.initialURL else { return }
@@ -293,7 +204,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 				
 			}
 			let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
-				//TODO: implement later Cancel
+				
 			}
 			
 			alertcontroller.addAction(addBookmarkAction)
@@ -303,49 +214,31 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 			self.present(alertcontroller, animated: true, completion: nil)
 		}
 		
+		//MARK: Tabs
 		tabsButton.tapEvent = {
 			print("tabsButton.tapEvent!")
 		}
-		
 		tabsButton.longEvent = {
 			print("tabsButton.longEvent!")
-			let alertcontroller = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
-			let closeThisTabAction = UIAlertAction(title: "Close This Tab", style: UIAlertAction.Style.destructive) { (action) in
-				//TODO: implement later Close This Tab
-			}
-			let closeAllTabsAction = UIAlertAction(title: "Close All Tabs", style: UIAlertAction.Style.destructive) { (action) in
-				//TODO: implement later Close All Tabs
-			}
-			let newTabAction = UIAlertAction(title: "New Tab", style: UIAlertAction.Style.default) { (action) in
-				//TODO: implement later ADD TO READINGLIST
-			}
-			let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
-				//TODO: implement later Cancel
-			}
+			let tabAlerts = AlertsAndMenus.shared.makeTabAlerts()
 			
-			alertcontroller.addAction(closeAllTabsAction)
-			alertcontroller.addAction(closeThisTabAction)
-			alertcontroller.addAction(newTabAction)
-			alertcontroller.addAction(cancelAction)
+			self.present(tabAlerts, animated: true, completion: nil)
 			
-			self.present(alertcontroller, animated: true, completion: nil)
 		}
-		
+		//MARK: Backward
 		backButton.tapEvent = {
 			self.webView.goBack()
 		}
-		
 		backButton.longEvent = {
 			let storyboard = UIStoryboard(name: "Main", bundle: nil)
 			//			let history = storyboard.instantiateViewController(identifier: "History") as! History
 			let history = storyboard.instantiateViewController(identifier: "HistoryNavigationController") as UINavigationController
 			self.navigationController?.present(history, animated: true, completion: nil)
 		}
-		
+		//MARK: Forward
 		forwardButton.tapEvent = {
 			self.webView.goForward()
 		}
-		
 		forwardButton.longEvent = {
 			let storyboard = UIStoryboard(name: "Main", bundle: nil)
 			//			let history = storyboard.instantiateViewController(identifier: "History") as! History
@@ -355,20 +248,16 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		
 	}
 	
-	//-----------------
 	func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-		previewingContext.sourceRect = bookmarksButton.accessibilityFrame
-		
+//		previewingContext.sourceRect = bookmarksButton.accessibilityFrame
 		guard let vc = storyboard?.instantiateViewController(identifier: "SegmentControlVC") as? SegmentControlVC else { preconditionFailure("Expected SegmentVC") }
-		
 		return vc
-		
 	}
 	
 	func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
 		print("previewingContext")
 	}
-	//-----------------
+	
 	
 	func getPlist(withName name: String) -> [String]? {
 		if let path = Bundle.main.path(forResource: name, ofType: "plist"), let xml = FileManager.default.contents(atPath: path) {
@@ -885,7 +774,6 @@ extension MainVC: UISearchResultsUpdating {
 	}
 	
 	func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-		///??????
 		searchBar.endEditing(true)
 		searchBar.resignFirstResponder()
 		return true
@@ -994,68 +882,3 @@ extension UIViewController {
 	}
 }
 
-
-class CusBarItem: UIBarButtonItem {
-	
-	let touchView:UIView = UIView()
-	let imageView:UIImageView = UIImageView()
-	
-	var tapEvent:(()->())?
-	var longEvent:(()->())?
-	
-	override class func awakeFromNib() {
-		super.awakeFromNib()
-	}
-	
-	required init?(coder: NSCoder) {
-		super.init(coder: coder)
-		//TODO: - 뒤로 가거나 앞으로 갈 수 있을때 파란색으로 활성화 시키고 싶다.
-//		self.isEnabled = super.isEnabled
-//		super.isEnabled = self.isEnabled
-		
-		initSetting()
-	}
-	
-	func initSetting() {
-		if let cus = self.customView {
-			print("cus!!");
-		} else {
-			print("cus nil");
-			//			if let image = self.backgroundImage(for: .normal, barMetrics: .default) {
-			//
-			//			}
-			//			touchView.backgroundColor = UIColor.red
-			touchView.frame = CGRect(x: 0, y: 0, width: 27, height: 27)
-			self.customView = touchView
-			
-			imageView.frame = touchView.frame
-			imageView.image = self.image
-			touchView.addSubview(imageView)
-			imageView.contentMode = .scaleAspectFit
-			
-			let tapGesture = UITapGestureRecognizer(target: self, action: #selector (tap))  //Tap function will call when user tap on button
-//			tapGesture.isEnabled = super.isEnabled //??????
-			let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(long))  //Long function will call when user long press on button.
-			tapGesture.numberOfTapsRequired = 1
-			longGesture.minimumPressDuration = 0.5
-			longGesture.numberOfTouchesRequired = 1
-			imageView.addGestureRecognizer(tapGesture)
-			imageView.addGestureRecognizer(longGesture)
-			
-			imageView.isUserInteractionEnabled = true
-			
-		}
-	}
-	
-	@objc func tap() {
-		if let tapEvent = self.tapEvent {
-			tapEvent()
-		}
-	}
-	
-	@objc func long() {
-		if let longEvent = self.longEvent {
-			longEvent()
-		}
-	}
-}

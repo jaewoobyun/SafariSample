@@ -155,7 +155,7 @@ extension EditBookmarkVC: CITreeViewDelegate {
 //		}
 		if let selectedNodeAtIndexPath = treeViewNode.self.item as? BookmarksData {
 			let string = selectedNodeAtIndexPath.titleString
-			print(string)
+			print(string as Any)
 		}
 		
 		

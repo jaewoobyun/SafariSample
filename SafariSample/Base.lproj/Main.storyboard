@@ -288,9 +288,8 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                         </textField>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Akw-49-6Pc">
-                                            <rect key="frame" x="8" y="79" width="56" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Akw-49-6Pc">
+                                            <rect key="frame" x="5" y="75" width="56" height="20"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
@@ -300,7 +299,10 @@
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="ocV-Ei-u99" secondAttribute="trailing" id="1kn-fj-8uc"/>
                                         <constraint firstItem="ocV-Ei-u99" firstAttribute="centerY" secondItem="E1q-S8-Cym" secondAttribute="centerY" id="ANT-Wm-1Jn"/>
+                                        <constraint firstItem="Akw-49-6Pc" firstAttribute="leading" secondItem="E1q-S8-Cym" secondAttribute="leading" constant="5" id="PoQ-93-bWA"/>
                                         <constraint firstItem="ocV-Ei-u99" firstAttribute="leading" secondItem="E1q-S8-Cym" secondAttribute="leading" id="Tql-DF-guo"/>
+                                        <constraint firstItem="Akw-49-6Pc" firstAttribute="top" secondItem="ocV-Ei-u99" secondAttribute="bottom" constant="5" id="iY3-DT-3xz"/>
+                                        <constraint firstAttribute="bottom" secondItem="Akw-49-6Pc" secondAttribute="bottom" constant="5" id="pjW-FA-nik"/>
                                     </constraints>
                                 </view>
                                 <prototypes>

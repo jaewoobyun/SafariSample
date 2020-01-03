@@ -31,6 +31,31 @@ class AlertsAndMenus {
 			return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [copycontentsAction, openInNewTabsAction, editAction, deleteAction])
 		}
 	
+	func makeTabAlerts() -> UIAlertController {
+		let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+		
+		let closeThisTabAction = UIAlertAction(title: "Close This Tab", style: UIAlertAction.Style.destructive) { (action) in
+			//TODO: implement later Close This Tab
+		}
+		let closeAllTabsAction = UIAlertAction(title: "Close All Tabs", style: UIAlertAction.Style.destructive) { (action) in
+			//TODO: implement later Close All Tabs
+		}
+		let newTabAction = UIAlertAction(title: "New Tab", style: UIAlertAction.Style.default) { (action) in
+			//TODO: implement later ADD TO READINGLIST
+		}
+		let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
+			//TODO: implement later Cancel
+		}
+		
+		alertController.addAction(closeAllTabsAction)
+		alertController.addAction(closeThisTabAction)
+		alertController.addAction(newTabAction)
+		alertController.addAction(cancelAction)
+		
+		return alertController
+	}
+	
+	
 	func alertNotify(title: String?, message: String?, style: UIAlertController.Style) -> UIAlertController {
 		let alert = UIAlertController.init(title: "Not A Valid URL", message: nil, preferredStyle: UIAlertController.Style.alert)
 		

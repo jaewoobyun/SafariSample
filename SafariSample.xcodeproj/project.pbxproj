@@ -17,6 +17,7 @@
 		CC0E121423A3565A00557B67 /* BookmarkModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CC0E121223A3565A00557B67 /* BookmarkModel.xcdatamodeld */; };
 		CC0E121C23A8B48200557B67 /* HistoryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0E121B23A8B47F00557B67 /* HistoryData.swift */; };
 		CC1F5D54239DD9DF00AD82EF /* EditFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1F5D53239DD9DF00AD82EF /* EditFolder.swift */; };
+		CC26079A23BF35B900B453CA /* CusBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC26079923BF35B900B453CA /* CusBarItem.swift */; };
 		CC456726238F89E1006C1EF1 /* EditFolderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC456725238F89E1006C1EF1 /* EditFolderVC.swift */; };
 		CC456728238F8C40006C1EF1 /* FolderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC456727238F8C40006C1EF1 /* FolderData.swift */; };
 		CC45672A238FACB0006C1EF1 /* CITreeViewClasses in Resources */ = {isa = PBXBuildFile; fileRef = CC456729238FACB0006C1EF1 /* CITreeViewClasses */; };
@@ -61,6 +62,7 @@
 		CC0E121323A3565A00557B67 /* BookmarkModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BookmarkModel.xcdatamodel; sourceTree = "<group>"; };
 		CC0E121B23A8B47F00557B67 /* HistoryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryData.swift; sourceTree = "<group>"; };
 		CC1F5D53239DD9DF00AD82EF /* EditFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolder.swift; sourceTree = "<group>"; };
+		CC26079923BF35B900B453CA /* CusBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CusBarItem.swift; sourceTree = "<group>"; };
 		CC456725238F89E1006C1EF1 /* EditFolderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderVC.swift; sourceTree = "<group>"; };
 		CC456727238F8C40006C1EF1 /* FolderData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderData.swift; sourceTree = "<group>"; };
 		CC456729238FACB0006C1EF1 /* CITreeViewClasses */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CITreeViewClasses; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				CC06F1AF2390A35A0096A6CD /* FolderCell.swift */,
 				CC06F1B02390A35A0096A6CD /* FolderCell.xib */,
 				CC0E121023A1EA5900557B67 /* AlertsAndMenus.swift */,
+				CC26079923BF35B900B453CA /* CusBarItem.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -375,6 +378,7 @@
 				CC456728238F8C40006C1EF1 /* FolderData.swift in Sources */,
 				CCB7A7522382295E00D8B0A0 /* MainVC.swift in Sources */,
 				CC06F1B82390E8CC0096A6CD /* TreeData.swift in Sources */,
+				CC26079A23BF35B900B453CA /* CusBarItem.swift in Sources */,
 				CCC26AAE23825EE5006E2E62 /* OpenTabsVC.swift in Sources */,
 				CC8698AD238BBCBD0043D796 /* BookmarksData.swift in Sources */,
 				CC8698A9238B54CE0043D796 /* ReadingList.swift in Sources */,

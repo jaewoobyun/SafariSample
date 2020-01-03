@@ -257,23 +257,6 @@ class BookmarksVC: UIViewController{
 		tableView.reloadData()
 	}
 	
-//	override var previewActionItems: [UIPreviewActionItem] {
-//		let copyContentsAction = UIPreviewAction(title: "Copy Contents" , style: .default, handler: { [unowned self] (_, _) in
-//
-//		})
-//		let openInNewTabsAction = UIPreviewAction(title: "Open in New Tabs", style: UIPreviewAction.Style.default) { [unowned self](action, vc) in
-//
-//		}
-//		let editAction = UIPreviewAction(title: "Edit", style: UIPreviewAction.Style.default) { [unowned self](action, vc) in
-//
-//		}
-//		let deleteAction = UIPreviewAction(title: "Delete", style: .destructive) { [unowned self] (_, _) in
-//
-//		}
-//
-//		return [ copyContentsAction, openInNewTabsAction, editAction, deleteAction ]
-//	}
-	
 	func makeContextMenu() -> UIMenu {
 //		let copycontentsAction = UIAction(title: "Copy Contents", image: UIImage(systemName: "doc.on.doc"), identifier: nil, discoverabilityTitle: nil, attributes: UIMenuElement.Attributes.init(), state: UIMenuElement.State.mixed) { (action) in
 //		}
