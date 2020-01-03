@@ -175,9 +175,10 @@ extension EditFolderVC: UITableViewDataSource, UITableViewDelegate {
 //		}
 	
 		var indentationLevel = 0
-		while data[indexPath.row].child != nil {
-			indentationLevel += 5
-		}
+//		while data[indexPath.row].child != nil {
+//			indentationLevel += 5
+//		}
+		//WRONG
 		return indentationLevel
 	}
 	

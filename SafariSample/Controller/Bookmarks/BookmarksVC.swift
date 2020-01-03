@@ -45,15 +45,6 @@ class BookmarksVC: UIViewController{
 		
 		self.navigationController?.navigationBar.isHidden = false
 		
-		if bookmarksData.count == 0, !isDepthViewController {
-			self.title = "Bookmarks"
-//			BookmarksDataModel.createSampleData()
-//			let bookmarksArray = BookmarksDataModel.bookMarkDatas
-//			bookmarksData = bookmarksArray
-			bookmarksData = UserDefaultsManager.shared.loadUserBookMarkListData()
-		}
-		
-		
 		readStringFromHTMLFile(with: "bookmarks_11_19_19")
 //		print(topmostItem)
 //		self.topToolBar.delegate = self
@@ -91,6 +82,7 @@ class BookmarksVC: UIViewController{
 		let interaction = UIContextMenuInteraction(delegate: self)
 		tableView.addInteraction(interaction)
 	}
+	
 	
 	
 	@IBAction func editButton(_ sender: UIBarButtonItem) {
@@ -233,6 +225,14 @@ class BookmarksVC: UIViewController{
 		navigationController?.navigationBar.barTintColor = barBackgroundColor
 		tableView.reloadData()
 		
+		if bookmarksData.count == 0, !isDepthViewController {
+			self.title = "Bookmarks"
+//			BookmarksDataModel.createSampleData()
+//			let bookmarksArray = BookmarksDataModel.bookMarkDatas
+//			bookmarksData = bookmarksArray
+			bookmarksData = UserDefaultsManager.shared.loadUserBookMarkListData()
+		}
+		
 		if let selectedIndexPath = tableView.indexPathForSelectedRow {
 			tableView.deselectRow(at: selectedIndexPath, animated: animated)
 		}
@@ -364,10 +364,11 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 				}
 			}
 			else {
-				let urlString = bookmarksData[indexPath.row].urlString
+				guard let urlString = bookmarksData[indexPath.row].urlString else { return }
+				guard let titleString = bookmarksData[indexPath.row].titleString else { return }
 				if tableView.isEditing {
 					if let reusableEditBookmarkVC = storyboard.instantiateViewController(withIdentifier: "EditBookmarkVC") as? EditBookmarkVC {
-						reusableEditBookmarkVC.bookmarkTitle = urlString
+						reusableEditBookmarkVC.bookmarkTitle = titleString
 						reusableEditBookmarkVC.address = urlString
 						navigationController?.pushViewController(reusableEditBookmarkVC, animated: true)
 					}
@@ -402,10 +403,13 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == .delete {
 			//TODO: - delete the row from the data source
-			
-			
-			
+//			tableView.beginUpdates()
 			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+//			tableView.endUpdates()
+			
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+				UserDefaultsManager.shared.removeBookmarkItemAtIndexPath(indexPath: indexPath)
+			}
 		}
 	}
 	

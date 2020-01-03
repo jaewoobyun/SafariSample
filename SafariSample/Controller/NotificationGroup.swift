@@ -17,17 +17,26 @@ class NotificationGroup {
 	}
 	
 	enum NotiType: String {
+		/// notify WebView of the Bookmark URL
 		case bookmarkURLName
+		/// notify WebView of the ReadingList URL
 		case readinglistURLName
+		/// notify WebView of the HistoryList URL
 		case historyURLName
+		/// 우리가 WebView에서  추출하고 싶은 방문기록
 		case historyDataInstance
+		/// 백 버튼을 눌렀을때 쌓이는 과거 기록들 // 아직 안쓰임
 		case backListData
+		/// 앞으로 버튼 눌렀을때 쌓이는 기록들 // 아직 안쓰임
 		case forwardListData
 		///히스토리 데이터가 업데이트 됬을때 사용한다.
 		case HistoryDataUpdate
 		///리딩 리스트 데이터가 업데이트 됬을때 사용한다.
 		case ReadingListDataUpdate
+		///북마크 데이트가 업데이트 되었을때 사용한다.
+		case BookmarkListDataUpdate
 		
+		/// Notification.Name 목록들.
 		func getNotificationName() -> Notification.Name? {
 			switch self {
 			case .bookmarkURLName:
@@ -36,21 +45,19 @@ class NotificationGroup {
 				return Notification.Name.init("readinglistURLName")
 			case .historyURLName:
 				return Notification.Name.init("historyURLName")
-			///우리가 추출하고 싶은 방문기록
 			case .historyDataInstance:
 				return Notification.Name.init("historyDataInstance")
-			/// 백 버튼을 눌렀을때 쌓이는 과거 기록들
 			case .backListData:
 				return Notification.Name.init("backListData")
-			/// 앞으로 버튼 눌렀을때 쌓이는 기로
 			case .forwardListData:
 				return Notification.Name.init("forwardListData")
 				
 			case .HistoryDataUpdate:
 				return Notification.Name.init("HistoryDataUpdate")
-			
 			case .ReadingListDataUpdate:
 				return Notification.Name.init("ReadingListDataUpdate")
+			case .BookmarkListDataUpdate:
+				return Notification.Name.init("BookmarkListDataUpdate")
 				
 			default:
 				return nil

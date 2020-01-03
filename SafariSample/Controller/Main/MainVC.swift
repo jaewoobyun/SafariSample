@@ -213,6 +213,10 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 		NotificationGroup.shared.removeAllObserver(vc: self)
 	}
 	
+	@objc func cancelAddBookmark() {
+		self.dismiss(animated: true, completion: nil)
+	}
+	
 
 	func setupCustomButtons() {
 		bookmarksButton.tapEvent = {
@@ -264,19 +268,12 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 				let storyboard = UIStoryboard(name: "Main", bundle: nil)
 				let editBookmarkVC = storyboard.instantiateViewController(withIdentifier: "EditBookmarkVC") as! EditBookmarkVC
 				let navController = UINavigationController(rootViewController: editBookmarkVC)
-//				navController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: UIBarButtonItem.Style.done, target: nil, action: nil)
+				
+				editBookmarkVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancelAddBookmark))
 				editBookmarkVC.bookmarkTitle = title
 				editBookmarkVC.address = urlString
 				
 				self.present(navController, animated: true, completion: nil)
-				
-				//TODO: - put the following code into EditBookmarkVC
-				
-//				let saveData = BookmarksData.init(urlString: urlString, titleString: title, iconUrlString: "", indexPath: [0])
-//				var array = UserDefaultsManager.shared.loadUserBookMarkListData()
-//				array.append(saveData)
-//
-//				UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: array)
 			}
 			
 			let addReadingListAction = UIAlertAction(title: "Add to Reading List", style: UIAlertAction.Style.default) { (action) in
@@ -1003,7 +1000,6 @@ class CusBarItem: UIBarButtonItem {
 	let touchView:UIView = UIView()
 	let imageView:UIImageView = UIImageView()
 	
-	
 	var tapEvent:(()->())?
 	var longEvent:(()->())?
 	
@@ -1013,7 +1009,9 @@ class CusBarItem: UIBarButtonItem {
 	
 	required init?(coder: NSCoder) {
 		super.init(coder: coder)
-		self.isEnabled = super.isEnabled
+		//TODO: - 뒤로 가거나 앞으로 갈 수 있을때 파란색으로 활성화 시키고 싶다.
+//		self.isEnabled = super.isEnabled
+//		super.isEnabled = self.isEnabled
 		
 		initSetting()
 	}
@@ -1023,7 +1021,6 @@ class CusBarItem: UIBarButtonItem {
 			print("cus!!");
 		} else {
 			print("cus nil");
-			
 			//			if let image = self.backgroundImage(for: .normal, barMetrics: .default) {
 			//
 			//			}
@@ -1037,6 +1034,7 @@ class CusBarItem: UIBarButtonItem {
 			imageView.contentMode = .scaleAspectFit
 			
 			let tapGesture = UITapGestureRecognizer(target: self, action: #selector (tap))  //Tap function will call when user tap on button
+//			tapGesture.isEnabled = super.isEnabled //??????
 			let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(long))  //Long function will call when user long press on button.
 			tapGesture.numberOfTapsRequired = 1
 			longGesture.minimumPressDuration = 0.5

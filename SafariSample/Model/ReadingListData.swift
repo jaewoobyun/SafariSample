@@ -27,6 +27,10 @@ struct ReadingListData: Codable {
 	
 	func getFirstIconLetter() -> String {
 		if let letter = title {
+			if letter.isEmpty {
+				return "?"
+			}
+			
 			let first = letter[letter.startIndex]
 			return String(first)
 		}

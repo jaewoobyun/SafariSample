@@ -169,7 +169,7 @@ class History: UITableViewController {
 	
 	override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 		dateFormatter.locale = Locale(identifier: "ko_kr")
-		dateFormatter.dateFormat = "EEEE, MMMM d HH:mm" //"화요일, 12월 17"
+		dateFormatter.dateFormat = "EEEE, MMMM d" //"화요일, 12월 17"
 
 		let dateString = dateFormatter.string(from: sections[section].date)
 		return dateString
@@ -184,11 +184,17 @@ class History: UITableViewController {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "prototype", for: indexPath)
 		cell.detailTextLabel?.textColor = UIColor.gray
 		
-		cell.textLabel?.text = sections[indexPath.section].cells[indexPath.row].urlString //TODO: 여기 .title? 로 바꿀것??
+		if let titleString = sections[indexPath.section].cells[indexPath.row].title {
+			cell.textLabel?.text = titleString
+		}
 		if let visitedDate = sections[indexPath.section].cells[indexPath.row].date {
 			dateFormatter.locale = Locale(identifier: "ko_kr")
 			dateFormatter.dateFormat = "EEEE, MMMM d HH:mm" //"화요일, 12월 17"
-			cell.detailTextLabel?.text = dateFormatter.string(from: visitedDate)
+			let visitedDateString = dateFormatter.string(from: visitedDate)
+			if let urlString = sections[indexPath.section].cells[indexPath.row].urlString {
+				cell.detailTextLabel?.text = visitedDateString + "  " + urlString
+			}
+			
 		}
 		
 		return cell

@@ -332,11 +332,17 @@ class UserDefaultsManager {
 		var bookmarkDatas = self.loadUserBookMarkListData()
 		
 		
-		
 	}
 	
 	/// 데이터를 해당 indexPath 에서 지운다.
-	func removeBookmarkItemAtIndexPath() {
+	//TODO: - not yet final
+	func removeBookmarkItemAtIndexPath(indexPath: IndexPath) {
+		var data = loadUserBookMarkListData()
+		data.remove(at: indexPath.row)
+		let isSaveSuccess = self.saveBookMarkListData(bookmarkD: data)
+		if !isSaveSuccess {
+			print("BookmarkData 를 indexPath.row 에서 지우고 저장하는데에 실패")
+		}
 		
 	}
 }

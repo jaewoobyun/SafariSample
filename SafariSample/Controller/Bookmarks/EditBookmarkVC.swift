@@ -12,6 +12,7 @@ import FavIcon
 
 class EditBookmarkVC: UIViewController {
 	
+	//MARK: - Properties
 	var bookmarkTitle: String?
 	var address: String?
 	
@@ -20,6 +21,8 @@ class EditBookmarkVC: UIViewController {
 	@IBOutlet weak var iconImageView: UIImageView!
 	@IBOutlet weak var titleInput: UITextField!
 	@IBOutlet weak var addressInput: UITextField!
+	
+	
 	
 	
 //	var data: [TreeData] = []
@@ -34,8 +37,9 @@ class EditBookmarkVC: UIViewController {
 		titleInput.text = bookmarkTitle
 		addressInput.text = address
 		
+		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAddBookmark))
+
 //		data = TreeData.getDefaultData() //get the default data
-		
 //		BookmarksDataModel.createSampleData()
 //		data = BookmarksDataModel.bookMarkDatas
 		
@@ -65,7 +69,21 @@ class EditBookmarkVC: UIViewController {
 //		treeView.expandAllRows()
 	}
 	
+	@objc func saveAddBookmark() {
+		print("Save Clicked!!")
+		//TODO: - put the following code into EditBookmarkVC
 
+//		let saveData = BookmarksData.init(urlString: urlString, titleString: title, iconUrlString: "", indexPath: [0])
+//		var array = UserDefaultsManager.shared.loadUserBookMarkListData()
+//		array.append(saveData)
+//
+//		UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: array)
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		
+	}
 	
 	/*
 	// MARK: - Navigation

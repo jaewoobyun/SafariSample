@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FavIcon
 
 class ReadingListCell: UITableViewCell {
 	
@@ -29,8 +30,30 @@ class ReadingListCell: UITableViewCell {
 		if let data = data {
 			titleLabel.text = data.title
 			detailLabel.text = data.urlString
-			iconInitialLetter.text = data.getFirstIconLetter()
-			iconImage.backgroundColor = data.getIconLetterColor()
+//			iconInitialLetter.text = data.getFirstIconLetter()
+//			iconImage.backgroundColor = data.getIconLetterColor()
+			if data.urlString != nil {
+				do {
+					try FavIcon.downloadPreferred(data.urlString!, completion: { (result) in
+						if case let .success(image) = result {
+							self.iconImage.image = image
+						}
+						else if case let .failure(error) = result {
+							print("failed to download preferred favicon for \(String(describing: data.urlString)): \(error)")
+							//?
+							self.iconInitialLetter.text = data.getFirstIconLetter()
+							self.iconImage.backgroundColor = data.getIconLetterColor()
+						}
+					})
+				}
+				catch let error {
+					print("failed to download preferred favicon for \(String(describing: data.urlString)): \(error)")
+					//?
+					self.iconInitialLetter.text = data.getFirstIconLetter()
+					self.iconImage.backgroundColor = data.getIconLetterColor()
+				}
+			}
+			
 		} else {
 			titleLabel.text = ""
 			detailLabel.text = ""
