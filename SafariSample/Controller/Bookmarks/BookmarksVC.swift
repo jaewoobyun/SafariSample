@@ -42,7 +42,7 @@ class BookmarksVC: UIViewController{
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		
+//		self.title = "Bookmarks"
 		self.navigationController?.navigationBar.isHidden = false
 		
 		readStringFromHTMLFile(with: "bookmarks_11_19_19")
@@ -67,7 +67,7 @@ class BookmarksVC: UIViewController{
 		btnTemp = UIButton.init(type: .custom)
 //		btnTemp = UIButton.init(type: UIButton.ButtonType.contactAdd)
 		btnTemp?.setTitle("New Folder", for: .normal) //title
-		btnTemp?.setTitleColor(.blue, for: .normal)
+		btnTemp?.setTitleColor(.systemBlue, for: .normal)
 		btnTemp?.addTarget(self, action: #selector(addNewFolder), for: UIControl.Event.touchUpInside)
 		btnTemp?.isHidden = true
 		

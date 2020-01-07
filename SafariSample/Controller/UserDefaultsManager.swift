@@ -328,6 +328,7 @@ class UserDefaultsManager {
 	}
 	
 	/// Insert
+	//TODO: - not yet final
 	func insertFolder(folder: BookmarksData, indexPath: IndexPath) {
 		var bookmarkDatas = self.loadUserBookMarkListData()
 		

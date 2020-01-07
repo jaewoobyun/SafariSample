@@ -54,6 +54,7 @@ class EditFolderVC: UIViewController {
 		data = UserDefaultsManager.shared.loadUserBookMarkListData()
 		tableView.reloadData()
 		
+		
 	}
 	
 	func insertFolderAtSelectedRow(indexPath: IndexPath, title: String) {
