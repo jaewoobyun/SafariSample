@@ -21,6 +21,18 @@ class FolderCell: UITableViewCell {
         // Initialization code
     }
 	
+	///Determine if cell should be a folder or a bookmark
+	func setupIconFolderOrBook(_ data: BookmarksData? = nil) {
+		if let data = data {
+			if data.isFolder {
+				self.icon.image = UIImage(systemName: "folder")
+			}
+			else {
+				self.icon.image = UIImage(systemName: "book")
+			}
+		}
+	}
+	
 	func setupCell(level: Int) {
 		self.leadingConstraint.constant = leadingValueForChildrenCell * CGFloat(level + 1)
 	}

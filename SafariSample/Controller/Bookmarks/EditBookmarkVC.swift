@@ -21,28 +21,27 @@ class EditBookmarkVC: UIViewController {
 	@IBOutlet weak var iconImageView: UIImageView!
 	@IBOutlet weak var titleInput: UITextField!
 	@IBOutlet weak var addressInput: UITextField!
-	
-	
-	
-	
-//	var data: [TreeData] = []
-	var data: [BookmarksData] = []
+
+//	var data: [BookmarksData] = [] //
+	var bookmarksData: NSMutableArray = []
 	var selectedFolderTitle: String?
+	
+	var selectedNode: CITreeViewNode? //?
+	var selectedIndexPath: IndexPath? //?
+	///선택된 노드의(select) 부모를 조회하여, 선택 줄이 몇 레벨에 있는지 화인한다.
+	/// [0,0,1] -> let now = bookmarksData[0].child[0].child[0],  === > now.child.append(folder)
+	var selectedNodeIndexs: [Int] = []
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		
 		titleInput.textColor = .gray
 		addressInput.textColor = .gray
 		
 		titleInput.text = bookmarkTitle
 		addressInput.text = address
 		
-		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAddBookmark))
-
-//		data = TreeData.getDefaultData() //get the default data
-//		BookmarksDataModel.createSampleData()
-//		data = BookmarksDataModel.bookMarkDatas
-		
+		/// 주소의 favIcon 이미지
 		if address != nil {
 			do {
 				try FavIcon.downloadPreferred(address!, completion: { (result) in
@@ -59,41 +58,70 @@ class EditBookmarkVC: UIViewController {
 			}
 		}
 		
-		data = UserDefaultsManager.shared.loadUserBookMarkListData()
+//		data = UserDefaultsManager.shared.loadUserBookMarkListData()
+		self.bookmarksData.addObjects(from: UserDefaultsManager.shared.loadUserBookMarkListData())
 		
 		treeView.treeViewDelegate = self
 		treeView.treeViewDataSource = self
 		
 		treeView.collapseNoneSelectedRows = false
 		treeView.register(UINib(nibName: "FolderCell", bundle: nil), forCellReuseIdentifier: "folderCell")
-//		treeView.expandAllRows()
+		treeView.reloadData()
+		treeView.expandAllRows()
+		
+		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAddBookmark))
+		
 	}
-	
-	@objc func saveAddBookmark() {
-		print("Save Clicked!!")
-		//TODO: - put the following code into EditBookmarkVC
-
-//		let saveData = BookmarksData.init(urlString: urlString, titleString: title, iconUrlString: "", indexPath: [0])
-//		var array = UserDefaultsManager.shared.loadUserBookMarkListData()
-//		array.append(saveData)
-//
-//		UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: array)
-	}
-	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
+	}
+	
+	func insertBookmarkAtSelectedLocation(bookMarkTitle: String, urlAddress: String, selectNodeIndexs:[Int]) {
+		
+		let newBookmarkItem = BookmarksData.init(urlString: urlAddress, titleString: bookMarkTitle, indexPath: selectNodeIndexs)
+		
+		if selectNodeIndexs.count == 0 {
+			self.bookmarksData.add(newBookmarkItem)
+		}
+		else {
+			var data: BookmarksData?
+			for index in selectNodeIndexs {
+				if data == nil {
+					data = self.bookmarksData.object(at: index) as! BookmarksData
+				} else {
+					data = data?.child[index]
+				}
+			}
+			data?.child.append(newBookmarkItem)
+		}
+		
+		UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: bookmarksData as! [BookmarksData])
+		
+		treeView.reloadData()
+		treeView.expandAllRows()
 		
 	}
 	
-	/*
-	// MARK: - Navigation
+		@objc func saveAddBookmark() {
+			print("Save Clicked!!")
+	//		let saveData = BookmarksData.init(urlString: urlString, titleString: title, iconUrlString: "", indexPath: [0])
+	//		var array = UserDefaultsManager.shared.loadUserBookMarkListData()
+	//		array.append(saveData)
+	//
+	//		UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: array)
+			
+			guard let bookmarkTitle = self.titleInput.text else {
+				return
+			}
+			
+			guard let address = self.addressInput.text else {
+				return
+			}
+			
+			insertBookmarkAtSelectedLocation(bookMarkTitle: bookmarkTitle, urlAddress: address, selectNodeIndexs: selectedNodeIndexs)
+
 	
-	// In a storyboard-based application, you will often want to do a little preparation before navigation
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-	// Get the new view controller using segue.destination.
-	// Pass the selected object to the new view controller.
-	}
-	*/
+		}
 	
 }
 //MARK: - CITreeView Delegate
@@ -123,21 +151,48 @@ extension EditBookmarkVC: CITreeViewDelegate {
 	}
 	
 	func treeView(_ treeView: CITreeView, didSelectRowAt treeViewNode: CITreeViewNode, atIndexPath indexPath: IndexPath) {
-//		print("didSelectRowAt", treeViewNode)
-//		if let parentNode = treeViewNode.parentNode {
-//			print("parentNode.item", parentNode.item)
-//		}
-//		print("TreeViewNode: ", treeViewNode, "indexPath:", indexPath.section, indexPath.row)
-
-//		if let selectedNodeAtIndexPath = treeViewNode.self.item as? TreeData {
-//
-//			let selectedNodeItemTitle = selectedNodeAtIndexPath.title
-//			selectedFolderTitle = selectedNodeItemTitle
-//		}
 		
-		if let selectedNodeAtIndexPath = treeViewNode.self.item as? BookmarksData {
-			let selectedNodeItemTitle = selectedNodeAtIndexPath.titleString
-			selectedFolderTitle = selectedNodeItemTitle
+		if let selectedNode = treeViewNode.self.item as? BookmarksData {
+			self.selectedNode = treeViewNode
+			self.selectedIndexPath = indexPath
+			
+			var selectNodeTitle: String = selectedNode.titleString ?? ""
+			
+			selectedNodeIndexs.removeAll()
+			var parentNode: CITreeViewNode? = treeViewNode
+			
+			repeat {
+				if let currentNode = parentNode {
+					parentNode = currentNode.parentNode
+					
+					if let parentBookMark = parentNode?.item as? BookmarksData {
+						
+						for index in 0..<parentBookMark.child.count {
+							let item = parentBookMark.child[index]
+							if item.titleString == selectNodeTitle {
+								//찾음
+								selectedNodeIndexs.insert(index, at: 0)
+								selectNodeTitle = parentBookMark.titleString ?? ""
+								break
+							}
+						}
+					}
+				}
+				else {
+					parentNode = nil
+				}
+			} while parentNode != nil
+			
+			//root
+			for index in 0..<self.bookmarksData.count {
+				let rootItem = self.bookmarksData[index] as! BookmarksData
+				if rootItem.titleString == selectNodeTitle {
+					selectedNodeIndexs.insert(index, at: 0)
+					break
+				}
+			}
+			
+			
 		}
 		
 	}
@@ -145,16 +200,9 @@ extension EditBookmarkVC: CITreeViewDelegate {
 
 	
 	func treeView(_ treeView: CITreeView, didDeselectRowAt treeViewNode: CITreeViewNode, atIndexPath indexPath: IndexPath) {
-//		if let parentNode = treeViewNode.parentNode{
-//			print(parentNode.item)
-//		}
-		
-//		if let selectedNodeAtIndexPath = treeViewNode.self.item as? TreeData {
-//			let string = selectedNodeAtIndexPath.title
-//			print(string)
-//		}
-		if let selectedNodeAtIndexPath = treeViewNode.self.item as? BookmarksData {
-			let string = selectedNodeAtIndexPath.titleString
+
+		if let selectedNode = treeViewNode.self.item as? BookmarksData {
+			let string = selectedNode.titleString
 			print(string as Any)
 		}
 		
@@ -166,13 +214,6 @@ extension EditBookmarkVC: CITreeViewDelegate {
 //MARK: - CITreeViewDataSource
 extension EditBookmarkVC: CITreeViewDataSource {
 	func treeViewSelectedNodeChildren(for treeViewNodeItem: AnyObject) -> [AnyObject] {
-//		if let dataObj = treeViewNodeItem as? TreeData {
-//
-////			print(dataObj.title)
-//
-//
-//			return dataObj.children
-//		}
 		if let dataObj = treeViewNodeItem as? BookmarksData {
 			return dataObj.child as [AnyObject]
 		}
@@ -181,24 +222,17 @@ extension EditBookmarkVC: CITreeViewDataSource {
 	}
 	
 	func treeViewDataArray() -> [AnyObject] {
-		return data as [AnyObject]
+		return bookmarksData as [AnyObject]
 	}
 	
 	func treeView(_ treeView: CITreeView, atIndexPath indexPath: IndexPath, withTreeViewNode treeViewNode: CITreeViewNode) -> UITableViewCell {
 		let cell = treeView.dequeueReusableCell(withIdentifier: "folderCell") as! FolderCell
-//		let cell = treeView.dequeueReusableCell(withIdentifier: "exampleCell", for: indexPath)
-		
-//		let dataObj = treeViewNode.item as! TreeData
 		let dataObj = treeViewNode.item as! BookmarksData
-//		cell.folderName.text = dataObj.title
-//		cell.setupCell(level: treeViewNode.level)
 		cell.folderName.text = dataObj.titleString
 		cell.setupCell(level: treeViewNode.level)
+		cell.setupIconFolderOrBook(dataObj)
 		
-//		if indexPath.row == 0 && selectedFolderTitle != nil {
-//			cell.folderName.text = selectedFolderTitle
-//
-//		}
+		
 		
 		return cell
 	}

@@ -12,11 +12,10 @@ import CITreeView
 
 class EditFolder: UIViewController {
 	
-	var folderTitle: String?
-	
 	@IBOutlet weak var titleTextField: UITextField!
 	@IBOutlet weak var treeView: CITreeView!
 	
+	var folderTitle: String?
 	var bookmarksData: NSMutableArray = []
 	var folderTitleInputText: String?
 	var selectedNode: CITreeViewNode? //
@@ -49,24 +48,47 @@ class EditFolder: UIViewController {
 		
 		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveFolder))
 		
+		
+		
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+		checkTitleIsntEmpty()
 	}
 	
 	override func viewDidDisappear(_ animated: Bool) {
 		super.viewDidDisappear(animated)
 	}
 	
+	func checkTitleIsntEmpty() {
+		//TODO: - awefoiajweofawejfawjfoawiejfo;
+		if let titleText = self.titleTextField.text, !titleText.isEmpty {
+			self.navigationItem.rightBarButtonItem?.isEnabled = true
+		} else {
+			self.navigationItem.rightBarButtonItem?.isEnabled = false
+		}
+		
+	}
+	
 	@objc func saveFolder() {
 		//guard let selectedIndexPath = self.selectedIndexPath else {return}
 		//guard let selectedNode = self.selectedNode else { return}
 		
-		guard let title = self.titleTextField.text else { return}
+		let alertController = UIAlertController(title: "Title Is Empty", message: "Please Set a Title for the Folder", preferredStyle: UIAlertController.Style.alert)
+		let cancelAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil)
+		alertController.addAction(cancelAction)
+		
+		guard let title = self.titleTextField.text, !title.isEmpty
+		else {
+			self.present(alertController, animated: true, completion: nil)
+			return
+		}
+		
+		
+		insertFolderAtSelectedLocation(folderTitle: title, selectNodeIndexs: selectNodeIndexs)
 		
 		//insertFolderAtSelectedLocation(indexPath: selectedIndexPath, selectedNode: selectedNode, title: title)
-		insertFolderAtSelectedLocation(folderTitle: title, selectNodeIndexs: selectNodeIndexs)
 	}
 	
 	
@@ -83,7 +105,6 @@ class EditFolder: UIViewController {
 //		array.append(newFolder)
 
 		let isSaveSuccess = UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: array)
-
 		print(isSaveSuccess)
 		
 	}
@@ -128,12 +149,24 @@ extension EditFolder: UITextFieldDelegate {
 	}
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		print("textFieldShouldReturn")		
+		print("textFieldShouldReturn")
 		self.folderTitleInputText = self.titleTextField.text
 		
 		textField.resignFirstResponder()
 		return true
 	}
+	
+//	func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//		let text = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+//
+//		if !text.isEmpty {
+//			self.navigationItem.rightBarButtonItem?.isEnabled = true
+//		}
+//		if text.isEmpty {
+//			self.navigationItem.rightBarButtonItem?.isEnabled = false
+//		}
+//		return true
+//	}
 	
 	
 }
@@ -214,25 +247,9 @@ extension EditFolder: CITreeViewDelegate {
 			
 			print("selectNodeIndexs \(selectNodeIndexs)")
 			
-//			if let selectedCell = treeView.cellForRow(at: indexPath) {
-//				if selectedNode.isFolder {
-//					selectedCell.accessoryType = .checkmark
-//				}
+//			if let cell = treeView.cellForRow(at: indexPath) {
+//				cell.accessoryType = .checkmark
 //			}
-			
-//			let cell = treeView.cellForRow(at: indexPath)
-//			if let val = selectedIndexPath {
-//				if indexPath == val{
-//					cell?.accessoryType = .checkmark
-//				}
-//				else {
-//					cell?.accessoryType = .none
-//				}
-//			}
-			
-			if let cell = treeView.cellForRow(at: indexPath) {
-				cell.accessoryType = .checkmark
-			}
 			
 			
 			
@@ -243,9 +260,9 @@ extension EditFolder: CITreeViewDelegate {
 //			self.present(alertController, animated: true, completion: nil)
 			
 			/// 선택한 노드가 폴더일때만 새로 만든 폴더가 그 안에 있어야 한다. indexpath 로 위치를 잡을 것이 아니라 자식 안에도 만들 수 있어야 한다. 그렇다면 폴더를 닫으면 index가 바뀌기 때문에 절대 경로(데이터)를 기준으로 생성해야 한다.?
-			if selectedNode.isFolder{
+//			if selectedNode.isFolder{
 //				insertFolderAtSelectedLocation(indexPath: indexPath, selectedNode: treeViewNode, title: folderTitleInputText!)
-			}
+//			}
 			
 						
 			
@@ -256,9 +273,9 @@ extension EditFolder: CITreeViewDelegate {
 	
 	func treeView(_ treeView: CITreeView, didDeselectRowAt treeViewNode: CITreeViewNode, atIndexPath indexPath: IndexPath) {
 		if let selectedNode = treeViewNode.self.item as? BookmarksData {
-			if let cell = treeView.cellForRow(at: indexPath) {
-				cell.accessoryType = .none
-			}
+//			if let cell = treeView.cellForRow(at: indexPath) {
+//				cell.accessoryType = .none
+//			}
 			
 			
 		}
@@ -303,47 +320,13 @@ extension EditFolder: CITreeViewDataSource {
 		
 		let dataObj = treeViewNode.item as! BookmarksData
 		
-		//FIXME: - 안됨 ㅠㅠ
-//		if dataObj.isFolder && dataObj.titleString == "Favorites" || indexPath.row == 0 {
-//			cell.icon.image = UIImage(systemName: "star")
-//			cell.textLabel?.text = folderTitleInputText
-//		}
-		
-		//------------------
-		
-		if dataObj.isFolder {
-			cell.icon.image = UIImage(systemName: "folder")
-		}
-		if !dataObj.isFolder {
-			cell.icon.image = UIImage(systemName: "book")
-		}
+		cell.setupIconFolderOrBook(dataObj)
 		
 		cell.folderName.text = dataObj.titleString
 		cell.setupCell(level: treeViewNode.level)
-		
-		if selectedNode != nil, folderTitleInputText != nil {
-			print("selectedNode: \(selectedNode), folderTitleInputText: \(folderTitleInputText)")
-		}
-		
-		
 		
 		return cell
 	}
 	
 	
 }
-
-
-//TODO: - ?? what does it mean to use a extension here?
-//extension EditFolder: UITableViewDelegate {
-//	tableviewcellf
-//}
-
-//
-//extension EditFolder: CITreeViewControllerDelegate {
-//	func getChildren(forTreeViewNodeItem item: AnyObject, with indexPath: IndexPath) -> [AnyObject] {
-//		<#code#>
-//	}
-//
-//
-//}
