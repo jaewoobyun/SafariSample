@@ -59,7 +59,7 @@ class EditFolderVC: UIViewController {
 	
 	func insertFolderAtSelectedRow(indexPath: IndexPath, title: String) {
 		let insertingFolder = BookmarksData.init(titleString: title, child: [], indexPath: [indexPath.row])
-		data[indexPath.row].addChild(insertingFolder)
+		data[indexPath.row].child.append(insertingFolder)
 	}
 	
 }

@@ -25,9 +25,9 @@ import UIKit
 //}
 
 
-struct BookmarksData: Codable {
+class BookmarksData: Codable {
 	let urlString: String?
-	let titleString: String?
+	var titleString: String?
 	let iconUrlString: String?
 	
 	let dataIndexPath:[Int]?
@@ -78,14 +78,14 @@ struct BookmarksData: Codable {
 		return nil
 	}
 	
-	//For Tree Sytle data
-	mutating func addChild(_ child: BookmarksData) {
-		self.child.append(child)
-	}
-	
-	mutating func removeChild(_ child: BookmarksData) {
-//		self.child = self.child.filter({ $0 !== child })
-	}
+//	//For Tree Sytle data
+//	mutating func addChild(_ child: BookmarksData) {
+//		self.child.append(child)
+//	}
+//	
+//	mutating func removeChild(_ child: BookmarksData) {
+////		self.child = self.child.filter({ $0 !== child })
+//	}
 	//------------
 }
 

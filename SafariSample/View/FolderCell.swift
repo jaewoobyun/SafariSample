@@ -27,6 +27,8 @@ class FolderCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+		accessoryType = selected ? .checkmark : .none
+		self.icon.tintColor = selected ? UIColor.systemBlue : UIColor.systemGray
     }
     
 }
