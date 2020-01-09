@@ -39,19 +39,20 @@ class BookmarksVC: UIViewController{
 	
 	var completionHandler: ((_ urlString: String?) ->())?
 	
+	//MARK: - LifeCycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-//		self.title = "Bookmarks"
+		//		self.title = "Bookmarks"
 		self.navigationController?.navigationBar.isHidden = false
 		
 		readStringFromHTMLFile(with: "bookmarks_11_19_19")
-//		print(topmostItem)
-//		self.topToolBar.delegate = self
+		//		print(topmostItem)
+		//		self.topToolBar.delegate = self
 		
-//		self.navigationItem.searchController = searchController
+		//		self.navigationItem.searchController = searchController
 		
-//		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "sample")
+		//		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "sample")
 		self.navigationController?.navigationBar.barTintColor = barBackgroundColor
 		
 		
@@ -65,7 +66,7 @@ class BookmarksVC: UIViewController{
 		
 		
 		btnTemp = UIButton.init(type: .custom)
-//		btnTemp = UIButton.init(type: UIButton.ButtonType.contactAdd)
+		//		btnTemp = UIButton.init(type: UIButton.ButtonType.contactAdd)
 		btnTemp?.setTitle("New Folder", for: .normal) //title
 		btnTemp?.setTitleColor(.systemBlue, for: .normal)
 		btnTemp?.addTarget(self, action: #selector(addNewFolder), for: UIControl.Event.touchUpInside)
@@ -74,16 +75,62 @@ class BookmarksVC: UIViewController{
 		newFolderButton = UIBarButtonItem.init(customView: btnTemp!)
 		
 		self.toolbarItems?.insert(newFolderButton!, at: 0)
-		
-		tableView.reloadData()
-		
-//		registerForPreviewing(with: self, sourceView: tableView)
-		
+		//		registerForPreviewing(with: self, sourceView: tableView)
 		let interaction = UIContextMenuInteraction(delegate: self)
 		tableView.addInteraction(interaction)
+		
+		tableView.reloadData()
 	}
 	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		self.title = title
+		navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+		navigationController?.navigationBar.shadowImage = UIImage()
+		navigationController?.navigationBar.barTintColor = barBackgroundColor
+		UserDefaultsManager.shared.registerBookmarkDataObserver(vc: self, selector: #selector(updateBookmarkListDatas))
+		
+		
+		if bookmarksData.count == 0, !isDepthViewController {
+			self.title = "Bookmarks"
+			//			BookmarksDataModel.createSampleData()
+			//			let bookmarksArray = BookmarksDataModel.bookMarkDatas
+			//			bookmarksData = bookmarksArray
+			///제일 처음 데이터가 로드 된다.
+			bookmarksData = UserDefaultsManager.shared.loadUserBookMarkListData()
+		}
+		
+		if let selectedIndexPath = tableView.indexPathForSelectedRow {
+			tableView.deselectRow(at: selectedIndexPath, animated: animated)
+		}
+		
+		//		if toggle == true {
+		//			self.toolbarItems?.insert(newFolderButton, at: 0)
+		//		}
+		//		else if toggle == false {
+		//
+		//		}
+		
+		tableView.reloadData()
+	}
 	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		navigationController?.navigationBar.setBackgroundImage(nil, for: UIBarMetrics.default)
+		navigationController?.navigationBar.shadowImage = nil
+	}
+	
+	override func viewDidDisappear(_ animated: Bool) {
+		super.viewDidDisappear(animated)
+		UserDefaultsManager.shared.removeBookmarksDataObserver()
+	}
+	
+	@objc func updateBookmarkListDatas() {
+		print("BookmarkVC updateBookmarkListDatas")
+		self.bookmarksData.removeAll()
+		self.bookmarksData = UserDefaultsManager.shared.bookmarkListDataSave
+		tableView.reloadData()
+	}
 	
 	@IBAction func editButton(_ sender: UIBarButtonItem) {
 		toggle = !toggle
@@ -102,9 +149,10 @@ class BookmarksVC: UIViewController{
 	@objc func addNewFolder() {
 		print("AddNewFolder!!")
 		let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//		let editFolderVC = storyboard.instantiateViewController(identifier: "EditFolderVC")
-//		self.navigationController?.pushViewController(editFolderVC, animated: true)
+		//		let editFolderVC = storyboard.instantiateViewController(identifier: "EditFolderVC")
+		//		self.navigationController?.pushViewController(editFolderVC, animated: true)
 		let editFolderVC = storyboard.instantiateViewController(identifier: "EditFolder")
+		editFolderVC.title = "Add New Folder"
 		self.navigationController?.pushViewController(editFolderVC, animated: true)
 		
 	}
@@ -115,76 +163,76 @@ class BookmarksVC: UIViewController{
 		do {
 			let content = try String(contentsOf: path, encoding: String.Encoding.utf8)
 			print("-----------content-------------")
-//			print(content)
+			//			print(content)
 			let doc: Document = try SwiftSoup.parse(content)
 			
-/// Swift Soup parsing Example
-//			print(doc)
-//			let link: Element = try doc.select("A").first()!
-//			print("------link---------")
-//			print(link)
-//			let text: String = try doc.body()!.text();
-//			print("------text---------")
-//			print(text)
-//			let linkHref: String = try link.attr("href");
-//			print("-----linkHref----------")
-//			print(linkHref)
-//			let linkText: String = try link.text();
-//			print("------linkText---------")
-//			print(linkText)
-//			let linkOuterH: String = try link.outerHtml();
-//			print("------linkOuterH---------")
-//			print(linkOuterH)
-//			let linkInnerH: String = try link.html();
-//			print("------linkText---------")
-//			print(linkInnerH)
+			/// Swift Soup parsing Example
+			//			print(doc)
+			//			let link: Element = try doc.select("A").first()!
+			//			print("------link---------")
+			//			print(link)
+			//			let text: String = try doc.body()!.text();
+			//			print("------text---------")
+			//			print(text)
+			//			let linkHref: String = try link.attr("href");
+			//			print("-----linkHref----------")
+			//			print(linkHref)
+			//			let linkText: String = try link.text();
+			//			print("------linkText---------")
+			//			print(linkText)
+			//			let linkOuterH: String = try link.outerHtml();
+			//			print("------linkOuterH---------")
+			//			print(linkOuterH)
+			//			let linkInnerH: String = try link.html();
+			//			print("------linkText---------")
+			//			print(linkInnerH)
 			
-//			let h3s: Elements = try doc.select("H3")
-//			for h3 in h3s {
-//				let text = try h3s.text()
-//				bookmarkStrings.append(text)//
-//				print(text)
-//			}
+			//			let h3s: Elements = try doc.select("H3")
+			//			for h3 in h3s {
+			//				let text = try h3s.text()
+			//				bookmarkStrings.append(text)//
+			//				print(text)
+			//			}
 			
-//			let dls: Elements = try doc.select("DL")
-//			for dl in dls {
-//				let dts: Elements = try dls.select("DT")
-//				for dt in dts {
-//					let h3s: Elements = try dts.select("H3")
-//					for h3 in h3s {
-//						let folders = try h3.text()
-//						print(folders)
-//					}
-//
-//				}
-//			}
+			//			let dls: Elements = try doc.select("DL")
+			//			for dl in dls {
+			//				let dts: Elements = try dls.select("DT")
+			//				for dt in dts {
+			//					let h3s: Elements = try dts.select("H3")
+			//					for h3 in h3s {
+			//						let folders = try h3.text()
+			//						print(folders)
+			//					}
+			//
+			//				}
+			//			}
 			
 			
-//			let p: Elements = try doc.select("p")
-//			for dt in p {
-//				let a: Elements = try p.select("A")
-//				let aText = try a.text()
-//				print(aText)
-//				topmostItem.append(aText)
-//			}
+			//			let p: Elements = try doc.select("p")
+			//			for dt in p {
+			//				let a: Elements = try p.select("A")
+			//				let aText = try a.text()
+			//				print(aText)
+			//				topmostItem.append(aText)
+			//			}
 			
 			//-------------------------------------
-
-//				let dts: Elements = try doc.select("DT")
-//				for dt in dts {
-//					let h3s: Elements = try dt.select("H3")
-//					for h3 in h3s {
-//						if h3.hasText() {
-//							let foldername: String = try h3.text()
-//							topmostItem.append(foldername)
-//						}
-//					}
-//				}
 			
-//			let dls: Elements = try doc.select("DL > p")
-//			for dl in dls {
-//				print(dl)
-//			}
+			//				let dts: Elements = try doc.select("DT")
+			//				for dt in dts {
+			//					let h3s: Elements = try dt.select("H3")
+			//					for h3 in h3s {
+			//						if h3.hasText() {
+			//							let foldername: String = try h3.text()
+			//							topmostItem.append(foldername)
+			//						}
+			//					}
+			//				}
+			
+			//			let dls: Elements = try doc.select("DL > p")
+			//			for dl in dls {
+			//				print(dl)
+			//			}
 			
 			let wants: Elements = try doc.select("DT > H3")
 			for want in wants {
@@ -192,22 +240,22 @@ class BookmarksVC: UIViewController{
 				topmostItem.append(text)
 			}
 			
-//			let dls: Elements = try doc.select("DL > p")
-//			for dl in dls {
-//				let dts: Elements = try dls.select("DT > H3")
-//				for dt in dts {
-//					let h3 = try dt.text()
-//					topmostItem.append(h3)
-//				}
-//			}
+			//			let dls: Elements = try doc.select("DL > p")
+			//			for dl in dls {
+			//				let dts: Elements = try dls.select("DT > H3")
+			//				for dt in dts {
+			//					let h3 = try dt.text()
+			//					topmostItem.append(h3)
+			//				}
+			//			}
 			
-//-------------------------------------------
+			//-------------------------------------------
 			
 			
-//			if let topmostElement: Element = try doc.lastElementSibling() {
-//				print(topmostElement.ownText())
-//			}
-//			let topmostElement: Elements = try doc.select("DL")
+			//			if let topmostElement: Element = try doc.lastElementSibling() {
+			//				print(topmostElement.ownText())
+			//			}
+			//			let topmostElement: Elements = try doc.select("DL")
 			
 			
 			return content
@@ -216,58 +264,26 @@ class BookmarksVC: UIViewController{
 			return ""
 		}
 	}
-
-	
-	override func viewWillAppear(_ animated: Bool) {
-		self.title = title
-		navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-		navigationController?.navigationBar.shadowImage = UIImage()
-		navigationController?.navigationBar.barTintColor = barBackgroundColor
-		tableView.reloadData()
-		
-		if bookmarksData.count == 0, !isDepthViewController {
-			self.title = "Bookmarks"
-//			BookmarksDataModel.createSampleData()
-//			let bookmarksArray = BookmarksDataModel.bookMarkDatas
-//			bookmarksData = bookmarksArray
-			bookmarksData = UserDefaultsManager.shared.loadUserBookMarkListData()
-		}
-		
-		if let selectedIndexPath = tableView.indexPathForSelectedRow {
-			tableView.deselectRow(at: selectedIndexPath, animated: animated)
-		}
-		
-//		if toggle == true {
-//			self.toolbarItems?.insert(newFolderButton, at: 0)
-//		}
-//		else if toggle == false {
-//
-//		}
-	}
 	
 	
-	override func viewWillDisappear(_ animated: Bool) {
-		super.viewWillDisappear(animated)
-		navigationController?.navigationBar.setBackgroundImage(nil, for: UIBarMetrics.default)
-		navigationController?.navigationBar.shadowImage = nil
-	}
 	
-	func reloadTableView() {
-		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "example")
-		tableView.reloadData()
-	}
+	
+	//	func reloadTableView() {
+	//		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "example")
+	//		tableView.reloadData()
+	//	}
 	
 	func makeContextMenu() -> UIMenu {
-//		let copycontentsAction = UIAction(title: "Copy Contents", image: UIImage(systemName: "doc.on.doc"), identifier: nil, discoverabilityTitle: nil, attributes: UIMenuElement.Attributes.init(), state: UIMenuElement.State.mixed) { (action) in
-//		}
+		//		let copycontentsAction = UIAction(title: "Copy Contents", image: UIImage(systemName: "doc.on.doc"), identifier: nil, discoverabilityTitle: nil, attributes: UIMenuElement.Attributes.init(), state: UIMenuElement.State.mixed) { (action) in
+		//		}
 		let copycontentsAction = UIAction(title: "Copy Contents", image: UIImage(systemName: "doc.on.doc")) { action in }
-//		let openInNewTabsAction = UIAction(title: "Open in New Tabs", image: UIImage(systemName: "plus.rectangle.on.rectangle"), identifier: nil, discoverabilityTitle: nil, attributes: UIMenuElement.Attributes.init(), state: UIMenuElement.State.mixed) { (action) in
-//		}
+		//		let openInNewTabsAction = UIAction(title: "Open in New Tabs", image: UIImage(systemName: "plus.rectangle.on.rectangle"), identifier: nil, discoverabilityTitle: nil, attributes: UIMenuElement.Attributes.init(), state: UIMenuElement.State.mixed) { (action) in
+		//		}
 		let openInNewTabsAction = UIAction(title: "Open in New Tabs", image: UIImage(systemName: "plus.rectangle.on.rectangle")) { action in }
 		let editAction = UIAction(title: "Edit...", image: UIImage(systemName: "square.and.pencil")) { action in }
 		
-//		let deleteAction = UIAction(title: "Delete", image: UIImage(systemName: "trash"), identifier: nil, discoverabilityTitle: "delete", attributes: UIMenuElement.Attributes.destructive, state: UIMenuElement.State.mixed) { (action) in
-//		}
+		//		let deleteAction = UIAction(title: "Delete", image: UIImage(systemName: "trash"), identifier: nil, discoverabilityTitle: "delete", attributes: UIMenuElement.Attributes.destructive, state: UIMenuElement.State.mixed) { (action) in
+		//		}
 		let deleteCancel = UIAction(title: "Cancel", image: UIImage(systemName: "xmark")) { action in }
 		let deleteConfirmation = UIAction(title: "Delete", image: UIImage(systemName: "checkmark"), attributes: .destructive) { action in }
 		// The delete sub-menu is created like the top-level menu, but we also specify an image and options
@@ -284,7 +300,7 @@ class BookmarksVC: UIViewController{
 //MARK: - UISearchResultsUpdating
 extension BookmarksVC: UISearchResultsUpdating {
 	func updateSearchResults(for searchController: UISearchController) {
-//		searchBar = searchController.searchBar //
+		//		searchBar = searchController.searchBar //
 	}
 	
 	
@@ -299,8 +315,8 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		
 		let cell = tableView.dequeueReusableCell(withIdentifier: "sample", for: indexPath)
-//		cell.textLabel?.text = topmostItem[indexPath.row]
-//		cell.textLabel?.text = sampleFolderData.folderName
+		//		cell.textLabel?.text = topmostItem[indexPath.row]
+		//		cell.textLabel?.text = sampleFolderData.folderName
 		
 		if !bookmarksData[indexPath.row].isFolder {
 			cell.imageView?.image = UIImage(systemName: "book")
@@ -328,8 +344,10 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 		if let reuseableVC = storyboard.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC {
 			if bookmarksData[indexPath.row].isFolder {
 				if tableView.isEditing {
-					if let reusableEditFolder = storyboard.instantiateViewController(identifier: "EditFolder") as? EditFolder { //FIXME: - EditFolder
-//						reusableEditFolder.folderTitle = bookmarksData[indexPath.item].titleString
+					if let reusableEditFolder = storyboard.instantiateViewController(identifier: "EditFolder") as? EditFolder {
+						reusableEditFolder.folderTitle = bookmarksData[indexPath.item].titleString
+						//TODO: - need to pass the location of the editing folder to EditFolder
+						reusableEditFolder.selectedIndexPath = indexPath
 						navigationController?.pushViewController(reusableEditFolder, animated: true)
 					}
 				}
@@ -371,7 +389,7 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 			print("vc load fail")
 		}
 		
-
+		
 		
 	}
 	
@@ -386,12 +404,12 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == .delete {
 			//TODO: - delete the row from the data source
-//			tableView.beginUpdates()
+			
+			bookmarksData.remove(at: indexPath.row)
 			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
-//			tableView.endUpdates()
 			
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-				UserDefaultsManager.shared.removeBookmarkItemAtIndexPath(indexPath: indexPath)
+				UserDefaultsManager.shared.removeBookmarkFolderItemAtIndexPath(indexPath: indexPath)
 			}
 		}
 	}
@@ -401,17 +419,17 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-//		var rowToMove = data[indexPath.row]
-//		data.removeAtIndex()
+		//		var rowToMove = data[indexPath.row]
+		//		data.removeAtIndex()
 		
 	}
 	
 	func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-//		return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (suggestedActions) -> UIMenu? in
-//			return self.makeContextMenu()
-//		}
-//		guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
-//		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+		//		return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (suggestedActions) -> UIMenu? in
+		//			return self.makeContextMenu()
+		//		}
+		//		guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
+		//		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
 		guard let reusableVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview reusableVC")}
 		if bookmarksData[indexPath.row].isFolder {
 			print("is Folder")
@@ -422,10 +440,10 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 		}
 		else {
 			print("isn't Folder")
-//			let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
-//			let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
-//			alert.addAction(action)
-//			self.present(alert, animated: true, completion: nil)
+			//			let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
+			//			let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
+			//			alert.addAction(action)
+			//			self.present(alert, animated: true, completion: nil)
 			
 			//TODO: - show a preview of the link (webview).
 			
@@ -438,7 +456,7 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 	
 	func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
 		animator.addCompletion {
-
+			
 		}
 	}
 	
@@ -481,24 +499,24 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 
 extension BookmarksVC: UIContextMenuInteractionDelegate {
 	func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-				guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
+		guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
 		//		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-				guard let reusableVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview reusableVC")}
-				if bookmarksData[indexPath.row].isFolder {
-					print("is Folder")
-					reusableVC.navigationController?.title = bookmarksData[indexPath.row].titleString
-					reusableVC.title = bookmarksData[indexPath.row].titleString
-					reusableVC.bookmarksData = bookmarksData[indexPath.row].child
-					reusableVC.isDepthViewController = true
-				}
-				else {
-					print("isn't Folder")
-					//TODO: - folder 가 아니라 bookmark 이기 때문에 preview 로 해당 url 이 보여야 한다 ??
-//					let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
-//					let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
-//					alert.addAction(action)
-//					self.present(alert, animated: true, completion: nil)
-				}
+		guard let reusableVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview reusableVC")}
+		if bookmarksData[indexPath.row].isFolder {
+			print("is Folder")
+			reusableVC.navigationController?.title = bookmarksData[indexPath.row].titleString
+			reusableVC.title = bookmarksData[indexPath.row].titleString
+			reusableVC.bookmarksData = bookmarksData[indexPath.row].child
+			reusableVC.isDepthViewController = true
+		}
+		else {
+			print("isn't Folder")
+			//TODO: - folder 가 아니라 bookmark 이기 때문에 preview 로 해당 url 이 보여야 한다 ??
+			//					let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
+			//					let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
+			//					alert.addAction(action)
+			//					self.present(alert, animated: true, completion: nil)
+		}
 		
 		return UIContextMenuConfiguration(identifier: nil, previewProvider: {return reusableVC}) { (element) -> UIMenu? in
 			return self.makeContextMenu()

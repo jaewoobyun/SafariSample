@@ -61,6 +61,8 @@ class EditBookmarkVC: UIViewController {
 //		data = UserDefaultsManager.shared.loadUserBookMarkListData()
 		self.bookmarksData.addObjects(from: UserDefaultsManager.shared.loadUserBookMarkListData())
 		
+		titleInput.delegate = self
+		addressInput.delegate = self
 		treeView.treeViewDelegate = self
 		treeView.treeViewDataSource = self
 		
@@ -119,11 +121,36 @@ class EditBookmarkVC: UIViewController {
 			}
 			
 			insertBookmarkAtSelectedLocation(bookMarkTitle: bookmarkTitle, urlAddress: address, selectNodeIndexs: selectedNodeIndexs)
-
-	
+			
+			self.dismiss(animated: true, completion: nil)
 		}
 	
 }
+//MARK: - UITextField Delegate
+extension EditBookmarkVC: UITextFieldDelegate {
+	func textFieldDidEndEditing(_ textField: UITextField) {
+		
+	}
+	
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return true
+	}
+	
+	func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+		let text = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+
+		if !text.isEmpty {
+			self.navigationItem.rightBarButtonItem?.isEnabled = true
+		}
+		else {
+			self.navigationItem.rightBarButtonItem?.isEnabled = false
+		}
+		return true
+	}
+}
+
+
 //MARK: - CITreeView Delegate
 extension EditBookmarkVC: CITreeViewDelegate {
 	func willExpandTreeViewNode(treeViewNode: CITreeViewNode, atIndexPath: IndexPath) {

@@ -15,6 +15,11 @@ class EditFolder: UIViewController {
 	@IBOutlet weak var titleTextField: UITextField!
 	@IBOutlet weak var treeView: CITreeView!
 	
+	enum Case {
+		case editFolder
+		case addNewFolder
+	}
+	
 	var folderTitle: String?
 	var bookmarksData: NSMutableArray = []
 	var folderTitleInputText: String?
@@ -25,11 +30,54 @@ class EditFolder: UIViewController {
 	/// [0,0,1] -> let now = bookmarksData[0].child[0].child[0],  === > now.child.append(folder)
 	var selectNodeIndexs:[Int] = []
 	
+	
+	var editTargetData:BookmarksData? = nil
+	
+	//재귀함수를 만들어보쟈.
+	func locateSelectedFolder(targetArray:[BookmarksData], searchKeyword:String) -> BookmarksData? {
+		
+		for data in targetArray {
+			let child = data.child
+			if child.count != 0 {
+				if let searchData = locateSelectedFolder(targetArray: child, searchKeyword: searchKeyword) {
+					return searchData
+				}
+			}
+			
+			print("data.titleString : \(data.titleString ?? "??")")
+			if data.titleString == searchKeyword {
+				//찾았다!
+				print("찾았다 : \(data)")
+				return data
+			}
+		}
+		
+		print("못찾았다.... 뭔가 이상함. \(searchKeyword)")
+		return nil
+	}
+	
 	//MARK: - Life Cycle
 	override func viewDidLoad() {
 		self.title = "Edit Folder"
 		super.viewDidLoad()
 		self.bookmarksData.addObjects(from: UserDefaultsManager.shared.loadUserBookMarkListData())
+		
+		if let folderTitle = folderTitle {
+			let editTargetData = locateSelectedFolder(targetArray: (self.bookmarksData as! [BookmarksData]), searchKeyword: folderTitle)
+			editTargetData?.titleString = self.titleTextField.text
+			self.editTargetData = editTargetData
+		}
+		
+//		if let editTargetData = self.editTargetData {
+//			//뷰 사용가능
+//			print(editTargetData)
+//
+//
+//		} else {
+//			if let navi = self.navigationController {
+//				navi.popViewController(animated: true)
+//			}
+//		}
 		
 		//self.bookmarksData = UserDefaultsManager.shared.loadUserBookMarkListData()
 		
@@ -48,12 +96,16 @@ class EditFolder: UIViewController {
 		
 		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveFolder))
 		
-		
+	}
+	
+	func editFolderName() {
 		
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+//		self.title = "Edit Folder"
+		self.title = super.title
 		checkTitleIsntEmpty()
 	}
 	
@@ -62,7 +114,7 @@ class EditFolder: UIViewController {
 	}
 	
 	func checkTitleIsntEmpty() {
-		//TODO: - awefoiajweofawejfawjfoawiejfo;
+		//TODO: - Not sure if this is used;
 		if let titleText = self.titleTextField.text, !titleText.isEmpty {
 			self.navigationItem.rightBarButtonItem?.isEnabled = true
 		} else {
@@ -78,7 +130,7 @@ class EditFolder: UIViewController {
 		let alertController = UIAlertController(title: "Title Is Empty", message: "Please Set a Title for the Folder", preferredStyle: UIAlertController.Style.alert)
 		let cancelAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil)
 		alertController.addAction(cancelAction)
-		
+
 		guard let title = self.titleTextField.text, !title.isEmpty
 		else {
 			self.present(alertController, animated: true, completion: nil)
@@ -86,28 +138,31 @@ class EditFolder: UIViewController {
 		}
 		
 		
+		
 		insertFolderAtSelectedLocation(folderTitle: title, selectNodeIndexs: selectNodeIndexs)
 		
 		//insertFolderAtSelectedLocation(indexPath: selectedIndexPath, selectedNode: selectedNode, title: title)
-	}
-	
-	
-	func insertFolderAtSelectedLocation(indexPath: IndexPath, selectedNode: CITreeViewNode, title: String) {
-		let newFolder = BookmarksData.init(titleString: title, child: [], indexPath: [])
-
-		var array = UserDefaultsManager.shared.loadUserBookMarkListData()
-
-		if let selectedNodeItem = selectedNode.item as? BookmarksData {
-			print(selectedNodeItem.dataIndexPath)
-			array[indexPath.row].child.append(newFolder)
-		}
-
-//		array.append(newFolder)
-
-		let isSaveSuccess = UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: array)
-		print(isSaveSuccess)
 		
+		self.navigationController?.popViewController(animated: true)
 	}
+	
+	
+//	func insertFolderAtSelectedLocation(indexPath: IndexPath, selectedNode: CITreeViewNode, title: String) {
+//		let newFolder = BookmarksData.init(titleString: title, child: [], indexPath: [indexPath.row])
+//
+//		var array = UserDefaultsManager.shared.loadUserBookMarkListData()
+//
+//		if let selectedNodeItem = selectedNode.item as? BookmarksData {
+//			print(selectedNodeItem.dataIndexPath)
+//			array[indexPath.row].child.append(newFolder)
+//		}
+//
+////		array.append(newFolder)
+//
+//		let isSaveSuccess = UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: array)
+//		print(isSaveSuccess)
+//
+//	}
 	
 	func insertFolderAtSelectedLocation(folderTitle:String, selectNodeIndexs:[Int]) {
 		
@@ -156,17 +211,17 @@ extension EditFolder: UITextFieldDelegate {
 		return true
 	}
 	
-//	func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//		let text = (textField.text! as NSString).replacingCharacters(in: range, with: string)
-//
-//		if !text.isEmpty {
-//			self.navigationItem.rightBarButtonItem?.isEnabled = true
-//		}
-//		if text.isEmpty {
-//			self.navigationItem.rightBarButtonItem?.isEnabled = false
-//		}
-//		return true
-//	}
+	func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+		let text = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+
+		if !text.isEmpty {
+			self.navigationItem.rightBarButtonItem?.isEnabled = true
+		}
+		else {
+			self.navigationItem.rightBarButtonItem?.isEnabled = false
+		}
+		return true
+	}
 	
 	
 }
@@ -197,7 +252,6 @@ extension EditFolder: CITreeViewDelegate {
 		}
 	}
 	
-	
 	func treeView(_ treeView: CITreeView, heightForRowAt indexPath: IndexPath, withTreeViewNode treeViewNode: CITreeViewNode) -> CGFloat {
 		return 40
 	}
@@ -222,12 +276,19 @@ extension EditFolder: CITreeViewDelegate {
 						
 						for index in 0..<parentBookMark.child.count {
 							let item = parentBookMark.child[index]
+							//------------------- trying to find the selected Folder to edit
+//							if item.titleString == folderTitle {
+//								treeView.selectRow(at: indexPath, animated: true, scrollPosition: .middle)
+//								print("Found Item at: ", indexPath)
+//							}
+							//-------------------
 							if item.titleString == selectNodeTitle {
 								///찾았다?
 								selectNodeIndexs.insert(index, at: 0)
 								selectNodeTitle = parentBookMark.titleString ?? ""
 								break
 							}
+							
 						}
 					}
 					
@@ -239,6 +300,9 @@ extension EditFolder: CITreeViewDelegate {
 			//root
 			for index in 0..<self.bookmarksData.count {
 				let rootItem = self.bookmarksData[index] as! BookmarksData
+//				if rootItem.titleString == folderTitle {
+//					treeView.selectRow(at: indexPath, animated: true, scrollPosition: UITableView.ScrollPosition.middle)
+//				}
 				if rootItem.titleString == selectNodeTitle {
 					selectNodeIndexs.insert(index, at: 0)
 					break
@@ -267,7 +331,6 @@ extension EditFolder: CITreeViewDelegate {
 						
 			
 		}
-		
 		
 	}
 	
@@ -301,15 +364,27 @@ extension EditFolder: CITreeViewDataSource {
 //		}
 //		let filteredData = data.filter { $0.isFolder }
 		
-//		let filteredData = bookmarksData.filter { (item) -> Bool in
-//			let temp = item.isFolder
-//			if !temp {
-//				print("isn't folder")
+//		if let bookmarksData = self.bookmarksData as? [BookmarksData] {
+//			let filteredData = bookmarksData.filter { (item) -> Bool in
+//				let temp = item.isFolder
+//				if !temp {
+//					print("isn't folder")
+//				}
+//				return temp
 //			}
-//			return temp
-//		}
 //
+//			return filteredData as [AnyObject]
+//		}
+		
+		//FIXME: - FILTERING FOLDER DATA ONLY???????
+//		let filteredData = bookmarksData.filter { (item) -> Bool in
+//			guard let item = item as? BookmarksData else { return false }
+//			let folders = item.isFolder
+//
+//			return folders
+//		}
 //		return filteredData as [AnyObject]
+		
 		return bookmarksData as [AnyObject]
 	}
 	

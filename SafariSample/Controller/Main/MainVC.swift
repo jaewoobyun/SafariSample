@@ -167,6 +167,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 				}
 			}
 		}
+
 		bookmarksButton.longEvent = {
 			print("bookmarksButton.longEvent")
 			let alertcontroller = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)

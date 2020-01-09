@@ -22,6 +22,7 @@ class UserDefaultsManager {
 	var backList:[URL] = []
 	var forwardList:[URL] = []
 	var readingListDataSave: [ReadingListData] = []
+	var bookmarkListDataSave: [BookmarksData] = []
 	
 	init() {
 		
@@ -67,7 +68,7 @@ class UserDefaultsManager {
 			}
 		}
 		
-		self.updateDatasNoti()
+		self.updateHistoryDatasNoti()
 	}
 	
 	
@@ -103,7 +104,7 @@ class UserDefaultsManager {
 	}
 	
 	///데이터가 변경됬을떄. 기존 데이터들을 쓰는 아가들에게 변경됬음을 공지한다.
-	func updateDatasNoti() {
+	func updateHistoryDatasNoti() {
 		//옵저버로 post.
 		NotificationGroup.shared.post(type: .HistoryDataUpdate)
 	}
@@ -124,7 +125,7 @@ class UserDefaultsManager {
 		visitedWebSiteHistoryRecords.append(contentsOf: datas)
 		
 		//저장도 성공했네?
-		self.updateDatasNoti()
+		self.updateHistoryDatasNoti()
 	}
 	
 	
@@ -141,7 +142,7 @@ class UserDefaultsManager {
 		visitedWebSiteHistoryRecords.removeAll()
 		visitedWebSiteHistoryRecords.append(contentsOf: datas)
 		//4. 삭제 성공
-		self.updateDatasNoti()
+		self.updateHistoryDatasNoti()
 	}
 	
 	
@@ -158,7 +159,7 @@ class UserDefaultsManager {
 		let isSuccess = self.saveWebHistoryArray(arr: visitedWebSiteHistoryRecords)
 		print("isSuccess : \(isSuccess)")
 		
-		self.updateDatasNoti()
+		self.updateHistoryDatasNoti()
 	}
 	
 	func removeHistoryDataAtLastHour(_ withHour:Int) {
@@ -178,14 +179,14 @@ class UserDefaultsManager {
 		let isSuccess = self.saveWebHistoryArray(arr: visitedWebSiteHistoryRecords)
 		print("isSuccess : \(isSuccess)")
 		
-		self.updateDatasNoti()
+		self.updateHistoryDatasNoti()
 	}
 	
 	func removeAllHistoryData() {
 		userdefaultstandard.removeObject(forKey: "HistoryData")
 		visitedWebSiteHistoryRecords.removeAll()
 		
-		self.updateDatasNoti()
+		self.updateHistoryDatasNoti()
 	}
 	
 	
@@ -323,7 +324,7 @@ class UserDefaultsManager {
 				print(error)
 			}
 		}
-		
+		self.updateBookmarkListDataNoti()
 		return []
 	}
 	
@@ -336,16 +337,34 @@ class UserDefaultsManager {
 	}
 	
 	/// 데이터를 해당 indexPath 에서 지운다.
-	//TODO: - not yet final
-	func removeBookmarkItemAtIndexPath(indexPath: IndexPath) {
+	func removeBookmarkFolderItemAtIndexPath(indexPath: IndexPath) {
 		var data = loadUserBookMarkListData()
 		data.remove(at: indexPath.row)
 		let isSaveSuccess = self.saveBookMarkListData(bookmarkD: data)
 		if !isSaveSuccess {
 			print("BookmarkData 를 indexPath.row 에서 지우고 저장하는데에 실패")
 		}
+		self.bookmarkListDataSave.removeAll()
+		self.bookmarkListDataSave.append(contentsOf: data)
+		
+		self.updateBookmarkListDataNoti()
 		
 	}
+	
+	func registerBookmarkDataObserver(vc: UIViewController, selector: Selector) {
+		NotificationGroup.shared.registerObserver(type: .BookmarkListDataUpdate, vc: vc, selector: selector)
+	}
+	
+	func removeBookmarksDataObserver() {
+		print("Removing Bookmark / Folder Data Observer")
+		NotificationCenter.default.removeObserver(self, name: NotificationGroup.NotiType.BookmarkListDataUpdate.getNotificationName(), object: nil)
+	}
+	
+	func updateBookmarkListDataNoti() {
+		NotificationGroup.shared.post(type: .BookmarkListDataUpdate)
+	}
+	
+	
 }
 
 
