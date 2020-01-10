@@ -183,6 +183,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 				let navController = UINavigationController(rootViewController: editBookmarkVC)
 				
 				editBookmarkVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancelAddBookmark))
+				editBookmarkVC.caseType = .AddNewBookmark
 				editBookmarkVC.bookmarkTitle = title
 				editBookmarkVC.address = urlString
 				

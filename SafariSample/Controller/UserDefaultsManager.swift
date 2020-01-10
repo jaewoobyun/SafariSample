@@ -311,6 +311,7 @@ class UserDefaultsManager {
 			print(error)
 			return false
 		}
+		self.updateBookmarkListDataNoti() //
 		return true
 	}
 	

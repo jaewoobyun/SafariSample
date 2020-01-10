@@ -15,11 +15,29 @@ class EditFolder: UIViewController {
 	@IBOutlet weak var titleTextField: UITextField!
 	@IBOutlet weak var treeView: CITreeView!
 	
-	enum Case {
-		case editFolder
-		case addNewFolder
+	enum CaseType {
+		case AddNewFolder
+		case EditFolder
+		
+		func getTitle() -> String {
+			switch self {
+			case .AddNewFolder: return "Add New Folder"
+			case .EditFolder: return "Edit Folder"
+			}
+		}
+		
+		func getButtonTitle() -> UIBarButtonItem.SystemItem {
+			switch self {
+			case .AddNewFolder: return .add
+			case .EditFolder: return .save
+			}
+		}
+		
+		
 	}
 	
+	var isExpanded: Bool = true
+	var caseType: CaseType = .EditFolder
 	var folderTitle: String?
 	var bookmarksData: NSMutableArray = []
 	var folderTitleInputText: String?
@@ -33,40 +51,18 @@ class EditFolder: UIViewController {
 	
 	var editTargetData:BookmarksData? = nil
 	
-	//재귀함수를 만들어보쟈.
-	func locateSelectedFolder(targetArray:[BookmarksData], searchKeyword:String) -> BookmarksData? {
-		
-		for data in targetArray {
-			let child = data.child
-			if child.count != 0 {
-				if let searchData = locateSelectedFolder(targetArray: child, searchKeyword: searchKeyword) {
-					return searchData
-				}
-			}
-			
-			print("data.titleString : \(data.titleString ?? "??")")
-			if data.titleString == searchKeyword {
-				//찾았다!
-				print("찾았다 : \(data)")
-				return data
-			}
-		}
-		
-		print("못찾았다.... 뭔가 이상함. \(searchKeyword)")
-		return nil
-	}
-	
 	//MARK: - Life Cycle
 	override func viewDidLoad() {
-		self.title = "Edit Folder"
+		self.title = caseType.getTitle()
+		
 		super.viewDidLoad()
 		self.bookmarksData.addObjects(from: UserDefaultsManager.shared.loadUserBookMarkListData())
 		
-		if let folderTitle = folderTitle {
-			let editTargetData = locateSelectedFolder(targetArray: (self.bookmarksData as! [BookmarksData]), searchKeyword: folderTitle)
-			editTargetData?.titleString = self.titleTextField.text
-			self.editTargetData = editTargetData
-		}
+//		if let folderTitle = folderTitle {
+//			let editTargetData = locateSelectedFolder(targetArray: (self.bookmarksData as! [BookmarksData]), searchKeyword: folderTitle)
+//			editTargetData?.titleString = self.titleTextField.text
+//			self.editTargetData = editTargetData
+//		}
 		
 //		if let editTargetData = self.editTargetData {
 //			//뷰 사용가능
@@ -94,24 +90,46 @@ class EditFolder: UIViewController {
 		treeView.reloadData()
 		treeView.expandAllRows()
 		
-		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveFolder))
+		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: caseType.getButtonTitle(), target: self, action: #selector(saveFolder))
 		
 	}
-	
-	func editFolderName() {
-		
-	}
+
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-//		self.title = "Edit Folder"
 		self.title = super.title
 		checkTitleIsntEmpty()
+		
+		if caseType == .EditFolder {
+			if let folderTitle = folderTitle {
+						let editTargetData = locateSelectedFolder(targetArray: (self.bookmarksData as! [BookmarksData]), searchKeyword: folderTitle)
+			//			editTargetData?.titleString = self.titleTextField.text
+						self.editTargetData = editTargetData
+					}
+		}
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
 	}
 	
 	override func viewDidDisappear(_ animated: Bool) {
 		super.viewDidDisappear(animated)
 	}
+	
+	@IBAction func expandCollapseButton(_ sender: UIButton) {
+		isExpanded = !isExpanded
+		if isExpanded {
+			sender.setTitle("Expand All", for: UIControl.State.normal)
+			self.treeView.collapseAllRows()
+		}
+		else {
+			sender.setTitle("Collapse All", for: UIControl.State.normal)
+			self.treeView.expandAllRows()
+		}
+		
+	}
+	
 	
 	func checkTitleIsntEmpty() {
 		//TODO: - Not sure if this is used;
@@ -123,27 +141,72 @@ class EditFolder: UIViewController {
 		
 	}
 	
+	
+	//재귀함수를 만들어보쟈.
+	func locateSelectedFolder(targetArray:[BookmarksData], searchKeyword:String) -> BookmarksData? {
+		
+		for data in targetArray {
+			let child = data.child
+			if child.count != 0 {
+				if let searchData = locateSelectedFolder(targetArray: child, searchKeyword: searchKeyword) {
+					return searchData
+				}
+			}
+			
+			print("data.titleString : \(data.titleString ?? "??")")
+			if data.titleString == searchKeyword {
+				//찾았다!
+				print("찾았다 : \(data)")
+				return data
+			}
+		}
+		
+		print("못찾았다.... 뭔가 이상함. \(searchKeyword)")
+		return nil
+	}
+	
 	@objc func saveFolder() {
 		//guard let selectedIndexPath = self.selectedIndexPath else {return}
 		//guard let selectedNode = self.selectedNode else { return}
-		
-		let alertController = UIAlertController(title: "Title Is Empty", message: "Please Set a Title for the Folder", preferredStyle: UIAlertController.Style.alert)
-		let cancelAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil)
-		alertController.addAction(cancelAction)
+//
+//		let alertController = UIAlertController(title: "Title Is Empty", message: "Please Set a Title for the Folder", preferredStyle: UIAlertController.Style.alert)
+//		let cancelAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil)
+//		alertController.addAction(cancelAction)
 
 		guard let title = self.titleTextField.text, !title.isEmpty
 		else {
-			self.present(alertController, animated: true, completion: nil)
+//			self.present(alertController, animated: true, completion: nil)
 			return
 		}
 		
+		if caseType == .AddNewFolder {
+			insertFolderAtSelectedLocation(folderTitle: title, selectNodeIndexs: selectNodeIndexs)
+		}
 		
-		
-		insertFolderAtSelectedLocation(folderTitle: title, selectNodeIndexs: selectNodeIndexs)
-		
-		//insertFolderAtSelectedLocation(indexPath: selectedIndexPath, selectedNode: selectedNode, title: title)
-		
-		self.navigationController?.popViewController(animated: true)
+		if caseType == .EditFolder {
+			guard let edittedFolderTitle = self.folderTitleInputText else {
+				return
+			}
+			self.treeView.isUserInteractionEnabled = false
+			editFolderNameAtSelectedLocation(edittedFolderTitle: edittedFolderTitle)
+			
+			//TODO: - need to select (highlight) the row
+		}
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+			self.navigationController?.popViewController(animated: true)
+		}
+	}
+	
+	func editFolderNameAtSelectedLocation(edittedFolderTitle: String) {
+		if let folderTitle = folderTitle {
+			let editTargetData = locateSelectedFolder(targetArray: (self.bookmarksData as! [BookmarksData]), searchKeyword: folderTitle)
+			editTargetData?.titleString = edittedFolderTitle
+			self.editTargetData = editTargetData
+		}
+		let isSaveSuccess = UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: bookmarksData as! [BookmarksData])
+		print("Editing Folder Name at Selected Location success?: ", isSaveSuccess)
+		treeView.reloadData()
+		treeView.expandAllRows()
 	}
 	
 	
@@ -186,8 +249,8 @@ class EditFolder: UIViewController {
 			data?.child.append(appendFolder)
 		}
 		
-		UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: bookmarksData as! [BookmarksData])
-		
+		let isSaveSuccess = UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: bookmarksData as! [BookmarksData])
+		print("Inserting Folder at Selected Location success?: ", isSaveSuccess)
 		treeView.reloadData()
 		treeView.expandAllRows()
 	}
@@ -230,14 +293,26 @@ extension EditFolder: UITextFieldDelegate {
 extension EditFolder: CITreeViewDelegate {
 	func willExpandTreeViewNode(treeViewNode: CITreeViewNode, atIndexPath: IndexPath) {
 		print("willExpand")
-		//
+		
+//		if caseType == .EditFolder {
+//			if let target = treeViewNode.item as? BookmarksData {
+//				if let editTarget = self.editTargetData {
+//					if target.titleString == editTarget.titleString {
+//						self.treeView.selectRow(at: atIndexPath, animated: true, scrollPosition: UITableView.ScrollPosition.none)
+//					}
+//				}
+//			}
+//		}
+		
+		
 	}
 	
 	func didExpandTreeViewNode(treeViewNode: CITreeViewNode, atIndexPath: IndexPath) {
 		print("didExpand")
-		if atIndexPath.row == 0 {
-			treeView.expandAllRows()
-		}
+//		if atIndexPath.row == 0 {
+//			treeView.expandAllRows()
+//		}
+		
 		
 	}
 	
@@ -247,9 +322,9 @@ extension EditFolder: CITreeViewDelegate {
 	
 	func didCollapseTreeViewNode(treeViewNode: CITreeViewNode, atIndexPath: IndexPath) {
 		print("didCollapse")
-		if atIndexPath.row == 0 {
-			treeView.collapseAllRows()
-		}
+//		if atIndexPath.row == 0 {
+//			treeView.collapseAllRows()
+//		}
 	}
 	
 	func treeView(_ treeView: CITreeView, heightForRowAt indexPath: IndexPath, withTreeViewNode treeViewNode: CITreeViewNode) -> CGFloat {
@@ -311,22 +386,16 @@ extension EditFolder: CITreeViewDelegate {
 			
 			print("selectNodeIndexs \(selectNodeIndexs)")
 			
-//			if let cell = treeView.cellForRow(at: indexPath) {
-//				cell.accessoryType = .checkmark
-//			}
-			
-			
-			
 //			let alertController = UIAlertController(title: folderTitleInputText, message: "indexPath:" + String(describing: indexPath) + "\n" + "dataIndexPath:" + String(describing: selectedNode.dataIndexPath) + "\n"
 //				, preferredStyle: UIAlertController.Style.alert)
 //			let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil)
 //			alertController.addAction(cancelAction)
 //			self.present(alertController, animated: true, completion: nil)
-			
 			/// 선택한 노드가 폴더일때만 새로 만든 폴더가 그 안에 있어야 한다. indexpath 로 위치를 잡을 것이 아니라 자식 안에도 만들 수 있어야 한다. 그렇다면 폴더를 닫으면 index가 바뀌기 때문에 절대 경로(데이터)를 기준으로 생성해야 한다.?
 //			if selectedNode.isFolder{
 //				insertFolderAtSelectedLocation(indexPath: indexPath, selectedNode: treeViewNode, title: folderTitleInputText!)
 //			}
+			
 			
 						
 			
@@ -399,6 +468,22 @@ extension EditFolder: CITreeViewDataSource {
 		
 		cell.folderName.text = dataObj.titleString
 		cell.setupCell(level: treeViewNode.level)
+		
+		//FIXME: - child folder selection is not abled. ㅠㅠ
+		if !dataObj.isFolder {
+//			cell.isUserInteractionEnabled = false
+		}
+		
+		if caseType == .EditFolder {
+			cell.isUserInteractionEnabled = false
+			if let target = treeViewNode.item as? BookmarksData {
+				if let editTarget = self.editTargetData {
+					if target.titleString == editTarget.titleString {
+						self.treeView.selectRow(at: indexPath, animated: true, scrollPosition: UITableView.ScrollPosition.none)
+					}
+				}
+			}
+		}
 		
 		return cell
 	}

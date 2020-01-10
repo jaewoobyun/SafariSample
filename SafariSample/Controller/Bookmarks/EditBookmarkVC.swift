@@ -21,20 +21,44 @@ class EditBookmarkVC: UIViewController {
 	@IBOutlet weak var iconImageView: UIImageView!
 	@IBOutlet weak var titleInput: UITextField!
 	@IBOutlet weak var addressInput: UITextField!
+	
+	enum CaseType {
+		case AddNewBookmark
+		case EditBookmark
+		
+		func getTitle() -> String {
+			switch self {
+			case .AddNewBookmark: return "Add Bookmark"
+			case .EditBookmark: return "Edit Bookmark"
+			}
+		}
+		
+		func getButtonTitle() -> UIBarButtonItem.SystemItem {
+			switch self {
+			case .AddNewBookmark: return .add
+			case .EditBookmark: return .save
+			}
+		}
+	}
 
 //	var data: [BookmarksData] = [] //
+	var caseType: CaseType = .EditBookmark
 	var bookmarksData: NSMutableArray = []
-	var selectedFolderTitle: String?
+//	var selectedFolderTitle: String?
+	var editedBookmarkTitle: String?
 	
 	var selectedNode: CITreeViewNode? //?
 	var selectedIndexPath: IndexPath? //?
 	///선택된 노드의(select) 부모를 조회하여, 선택 줄이 몇 레벨에 있는지 화인한다.
 	/// [0,0,1] -> let now = bookmarksData[0].child[0].child[0],  === > now.child.append(folder)
 	var selectedNodeIndexs: [Int] = []
+	var editTargetData: BookmarksData? = nil
 	
+	
+	//MARK: - LifeCycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
+		self.title = caseType.getTitle()
 		titleInput.textColor = .gray
 		addressInput.textColor = .gray
 		
@@ -71,11 +95,42 @@ class EditBookmarkVC: UIViewController {
 		treeView.reloadData()
 		treeView.expandAllRows()
 		
-		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAddBookmark))
+		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: caseType.getButtonTitle(), target: self, action: #selector(saveAddBookmark))
 		
 	}
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		self.title = super.title
+		
+		if caseType == .EditBookmark {
+			guard let bookmarkTitle = self.bookmarkTitle else { return }
+			let editTargetData = locateSelectedBookmark(targetArray: (self.bookmarksData as! [BookmarksData]), searchKeyword: bookmarkTitle)
+			self.editTargetData = editTargetData
+		}
+	}
+	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
+	}
+	
+	func locateSelectedBookmark(targetArray: [BookmarksData], searchKeyword: String) -> BookmarksData? {
+		for data in targetArray {
+			let child = data.child
+			if child.count != 0 {
+				if let searchData = locateSelectedBookmark(targetArray: child, searchKeyword: searchKeyword) {
+					return searchData
+				}
+			}
+			
+			print("data.titleString : \(data.titleString ?? "??")")
+			if data.titleString == searchKeyword {
+				print("These are the droids you are looking for \(data)")
+				return data
+			}
+		}
+		print("These are NOT the droids you are looking for: \(searchKeyword)")
+		return nil
+		
 	}
 	
 	func insertBookmarkAtSelectedLocation(bookMarkTitle: String, urlAddress: String, selectNodeIndexs:[Int]) {
@@ -120,10 +175,31 @@ class EditBookmarkVC: UIViewController {
 				return
 			}
 			
-			insertBookmarkAtSelectedLocation(bookMarkTitle: bookmarkTitle, urlAddress: address, selectNodeIndexs: selectedNodeIndexs)
+			if caseType == .AddNewBookmark {
+				insertBookmarkAtSelectedLocation(bookMarkTitle: bookmarkTitle, urlAddress: address, selectNodeIndexs: selectedNodeIndexs)
+			}
 			
-			self.dismiss(animated: true, completion: nil)
+			if caseType == .EditBookmark {
+				guard let edittedBookmarkTitle = self.editedBookmarkTitle else { return }
+				editBookmarkNameAtSelectedLocation(edittedBookmarkTitle: edittedBookmarkTitle)
+			}
+			
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+				self.dismiss(animated: true, completion: nil)
+			}
 		}
+	
+	func editBookmarkNameAtSelectedLocation(edittedBookmarkTitle: String) { //, edittedBookmarkAddress: String
+		if let passedBookmarkTitle = bookmarkTitle {
+			let editTargetBookmarkData = locateSelectedBookmark(targetArray: (self.bookmarksData as! [BookmarksData]), searchKeyword: passedBookmarkTitle)
+			editTargetBookmarkData?.titleString = edittedBookmarkTitle
+			self.editTargetData = editTargetBookmarkData
+		}
+		let isSaveSuccess = UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: bookmarksData as! [BookmarksData])
+		print("Editing Bookmark Name at Selected Location success: ", isSaveSuccess)
+		treeView.reloadData()
+		treeView.expandAllRows()
+	}
 	
 }
 //MARK: - UITextField Delegate
@@ -133,6 +209,7 @@ extension EditBookmarkVC: UITextFieldDelegate {
 	}
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		self.editedBookmarkTitle = self.titleInput.text
 		textField.resignFirstResponder()
 		return true
 	}
@@ -259,6 +336,20 @@ extension EditBookmarkVC: CITreeViewDataSource {
 		cell.setupCell(level: treeViewNode.level)
 		cell.setupIconFolderOrBook(dataObj)
 		
+		if !dataObj.isFolder {
+			cell.isUserInteractionEnabled = false
+		}
+		
+		if caseType == .EditBookmark {
+			cell.isUserInteractionEnabled = false
+			if let target = treeViewNode.item as? BookmarksData {
+				if let editTarget = self.editTargetData {
+					if target.titleString == editTarget.titleString {
+						self.treeView.selectRow(at: indexPath, animated: true, scrollPosition: UITableView.ScrollPosition.none)
+					}
+				}
+			}
+		}
 		
 		
 		return cell

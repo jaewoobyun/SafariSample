@@ -43,7 +43,7 @@ class BookmarksVC: UIViewController{
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		//		self.title = "Bookmarks"
+//		self.title = "Bookmarks"
 		self.navigationController?.navigationBar.isHidden = false
 		
 		readStringFromHTMLFile(with: "bookmarks_11_19_19")
@@ -128,7 +128,7 @@ class BookmarksVC: UIViewController{
 	@objc func updateBookmarkListDatas() {
 		print("BookmarkVC updateBookmarkListDatas")
 		self.bookmarksData.removeAll()
-		self.bookmarksData = UserDefaultsManager.shared.bookmarkListDataSave
+		self.bookmarksData = UserDefaultsManager.shared.loadUserBookMarkListData()
 		tableView.reloadData()
 	}
 	
@@ -152,8 +152,10 @@ class BookmarksVC: UIViewController{
 		//		let editFolderVC = storyboard.instantiateViewController(identifier: "EditFolderVC")
 		//		self.navigationController?.pushViewController(editFolderVC, animated: true)
 		let editFolderVC = storyboard.instantiateViewController(identifier: "EditFolder")
-		editFolderVC.title = "Add New Folder"
-		self.navigationController?.pushViewController(editFolderVC, animated: true)
+		if let editFolder = editFolderVC as? EditFolder {
+			editFolder.caseType = .AddNewFolder
+			self.navigationController?.pushViewController(editFolder, animated: true)
+		}
 		
 	}
 	
@@ -403,7 +405,7 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 	
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == .delete {
-			//TODO: - delete the row from the data source
+			//TODO: - child로 들어가서 지울때 에러난다.
 			
 			bookmarksData.remove(at: indexPath.row)
 			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
