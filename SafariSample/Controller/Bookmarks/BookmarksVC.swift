@@ -267,36 +267,6 @@ class BookmarksVC: UIViewController{
 		}
 	}
 	
-	
-	
-	
-	//	func reloadTableView() {
-	//		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "example")
-	//		tableView.reloadData()
-	//	}
-	
-	func makeContextMenu() -> UIMenu {
-		//		let copycontentsAction = UIAction(title: "Copy Contents", image: UIImage(systemName: "doc.on.doc"), identifier: nil, discoverabilityTitle: nil, attributes: UIMenuElement.Attributes.init(), state: UIMenuElement.State.mixed) { (action) in
-		//		}
-		let copycontentsAction = UIAction(title: "Copy Contents", image: UIImage(systemName: "doc.on.doc")) { action in }
-		//		let openInNewTabsAction = UIAction(title: "Open in New Tabs", image: UIImage(systemName: "plus.rectangle.on.rectangle"), identifier: nil, discoverabilityTitle: nil, attributes: UIMenuElement.Attributes.init(), state: UIMenuElement.State.mixed) { (action) in
-		//		}
-		let openInNewTabsAction = UIAction(title: "Open in New Tabs", image: UIImage(systemName: "plus.rectangle.on.rectangle")) { action in }
-		let editAction = UIAction(title: "Edit...", image: UIImage(systemName: "square.and.pencil")) { action in }
-		
-		//		let deleteAction = UIAction(title: "Delete", image: UIImage(systemName: "trash"), identifier: nil, discoverabilityTitle: "delete", attributes: UIMenuElement.Attributes.destructive, state: UIMenuElement.State.mixed) { (action) in
-		//		}
-		let deleteCancel = UIAction(title: "Cancel", image: UIImage(systemName: "xmark")) { action in }
-		let deleteConfirmation = UIAction(title: "Delete", image: UIImage(systemName: "checkmark"), attributes: .destructive) { action in }
-		// The delete sub-menu is created like the top-level menu, but we also specify an image and options
-		let deleteAction = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [deleteCancel, deleteConfirmation])
-		
-		return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [copycontentsAction, openInNewTabsAction, editAction, deleteAction])
-	}
-	
-	
-	
-	
 }
 
 //MARK: - UISearchResultsUpdating
@@ -432,26 +402,33 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 		//		}
 		//		guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
 		//		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-		guard let reusableVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview reusableVC")}
+		guard let bookmarksVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview bookmarksVC")}
+		///폴더 일때
 		if bookmarksData[indexPath.row].isFolder {
+			//ContextMenu * Copy Contents, * Open in new tabs, * Edit, * Delete
 			print("is Folder")
-			reusableVC.navigationController?.title = bookmarksData[indexPath.row].titleString
-			reusableVC.title = bookmarksData[indexPath.row].titleString
-			reusableVC.bookmarksData = bookmarksData[indexPath.row].child
-			reusableVC.isDepthViewController = true
+			bookmarksVC.navigationController?.title = bookmarksData[indexPath.row].titleString
+			bookmarksVC.title = bookmarksData[indexPath.row].titleString
+			bookmarksVC.bookmarksData = bookmarksData[indexPath.row].child
+			bookmarksVC.isDepthViewController = true
+			/// leaf node 일때 (= 마지막 끝 노드일때)
+			if bookmarksData[indexPath.row].child.isEmpty {
+				print("leaf node!!")
+				return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (actions) -> UIMenu? in
+					return AlertsAndMenus.shared.makeEmptyFolderContextMenu()
+				}
+				
+			}
 		}
-		else {
-			print("isn't Folder")
-			//			let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
-			//			let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
-			//			alert.addAction(action)
-			//			self.present(alert, animated: true, completion: nil)
-			
+		else { // Bookmark 일때 Context Menu * preview, * copy, * open in new tab, * Edit, * Delete
+			print("is Bookmark")
 			//TODO: - show a preview of the link (webview).
-			
+			return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (actions) -> UIMenu? in
+				return AlertsAndMenus.shared.makeBookmarkContextMenu()
+			}
 		}
-		return UIContextMenuConfiguration(identifier: nil, previewProvider: {return reusableVC}) { (actions) -> UIMenu? in
-			return self.makeContextMenu()
+		return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (actions) -> UIMenu? in
+			return AlertsAndMenus.shared.makeFolderContextMenu()
 		}
 		
 	}
@@ -498,31 +475,58 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 //
 //}
 
-
+//MARK: - UI ContextMenuInteractionDelegate
 extension BookmarksVC: UIContextMenuInteractionDelegate {
 	func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
 		guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
-		//		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-		guard let reusableVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview reusableVC")}
+//		//		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+//		guard let bookmarksVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview bookmarksVC")}
+//		if bookmarksData[indexPath.row].isFolder {
+//			print("is Folder")
+//			bookmarksVC.navigationController?.title = bookmarksData[indexPath.row].titleString
+//			bookmarksVC.title = bookmarksData[indexPath.row].titleString
+//			bookmarksVC.bookmarksData = bookmarksData[indexPath.row].child
+//			bookmarksVC.isDepthViewController = true
+//		}
+//		else {
+//			print("isn't Folder")
+//			//TODO: - folder 가 아니라 bookmark 이기 때문에 preview 로 해당 url 이 보여야 한다 ??
+//
+//		}
+//
+//		return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (element) -> UIMenu? in
+//			return self.makeContextMenu()
+//		}
+		
+		guard let bookmarksVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview bookmarksVC")}
+		///폴더 일때
 		if bookmarksData[indexPath.row].isFolder {
+			//ContextMenu * Copy Contents, * Open in new tabs, * Edit, * Delete
 			print("is Folder")
-			reusableVC.navigationController?.title = bookmarksData[indexPath.row].titleString
-			reusableVC.title = bookmarksData[indexPath.row].titleString
-			reusableVC.bookmarksData = bookmarksData[indexPath.row].child
-			reusableVC.isDepthViewController = true
+			bookmarksVC.navigationController?.title = bookmarksData[indexPath.row].titleString
+			bookmarksVC.title = bookmarksData[indexPath.row].titleString
+			bookmarksVC.bookmarksData = bookmarksData[indexPath.row].child
+			bookmarksVC.isDepthViewController = true
+			/// leaf node 일때 (= 마지막 끝 노드일때)
+			if bookmarksData[indexPath.row].child.isEmpty {
+				print("leaf node!!")
+				return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (actions) -> UIMenu? in
+					return AlertsAndMenus.shared.makeEmptyFolderContextMenu()
+				}
+				
+			}
 		}
-		else {
-			print("isn't Folder")
-			//TODO: - folder 가 아니라 bookmark 이기 때문에 preview 로 해당 url 이 보여야 한다 ??
-			//					let alert = UIAlertController.init(title: "is folder empty~", message: "", preferredStyle: .alert)
-			//					let action = UIAlertAction.init(title: "done", style: .destructive, handler: nil)
-			//					alert.addAction(action)
-			//					self.present(alert, animated: true, completion: nil)
+		else { // Bookmark 일때 Context Menu * preview, * copy, * open in new tab, * Edit, * Delete
+			print("is Bookmark")
+			//TODO: - show a preview of the link (webview).
+			return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (actions) -> UIMenu? in
+				return AlertsAndMenus.shared.makeBookmarkContextMenu()
+			}
+		}
+		return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (actions) -> UIMenu? in
+			return AlertsAndMenus.shared.makeFolderContextMenu()
 		}
 		
-		return UIContextMenuConfiguration(identifier: nil, previewProvider: {return reusableVC}) { (element) -> UIMenu? in
-			return self.makeContextMenu()
-		}
 		
 		
 	}

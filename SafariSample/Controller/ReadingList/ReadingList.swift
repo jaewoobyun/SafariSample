@@ -191,15 +191,78 @@ extension ReadingList : UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == .delete {
-			UserDefaultsManager.shared.removeReadingListItemAtIndexPath(indexPath: indexPath)
-			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+				tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+				UserDefaultsManager.shared.removeReadingListItemAtIndexPath(indexPath: indexPath)
+			}
 		}
 		
 	}
 	
 	func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
 		return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (actions) -> UIMenu? in
-			return AlertsAndMenus.shared.makeContextMenu()
+			//TODO: - previewProvider 웹뷰로 보여야 된다.
+//			for action in actions {
+//				if action == AlertsAndMenus.shared.copyAction {
+//					print("CopyAction!!!!!!!!!!")
+//
+//				}
+//			}
+			//-----------------------------------
+			
+//			let copyAction = UIAction(title: "Copy", image: nil, identifier: nil, discoverabilityTitle: nil, attributes: UIMenuElement.Attributes.init(), state: UIMenuElement.State.off) { (action) in
+//				print("Copying", self.readingListDatas[indexPath.row].urlString!)
+//			}
+//
+//			let openInNewTabAction = UIAction(title: "Open in New Tab", image: UIImage(systemName: "plus.rectangle.on.rectangle"), identifier: nil, discoverabilityTitle: nil, attributes: UIMenuElement.Attributes.init(), state: UIMenuElement.State.off) { (action) in
+//				print("action", action)
+//			}
+//
+//			let deleteCancel = UIAction(title: "Cancel", image: UIImage(systemName: "xmark")) { action in
+//
+//			}
+//			let deleteConfirmation = UIAction(title: "Delete", image: UIImage(systemName: "checkmark"), attributes: .destructive) { action in
+//
+//				self.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+//
+//				DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+//					UserDefaultsManager.shared.removeReadingListItemAtIndexPath(indexPath: indexPath)
+//				}
+//			}
+			
+			
+//			let deleteAction = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [deleteCancel, deleteConfirmation])
+			// ----------------------------------------
+//			return AlertsAndMenus.shared.makeReadingListContextMenu()
+			
+//			return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [copyAction, openInNewTabAction, deleteAction])
+			
+			return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [
+//				MenuButtonType.delete.createButtonAction({ (action) in
+//
+//				}),
+//				MenuButtonType.create.createButtonAction({ (action) in
+//
+//				}),
+				AlertsAndMenus.MenuButtonType.copy.createButtonAction({ (action) in
+					print("Copying", self.readingListDatas[indexPath.row].urlString!)
+				}),
+				AlertsAndMenus.MenuButtonType.openInNewTab.createButtonAction({ (action) in
+					print("action!", action)
+				}),
+				AlertsAndMenus.MenuButtonType.deleteCancel.createButtonAction({ (action) in
+					print("cancel")
+				}),
+				AlertsAndMenus.MenuButtonType.deleteConfirmation.createButtonAction({ (action) in
+					self.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+	
+					DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+						UserDefaultsManager.shared.removeReadingListItemAtIndexPath(indexPath: indexPath)
+					}
+				}),
+				
+				
+			])
 		}
 	}
 	

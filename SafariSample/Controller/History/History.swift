@@ -243,7 +243,7 @@ class History: UITableViewController {
 	
 	override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
 		return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (actions) -> UIMenu? in
-			return AlertsAndMenus.shared.makeContextMenu()
+			return AlertsAndMenus.shared.makeHistoryContextMenu()
 		}
 	}
 	
