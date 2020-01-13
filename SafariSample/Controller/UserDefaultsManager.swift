@@ -28,6 +28,8 @@ class UserDefaultsManager {
 		
 	}
 	
+	
+	//MARK: - History Data CRUD
 	//-------------------------------------------------------------------
 	func saveWebHistoryArray(arr: [HistoryData]) -> Bool {
 		do {
@@ -128,7 +130,7 @@ class UserDefaultsManager {
 		self.updateHistoryDatasNoti()
 	}
 	
-	
+	///안쓰임!!! technically 지워도 됨??
 	func removeHistoryItemAtIndexPath(historyData: HistoryData, indexPath: IndexPath) {
 		//1. UserDefault 에 있는 데이터를 로드해온다. 데이터가 없으면 빈 배열 반환
 		var datas = self.loadWebHistoryArray() ?? []

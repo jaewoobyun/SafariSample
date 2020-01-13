@@ -452,8 +452,8 @@
             filePath = "SafariSample/Controller/ReadingList/ReadingList.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "186"
-            endingLineNumber = "186"
+            startingLineNumber = "185"
+            endingLineNumber = "185"
             landmarkName = "tableView(_:editingStyleForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -516,10 +516,10 @@
             filePath = "SafariSample/Controller/UserDefaultsManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "293"
-            endingLineNumber = "293"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "295"
+            endingLineNumber = "295"
+            landmarkName = "removeReadingListItemWithUUID(uuids:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -596,10 +596,10 @@
             filePath = "SafariSample/Controller/UserDefaultsManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "343"
-            endingLineNumber = "343"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "345"
+            endingLineNumber = "345"
+            landmarkName = "removeBookmarkFolderItemAtIndexPath(indexPath:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -612,10 +612,10 @@
             filePath = "SafariSample/Controller/UserDefaultsManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "351"
-            endingLineNumber = "351"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "353"
+            endingLineNumber = "353"
+            landmarkName = "removeBookmarkFolderItemAtIndexPath(indexPath:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -628,10 +628,10 @@
             filePath = "SafariSample/Controller/Bookmarks/EditFolder.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "348"
-            endingLineNumber = "348"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "347"
+            endingLineNumber = "347"
+            landmarkName = "treeView(_:didSelectRowAt:atIndexPath:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -646,8 +646,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "134"
             endingLineNumber = "134"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "checkTitleIsntEmpty()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -662,8 +662,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "73"
             endingLineNumber = "73"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -676,10 +676,10 @@
             filePath = "SafariSample/Controller/Bookmarks/EditFolder.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "202"
+            endingLineNumber = "202"
+            landmarkName = "editFolderNameAtSelectedLocation(edittedFolderTitle:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -694,8 +694,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "183"
             endingLineNumber = "183"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "saveFolder()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -710,8 +710,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "150"
             endingLineNumber = "150"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "locateSelectedFolder(targetArray:searchKeyword:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -726,8 +726,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "159"
             endingLineNumber = "159"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "locateSelectedFolder(targetArray:searchKeyword:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -742,8 +742,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "186"
             endingLineNumber = "186"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "saveFolder()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -756,10 +756,10 @@
             filePath = "SafariSample/Controller/Bookmarks/EditFolder.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "362"
-            endingLineNumber = "362"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "361"
+            endingLineNumber = "361"
+            landmarkName = "treeView(_:didSelectRowAt:atIndexPath:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -774,8 +774,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "107"
             endingLineNumber = "107"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "viewWillAppear(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -788,10 +788,10 @@
             filePath = "SafariSample/Controller/Bookmarks/EditFolder.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "482"
-            endingLineNumber = "482"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "478"
+            endingLineNumber = "478"
+            landmarkName = "treeView(_:atIndexPath:withTreeViewNode:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -804,10 +804,10 @@
             filePath = "SafariSample/Controller/Bookmarks/EditFolder.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "477"
-            endingLineNumber = "477"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "473"
+            endingLineNumber = "473"
+            landmarkName = "treeView(_:atIndexPath:withTreeViewNode:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -829,24 +829,8 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "780F8E9F-664E-425D-A5DE-C1C83378D303"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SafariSample/Controller/Bookmarks/BookmarksVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "423"
-            endingLineNumber = "423"
-            landmarkName = "tableView(_:contextMenuConfigurationForRowAt:point:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "BCA2453C-3F04-439A-ABAC-4A0434A043A3"
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SafariSample/Controller/Bookmarks/BookmarksVC.swift"
@@ -855,22 +839,6 @@
             startingLineNumber = "416"
             endingLineNumber = "416"
             landmarkName = "tableView(_:contextMenuConfigurationForRowAt:point:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "5A795B6D-2496-4305-B484-1DFA8E160046"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SafariSample/Controller/Bookmarks/BookmarksVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "498"
-            endingLineNumber = "498"
-            landmarkName = "contextMenuInteraction(_:configurationForMenuAtLocation:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -888,6 +856,54 @@
             endingLineNumber = "384"
             landmarkName = "tableView(_:commit:forRowAt:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F02A5276-76D9-431F-AE9B-93724A92C176"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SafariSample/Controller/ReadingList/ReadingList.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "208"
+            endingLineNumber = "208"
+            landmarkName = "tableView(_:contextMenuConfigurationForRowAt:point:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "F02A5276-76D9-431F-AE9B-93724A92C176 - e468ba773a708282"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (__C.UIAction) -&gt; () in closure #1 (Swift.Array&lt;__C.UIMenuElement&gt;) -&gt; Swift.Optional&lt;__C.UIMenu&gt; in SafariSample.ReadingList.tableView(_: __C.UITableView, contextMenuConfigurationForRowAt: Foundation.IndexPath, point: __C.CGPoint) -&gt; Swift.Optional&lt;__C.UIContextMenuConfiguration&gt;"
+                  moduleName = "SafariSample"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nomad/MYAPPS/SafariSample/SafariSample/Controller/ReadingList/ReadingList.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "209"
+                  endingLineNumber = "209"
+                  offsetFromSymbolStart = "288">
+               </Location>
+               <Location
+                  uuid = "F02A5276-76D9-431F-AE9B-93724A92C176 - a9d19ccb9a428e46"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in closure #2 (__C.UIAction) -&gt; () in closure #1 (Swift.Array&lt;__C.UIMenuElement&gt;) -&gt; Swift.Optional&lt;__C.UIMenu&gt; in SafariSample.ReadingList.tableView(_: __C.UITableView, contextMenuConfigurationForRowAt: Foundation.IndexPath, point: __C.CGPoint) -&gt; Swift.Optional&lt;__C.UIContextMenuConfiguration&gt;"
+                  moduleName = "SafariSample"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nomad/MYAPPS/SafariSample/SafariSample/Controller/ReadingList/ReadingList.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "201"
+                  endingLineNumber = "201"
+                  offsetFromSymbolStart = "48">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -190,7 +190,6 @@ class EditFolder: UIViewController {
 			self.treeView.isUserInteractionEnabled = false
 			editFolderNameAtSelectedLocation(edittedFolderTitle: edittedFolderTitle)
 			
-			//TODO: - need to select (highlight) the row
 		}
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
 			self.navigationController?.popViewController(animated: true)
@@ -395,10 +394,7 @@ extension EditFolder: CITreeViewDelegate {
 //			if selectedNode.isFolder{
 //				insertFolderAtSelectedLocation(indexPath: indexPath, selectedNode: treeViewNode, title: folderTitleInputText!)
 //			}
-			
-			
-						
-			
+
 		}
 		
 	}
@@ -471,7 +467,7 @@ extension EditFolder: CITreeViewDataSource {
 		
 		//FIXME: - child folder selection is not abled. ㅠㅠ
 		if !dataObj.isFolder {
-//			cell.isUserInteractionEnabled = false
+			cell.isUserInteractionEnabled = false
 		}
 		
 		if caseType == .EditFolder {

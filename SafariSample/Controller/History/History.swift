@@ -243,7 +243,40 @@ class History: UITableViewController {
 	
 	override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
 		return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (actions) -> UIMenu? in
-			return AlertsAndMenus.shared.makeHistoryContextMenu()
+			
+			let deleteCancel = AlertsAndMenus.MenuButtonType.deleteCancel.createButtonAction({ (action) in
+				print("cancel")
+			})
+			let deleteConfirmation = AlertsAndMenus.MenuButtonType.deleteConfirmation.createButtonAction({ (action) in
+				///아이디는 먼저 뺴돌리고
+				let selectedItemUUID = self.sections[indexPath.section].cells[indexPath.row].uuid
+				
+				//디스플레이 데이터를 기반으로 애니메이션 실행.
+				self.sections[indexPath.section].cells.remove(at: indexPath.row)
+				tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+				
+				tableView.isUserInteractionEnabled = false
+				
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+					//		실물데이터에서 삭제요청.
+					UserDefaultsManager.shared.removeHistoryItemAtUUID(selectedItemUUID)
+					
+					//??
+				}
+			})
+			let deleteAction = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [deleteCancel, deleteConfirmation])
+			
+			return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [
+				AlertsAndMenus.MenuButtonType.copy.createButtonAction({ (action) in
+					//TODO: - unsafe unwraping
+					print("Copying", self.historyData[indexPath.row].urlString as Any)
+				}),
+				AlertsAndMenus.MenuButtonType.openInNewTab.createButtonAction({ (action) in
+					//TODO: - need to implement this
+					print("action!", action)
+				}),
+				deleteAction
+			])
 		}
 	}
 	

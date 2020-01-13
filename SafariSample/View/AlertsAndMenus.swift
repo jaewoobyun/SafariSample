@@ -19,25 +19,19 @@ class AlertsAndMenus {
 	var delegate:AlertsAndMenus?
 	
 	public enum MenuButtonType {
-//		case delete
-//		case create
-//
-//		func createButtonAction(_ baseHandle:@escaping UIActionHandler) -> UIAction {
-//			switch self {
-//			case .delete:
-//				return UIAction.init(title: "delete", image: UIImage.init(named: "delete.png"), identifier: nil, discoverabilityTitle: nil, attributes: .destructive, handler: baseHandle)
-//				//return UIAction.init(title: "delete", handler: baseHandle)
-//			case .create:
-//				return UIAction.init(title: "create", handler: baseHandle)
-//			}
-//		}
-		
+		///Copy
 		case copy
+		///Copy Contents
 		case copyContents
+		///Open In New Tab
 		case openInNewTab
+		///Open In New Tabs
 		case openInNewTabs
+		/// Edit
 		case edit
+		/// Delete cancel
 		case deleteCancel
+		/// DeleteConfirmation
 		case deleteConfirmation
 		
 		func createButtonAction(_ baseHandle: @escaping UIActionHandler) -> UIAction {
@@ -67,47 +61,56 @@ class AlertsAndMenus {
 		
 	}
 	
-//	enum MenuType {
-//		case emptyFolder
-//		case Folder
-////		case bookmark
-////		case readinglist
-////		case history
-//
-//		func createMenu(_ baseHandle:@escaping UIActionHandler) -> UIMenu {
-//			return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: self.getMenuButtons(baseHandle))
-//		}
-//
-//		private func getMenuButtons(_ baseHandle:@escaping UIActionHandler) -> [UIAction] {
-//			switch self {
-//			case .emptyFolder:
-//				return [
-//					MenuButtonType.delete.createButtonAction(baseHandle),
-//					MenuButtonType.create.createButtonAction(baseHandle),
-//					MenuButtonType.create.createButtonAction(baseHandle),
-//					MenuButtonType.create.createButtonAction(baseHandle)
-//				]
-//			case .Folder:
-//				return [
-//					MenuButtonType.create.createButtonAction(baseHandle)
-//				]
-//			}
-//		}
-//	}
-//
-//	//var aa : (_ aa:UIActionHandler)->()
-//
-//	func makeMenu(menuType: MenuType, prevVC:UIViewController) {
-//
-//		let menu = menuType.createMenu { (action) in
-//			print("action.title : \(action.title)")
-//		}
-//
-//		UIContextMenuConfiguration(identifier: nil, previewProvider: {return prevVC}) { (actions) -> UIMenu? in
-//			return menu
-//		}
-//
-//	}
+	enum MenuType {
+		case emptyFolder
+		case folder
+		case bookmark
+//		case readinglist
+//		case history
+
+		func createMenu(_ baseHandle:@escaping UIActionHandler) -> UIMenu {
+			return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: self.getMenuButtons(baseHandle))
+		}
+
+		private func getMenuButtons(_ baseHandle:@escaping UIActionHandler) -> [UIAction] {
+			switch self {
+			case .emptyFolder:
+				return [
+					MenuButtonType.edit.createButtonAction(baseHandle),
+					MenuButtonType.deleteConfirmation.createButtonAction(baseHandle)
+					
+				]
+			case .folder:
+				return [
+					MenuButtonType.copyContents.createButtonAction(baseHandle),
+					MenuButtonType.openInNewTabs.createButtonAction(baseHandle),
+					MenuButtonType.edit.createButtonAction(baseHandle),
+					MenuButtonType.deleteConfirmation.createButtonAction(baseHandle)
+				]
+			case .bookmark:
+				return [
+					MenuButtonType.copy.createButtonAction(baseHandle),
+					MenuButtonType.openInNewTab.createButtonAction(baseHandle),
+					MenuButtonType.edit.createButtonAction(baseHandle),
+					MenuButtonType.deleteConfirmation.createButtonAction(baseHandle)
+				]
+			}
+		}
+	}
+
+	//var aa : (_ aa:UIActionHandler)->()
+
+	func makeMenu(menuType: MenuType, prevVC:UIViewController) {
+
+		let menu = menuType.createMenu { (action) in
+			print("action.title : \(action.title)")
+		}
+
+		UIContextMenuConfiguration(identifier: nil, previewProvider: {return prevVC}) { (actions) -> UIMenu? in
+			return menu
+		}
+
+	}
 	
 	let copycontentsAction = UIAction(title: "Copy Contents", image: UIImage(systemName: "doc.on.doc")) { action in
 		

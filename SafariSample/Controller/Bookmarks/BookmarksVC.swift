@@ -403,6 +403,16 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 		//		guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
 		//		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
 		guard let bookmarksVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview bookmarksVC")}
+		let editAction = AlertsAndMenus.MenuButtonType.edit.createButtonAction({ (action) in
+			let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+			if let reusableEditFolder = storyboard.instantiateViewController(identifier: "EditFolder") as? EditFolder {
+				reusableEditFolder.folderTitle = self.bookmarksData[indexPath.item].titleString
+				//TODO: - need to pass the location of the editing folder to EditFolder
+				reusableEditFolder.selectedIndexPath = indexPath
+				self.navigationController?.pushViewController(reusableEditFolder, animated: true)
+			}
+		})
+		
 		///폴더 일때
 		if bookmarksData[indexPath.row].isFolder {
 			//ContextMenu * Copy Contents, * Open in new tabs, * Edit, * Delete
@@ -415,7 +425,14 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 			if bookmarksData[indexPath.row].child.isEmpty {
 				print("leaf node!!")
 				return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (actions) -> UIMenu? in
-					return AlertsAndMenus.shared.makeEmptyFolderContextMenu()
+//					return AlertsAndMenus.shared.makeEmptyFolderContextMenu()
+					
+					
+					return UIMenu(title: "Menu", image: nil, identifier: nil
+						, options: UIMenu.Options.init(), children: [
+							
+					
+					])
 				}
 				
 			}
@@ -479,25 +496,6 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 extension BookmarksVC: UIContextMenuInteractionDelegate {
 	func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
 		guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
-//		//		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-//		guard let bookmarksVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview bookmarksVC")}
-//		if bookmarksData[indexPath.row].isFolder {
-//			print("is Folder")
-//			bookmarksVC.navigationController?.title = bookmarksData[indexPath.row].titleString
-//			bookmarksVC.title = bookmarksData[indexPath.row].titleString
-//			bookmarksVC.bookmarksData = bookmarksData[indexPath.row].child
-//			bookmarksVC.isDepthViewController = true
-//		}
-//		else {
-//			print("isn't Folder")
-//			//TODO: - folder 가 아니라 bookmark 이기 때문에 preview 로 해당 url 이 보여야 한다 ??
-//
-//		}
-//
-//		return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (element) -> UIMenu? in
-//			return self.makeContextMenu()
-//		}
-		
 		guard let bookmarksVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview bookmarksVC")}
 		///폴더 일때
 		if bookmarksData[indexPath.row].isFolder {
