@@ -268,8 +268,10 @@ class History: UITableViewController {
 			
 			return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [
 				AlertsAndMenus.MenuButtonType.copy.createButtonAction({ (action) in
-					//TODO: - unsafe unwraping
 					print("Copying", self.historyData[indexPath.row].urlString as Any)
+					if let historyUrlString = self.historyData[indexPath.row].urlString {
+						UIPasteboard.general.string = historyUrlString
+					}
 				}),
 				AlertsAndMenus.MenuButtonType.openInNewTab.createButtonAction({ (action) in
 					//TODO: - need to implement this

@@ -354,6 +354,74 @@ class UserDefaultsManager {
 		
 	}
 	
+	func removeBookmarkFolderItem(at title: String) {
+		
+		let newDatas = self.deleteObjCall(targetDatas: loadUserBookMarkListData(), searchKeyword: title)
+		print(newDatas)
+		
+		let isSaveSuccess = self.saveBookMarkListData(bookmarkD: newDatas)
+		if !isSaveSuccess {
+			print("title 을 가진 데이터를 지운 데이터를 저장하는데 실패")
+		}
+		self.bookmarkListDataSave.removeAll()
+		self.bookmarkListDataSave.append(contentsOf: newDatas)
+		self.updateBookmarkListDataNoti()
+	}
+	
+	func deleteObjCall(targetDatas:[BookmarksData], searchKeyword:String) -> [BookmarksData] {
+		
+		let finalDataArray = targetDatas.filter { (data) -> Bool in
+			if data.titleString == searchKeyword {
+				return false
+			} else {
+				if data.child.count != 0 {
+					data.child = self.deleteObjCall(targetDatas: data.child, searchKeyword: searchKeyword)
+				}
+			}
+			
+			return true
+		}
+		
+		
+		return finalDataArray
+	}
+	
+	func isNameDuplicate(targetDatas:[BookmarksData], title: String) -> Bool {
+		for data in targetDatas {
+			if data.titleString == title {
+				return true
+			}
+			
+			if data.child.count != 0 {
+				let isNameDuplicate = self.isNameDuplicate(targetDatas: data.child, title: title)
+				return isNameDuplicate
+			}
+			
+			return false
+		}
+		
+		return false
+	}
+	
+	
+//	func removeBookmarkOrFolderItemAtIndexPath(isDepthViewController: Bool, indexPath: IndexPath) {
+//		print("isDepth?\(isDepthViewController),indexPath: \(indexPath)")
+//		var data = loadUserBookMarkListData()
+//		var child: [BookmarksData]
+//		if isDepthViewController {
+////			data[indexPaths[0].row].child[indexPaths[1].row].child.remove(at: <#T##Int#>)
+//			for i in depth {
+//				child = data[i].child
+//			}
+//
+//		}
+//		else {
+//			data.remove(at: depth.first!)
+//			let isSaveSuccess = self.saveBookMarkListData(bookmarkD: data)
+//		}
+//		self.updateBookmarkListDataNoti()
+//	}
+	
 	func registerBookmarkDataObserver(vc: UIViewController, selector: Selector) {
 		NotificationGroup.shared.registerObserver(type: .BookmarkListDataUpdate, vc: vc, selector: selector)
 	}

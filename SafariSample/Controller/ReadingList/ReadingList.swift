@@ -216,10 +216,14 @@ extension ReadingList : UITableViewDelegate, UITableViewDataSource {
 			return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [
 				AlertsAndMenus.MenuButtonType.copy.createButtonAction({ (action) in
 					print("Copying", self.readingListDatas[indexPath.row].urlString!)
+					if let urlString = self.readingListDatas[indexPath.row].urlString {
+						UIPasteboard.general.string = urlString
+						
+					}
 				}),
 				AlertsAndMenus.MenuButtonType.openInNewTab.createButtonAction({ (action) in
 					//TODO: - need to implement this
-					print("action!", action)
+					print("open in New Tabs!", action)
 				}),
 				deleteAction
 			])

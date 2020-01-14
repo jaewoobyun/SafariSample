@@ -100,16 +100,9 @@ class BookmarksVC: UIViewController{
 			bookmarksData = UserDefaultsManager.shared.loadUserBookMarkListData()
 		}
 		
-		if let selectedIndexPath = tableView.indexPathForSelectedRow {
-			tableView.deselectRow(at: selectedIndexPath, animated: animated)
-		}
-		
-		//		if toggle == true {
-		//			self.toolbarItems?.insert(newFolderButton, at: 0)
-		//		}
-		//		else if toggle == false {
-		//
-		//		}
+//		if let selectedIndexPath = tableView.indexPathForSelectedRow {
+//			tableView.deselectRow(at: selectedIndexPath, animated: animated)
+//		}
 		
 		tableView.reloadData()
 	}
@@ -127,9 +120,16 @@ class BookmarksVC: UIViewController{
 	
 	@objc func updateBookmarkListDatas() {
 		print("BookmarkVC updateBookmarkListDatas")
-		self.bookmarksData.removeAll()
-		self.bookmarksData = UserDefaultsManager.shared.loadUserBookMarkListData()
-		tableView.reloadData()
+		
+		if let navi = self.navigationController, navi.children.count > 1 {
+			navi.popToRootViewController(animated: true)
+		} else {
+			self.bookmarksData.removeAll()
+			self.bookmarksData = UserDefaultsManager.shared.loadUserBookMarkListData()
+			tableView.reloadData()
+		}
+		
+		
 	}
 	
 	@IBAction func editButton(_ sender: UIBarButtonItem) {
@@ -311,13 +311,12 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		print("didSelctRowAt \(indexPath)")
-		
 		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
 		if let reuseableVC = storyboard.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC {
 			if bookmarksData[indexPath.row].isFolder {
 				if tableView.isEditing {
 					if let reusableEditFolder = storyboard.instantiateViewController(identifier: "EditFolder") as? EditFolder {
-						reusableEditFolder.folderTitle = bookmarksData[indexPath.item].titleString
+						reusableEditFolder.folderTitle = bookmarksData[indexPath.row].titleString
 						//TODO: - need to pass the location of the editing folder to EditFolder
 						reusableEditFolder.selectedIndexPath = indexPath
 						navigationController?.pushViewController(reusableEditFolder, animated: true)
@@ -374,20 +373,24 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+		
+		
+		let data = bookmarksData[indexPath.row]
+		let removeTitle = data.titleString ?? ""
+		
 		if editingStyle == .delete {
-			//TODO: - child로 들어가서 지울때 에러난다.
-			
 			bookmarksData.remove(at: indexPath.row)
 			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
 			
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-				UserDefaultsManager.shared.removeBookmarkFolderItemAtIndexPath(indexPath: indexPath)
+				UserDefaultsManager.shared.removeBookmarkFolderItem(at: removeTitle)
 			}
+
 		}
 	}
 	
 	func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-		return true
+		return false
 	}
 	
 	func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -403,7 +406,7 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 		//		guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
 		//		let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
 		guard let bookmarksVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview bookmarksVC")}
-		let editAction = AlertsAndMenus.MenuButtonType.edit.createButtonAction({ (action) in
+		let editFolderAction = AlertsAndMenus.MenuButtonType.edit.createButtonAction({ (action) in
 			let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
 			if let reusableEditFolder = storyboard.instantiateViewController(identifier: "EditFolder") as? EditFolder {
 				reusableEditFolder.folderTitle = self.bookmarksData[indexPath.item].titleString
@@ -412,6 +415,50 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 				self.navigationController?.pushViewController(reusableEditFolder, animated: true)
 			}
 		})
+		let editBookmarkAction = AlertsAndMenus.MenuButtonType.edit.createButtonAction { (action) in
+			let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+			guard let urlString = self.bookmarksData[indexPath.row].urlString else { return }
+			guard let titleString = self.bookmarksData[indexPath.row].titleString else { return }
+			if let reusableEditBookmarkVC = storyboard.instantiateViewController(withIdentifier: "EditBookmarkVC") as? EditBookmarkVC {
+				reusableEditBookmarkVC.bookmarkTitle = titleString
+				reusableEditBookmarkVC.address = urlString
+				self.navigationController?.pushViewController(reusableEditBookmarkVC, animated: true)
+			}
+		}
+		let deleteAction = AlertsAndMenus.MenuButtonType.deleteConfirmation.createDeleteConfirmationMenu { (action) in
+			print("Deleted!!")
+			let data = self.bookmarksData[indexPath.row]
+			let removeTitle = data.titleString ?? ""
+			self.bookmarksData.remove(at: indexPath.row)
+			tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+			
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+				UserDefaultsManager.shared.removeBookmarkFolderItem(at: removeTitle)
+			}
+		}
+		let copyAction = AlertsAndMenus.MenuButtonType.copy.createButtonAction { (action) in
+			print("Copy!")
+			if let bookmarkUrlString = self.bookmarksData[indexPath.row].urlString {
+				UIPasteboard.general.string = bookmarkUrlString
+			}
+		}
+		let copyContentsAction = AlertsAndMenus.MenuButtonType.copyContents.createButtonAction { (action) in
+			print("Copy Contents!")
+			for item in self.bookmarksData[indexPath.row].child {
+				if let urlstrings = item.urlString {
+
+					UIPasteboard.general.strings?.append(urlstrings)
+				}
+			}
+			
+		}
+		let OpenInNewTabAction = AlertsAndMenus.MenuButtonType.openInNewTab.createButtonAction { (action) in
+			print("Open in New Tab!")
+		}
+		let openInNewTabsAction = AlertsAndMenus.MenuButtonType.openInNewTabs.createButtonAction { (action) in
+			print("Open in New Tabs!")
+		}
+		
 		
 		///폴더 일때
 		if bookmarksData[indexPath.row].isFolder {
@@ -426,27 +473,39 @@ extension BookmarksVC: UITableViewDataSource, UITableViewDelegate {
 				print("leaf node!!")
 				return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (actions) -> UIMenu? in
 //					return AlertsAndMenus.shared.makeEmptyFolderContextMenu()
-					
-					
 					return UIMenu(title: "Menu", image: nil, identifier: nil
 						, options: UIMenu.Options.init(), children: [
-							
-					
+							editFolderAction,
+							deleteAction
 					])
 				}
-				
+			}
+			return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (menuElements) -> UIMenu? in
+				return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [
+					copyContentsAction,
+					openInNewTabsAction,
+					editFolderAction,
+					deleteAction
+				])
 			}
 		}
 		else { // Bookmark 일때 Context Menu * preview, * copy, * open in new tab, * Edit, * Delete
 			print("is Bookmark")
 			//TODO: - show a preview of the link (webview).
-			return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (actions) -> UIMenu? in
-				return AlertsAndMenus.shared.makeBookmarkContextMenu()
+			return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (actions) -> UIMenu? in
+//				return AlertsAndMenus.shared.makeBookmarkContextMenu()
+				return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [
+					copyAction,
+					OpenInNewTabAction,
+					editBookmarkAction,
+					deleteAction
+				])
+				
 			}
 		}
-		return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (actions) -> UIMenu? in
-			return AlertsAndMenus.shared.makeFolderContextMenu()
-		}
+//		return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (actions) -> UIMenu? in
+//			return AlertsAndMenus.shared.makeFolderContextMenu()
+//		}
 		
 	}
 	
@@ -497,6 +556,59 @@ extension BookmarksVC: UIContextMenuInteractionDelegate {
 	func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
 		guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
 		guard let bookmarksVC = storyboard?.instantiateViewController(identifier: "BookmarksVC") as? BookmarksVC else { preconditionFailure("Failed to preview bookmarksVC")}
+		//-------------------
+		let editFolderAction = AlertsAndMenus.MenuButtonType.edit.createButtonAction({ (action) in
+			let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+			if let reusableEditFolder = storyboard.instantiateViewController(identifier: "EditFolder") as? EditFolder {
+				reusableEditFolder.folderTitle = self.bookmarksData[indexPath.item].titleString
+				//TODO: - need to pass the location of the editing folder to EditFolder
+				reusableEditFolder.selectedIndexPath = indexPath
+				self.navigationController?.pushViewController(reusableEditFolder, animated: true)
+			}
+		})
+		let editBookmarkAction = AlertsAndMenus.MenuButtonType.edit.createButtonAction { (action) in
+			let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+			guard let urlString = self.bookmarksData[indexPath.row].urlString else { return }
+			guard let titleString = self.bookmarksData[indexPath.row].titleString else { return }
+			if let reusableEditBookmarkVC = storyboard.instantiateViewController(withIdentifier: "EditBookmarkVC") as? EditBookmarkVC {
+				reusableEditBookmarkVC.bookmarkTitle = titleString
+				reusableEditBookmarkVC.address = urlString
+				self.navigationController?.pushViewController(reusableEditBookmarkVC, animated: true)
+			}
+		}
+		let deleteAction = AlertsAndMenus.MenuButtonType.deleteConfirmation.createDeleteConfirmationMenu { (action) in
+			print("Deleted!!")
+			let data = self.bookmarksData[indexPath.row]
+			let removeTitle = data.titleString ?? ""
+			self.bookmarksData.remove(at: indexPath.row)
+			self.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+				UserDefaultsManager.shared.removeBookmarkFolderItem(at: removeTitle)
+			}
+		}
+		let copyAction = AlertsAndMenus.MenuButtonType.copy.createButtonAction { (action) in
+					print("Copy!")
+					if let bookmarkUrlString = self.bookmarksData[indexPath.row].urlString {
+						UIPasteboard.general.string = bookmarkUrlString
+					}
+				}
+		let copyContentsAction = AlertsAndMenus.MenuButtonType.copyContents.createButtonAction { (action) in
+			print("Copy Contents!")
+			for item in self.bookmarksData[indexPath.row].child {
+				if let urlstrings = item.urlString {
+					UIPasteboard.general.strings?.append(urlstrings)
+				}
+			}
+			
+		}
+		let OpenInNewTabAction = AlertsAndMenus.MenuButtonType.openInNewTab.createButtonAction { (action) in
+			print("Open in New Tab!")
+		}
+		let openInNewTabsAction = AlertsAndMenus.MenuButtonType.openInNewTabs.createButtonAction { (action) in
+			print("Open in New Tabs!")
+		}
+		
+		//----------------
 		///폴더 일때
 		if bookmarksData[indexPath.row].isFolder {
 			//ContextMenu * Copy Contents, * Open in new tabs, * Edit, * Delete
@@ -508,22 +620,42 @@ extension BookmarksVC: UIContextMenuInteractionDelegate {
 			/// leaf node 일때 (= 마지막 끝 노드일때)
 			if bookmarksData[indexPath.row].child.isEmpty {
 				print("leaf node!!")
-				return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (actions) -> UIMenu? in
-					return AlertsAndMenus.shared.makeEmptyFolderContextMenu()
+				return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (actions) -> UIMenu? in
+//					return AlertsAndMenus.shared.makeEmptyFolderContextMenu()
+					
+					return UIMenu(title: "Menu", image: nil, identifier: nil
+						, options: UIMenu.Options.init(), children: [
+							editFolderAction,
+							deleteAction
+					])
 				}
 				
+			}
+			return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (menuElements) -> UIMenu? in
+				return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [
+					copyContentsAction,
+					openInNewTabsAction,
+					editFolderAction,
+					deleteAction
+				])
 			}
 		}
 		else { // Bookmark 일때 Context Menu * preview, * copy, * open in new tab, * Edit, * Delete
 			print("is Bookmark")
 			//TODO: - show a preview of the link (webview).
-			return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (actions) -> UIMenu? in
-				return AlertsAndMenus.shared.makeBookmarkContextMenu()
+			return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (actions) -> UIMenu? in
+//				return AlertsAndMenus.shared.makeBookmarkContextMenu()
+				return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [
+					copyAction,
+					OpenInNewTabAction,
+					editBookmarkAction,
+					deleteAction
+				])
 			}
 		}
-		return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (actions) -> UIMenu? in
-			return AlertsAndMenus.shared.makeFolderContextMenu()
-		}
+//		return UIContextMenuConfiguration(identifier: nil, previewProvider: {return bookmarksVC}) { (actions) -> UIMenu? in
+//			return AlertsAndMenus.shared.makeFolderContextMenu()
+//		}
 		
 		
 		

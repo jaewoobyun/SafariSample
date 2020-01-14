@@ -54,7 +54,9 @@ class AlertsAndMenus {
 		}
 		
 		func createDeleteConfirmationMenu(_baseHandle: @escaping UIActionHandler) -> UIMenu {
-			return UIMenu(title: "Delete", image: UIImage(systemName: "trash"), identifier: nil, options: UIMenu.Options.destructive, children: [self.createButtonAction(_baseHandle)
+			return UIMenu(title: "Delete", image: UIImage(systemName: "trash"), identifier: nil, options: UIMenu.Options.destructive, children: [
+				MenuButtonType.deleteCancel.createButtonAction(_baseHandle),
+				MenuButtonType.deleteConfirmation.createButtonAction(_baseHandle)
 			
 			])
 		}
@@ -72,7 +74,7 @@ class AlertsAndMenus {
 			return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: self.getMenuButtons(baseHandle))
 		}
 
-		private func getMenuButtons(_ baseHandle:@escaping UIActionHandler) -> [UIAction] {
+		func getMenuButtons(_ baseHandle:@escaping UIActionHandler) -> [UIAction] {
 			switch self {
 			case .emptyFolder:
 				return [
@@ -112,62 +114,6 @@ class AlertsAndMenus {
 
 	}
 	
-	let copycontentsAction = UIAction(title: "Copy Contents", image: UIImage(systemName: "doc.on.doc")) { action in
-		
-	}
-	
-	let copyAction = UIAction(title: "Copy", image: UIImage(systemName: "doc.on.doc")) { action in
-		
-	}
-	
-	let openInNewTabsAction = UIAction(title: "Open in New Tabs", image: UIImage(systemName: "plus.rectangle.on.rectangle")) { action in
-		
-	}
-	
-	let openInNewTabAction = UIAction(title: "Open in New Tab", image: UIImage(systemName: "plus.rectangle.on.rectangle")) { action in
-		
-	}
-	
-	let editAction = UIAction(title: "Edit", image: UIImage(systemName: "square.and.pencil")) { action in
-		
-	}
-	
-	let deleteCancel = UIAction(title: "Cancel", image: UIImage(systemName: "xmark")) { action in
-		
-	}
-	let deleteConfirmation = UIAction(title: "Delete", image: UIImage(systemName: "checkmark"), attributes: .destructive) { action in
-		
-	}
-	// The delete sub-menu is created like the top-level menu, but we also specify an image and options
-	
-	
-	func makeEmptyFolderContextMenu() -> UIMenu {
-		let deleteAction = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [deleteCancel, deleteConfirmation])
-		
-		return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [editAction, deleteAction])
-	}
-	
-	func makeFolderContextMenu() -> UIMenu {
-			let deleteAction = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [deleteCancel, deleteConfirmation])
-			
-			return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [copycontentsAction, openInNewTabsAction, editAction, deleteAction])
-		}
-	
-	func makeBookmarkContextMenu() -> UIMenu {
-		let deleteAction = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [deleteCancel, deleteConfirmation])
-		return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [copyAction, openInNewTabAction, editAction, deleteAction])
-	}
-	
-	func makeReadingListContextMenu() -> UIMenu {
-		let deleteAction = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [deleteCancel, deleteConfirmation])
-		return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [copyAction, openInNewTabAction, deleteAction])
-	}
-	
-	func makeHistoryContextMenu() -> UIMenu {
-		let deleteAction = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [deleteCancel, deleteConfirmation])
-		return UIMenu(title: "Menu", image: nil, identifier: nil, options: UIMenu.Options.init(), children: [copyAction, openInNewTabAction, deleteAction])
-	}
-	
 	func makeTabAlerts() -> UIAlertController {
 		let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
 		
@@ -201,6 +147,19 @@ class AlertsAndMenus {
 		let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
 		
 		alert.addAction(okAction)
+		
+		return alert
+	}
+	
+	func duplicateAlert(title: String?, message: String?, style: UIAlertController.Style) -> UIAlertController {
+		let alert = UIAlertController.init(title: "Duplicate Folder Name", message: nil, preferredStyle: UIAlertController.Style.alert)
+		
+		let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil)
+		
+		let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
+		
+		alert.addAction(okAction)
+		alert.addAction(cancelAction)
 		
 		return alert
 	}

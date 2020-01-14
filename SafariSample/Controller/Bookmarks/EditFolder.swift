@@ -102,10 +102,10 @@ class EditFolder: UIViewController {
 		
 		if caseType == .EditFolder {
 			if let folderTitle = folderTitle {
-						let editTargetData = locateSelectedFolder(targetArray: (self.bookmarksData as! [BookmarksData]), searchKeyword: folderTitle)
-			//			editTargetData?.titleString = self.titleTextField.text
-						self.editTargetData = editTargetData
-					}
+				let editTargetData = locateSelectedFolder(targetArray: (self.bookmarksData as! [BookmarksData]), searchKeyword: folderTitle)
+	//			editTargetData?.titleString = self.titleTextField.text
+				self.editTargetData = editTargetData
+			}
 		}
 	}
 	
@@ -168,22 +168,27 @@ class EditFolder: UIViewController {
 	@objc func saveFolder() {
 		//guard let selectedIndexPath = self.selectedIndexPath else {return}
 		//guard let selectedNode = self.selectedNode else { return}
-//
-//		let alertController = UIAlertController(title: "Title Is Empty", message: "Please Set a Title for the Folder", preferredStyle: UIAlertController.Style.alert)
-//		let cancelAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil)
-//		alertController.addAction(cancelAction)
 
+		///New title input here
 		guard let title = self.titleTextField.text, !title.isEmpty
 		else {
-//			self.present(alertController, animated: true, completion: nil)
 			return
 		}
-		
 		if caseType == .AddNewFolder {
-			insertFolderAtSelectedLocation(folderTitle: title, selectNodeIndexs: selectNodeIndexs)
+			if UserDefaultsManager.shared.isNameDuplicate(targetDatas: UserDefaultsManager.shared.loadUserBookMarkListData(), title: title) {
+				let alert = UIAlertController.init(title: "Duplicate Folder Name", message: nil, preferredStyle: UIAlertController.Style.alert)
+				
+				let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.destructive, handler: nil)
+				alert.addAction(okAction)
+				self.present(alert, animated: true, completion: nil)
+			} else {
+				insertFolderAtSelectedLocation(folderTitle: title, selectNodeIndexs: selectNodeIndexs)
+			}
+			
 		}
 		
 		if caseType == .EditFolder {
+			/// Editting folder title here
 			guard let edittedFolderTitle = self.folderTitleInputText else {
 				return
 			}
@@ -227,7 +232,6 @@ class EditFolder: UIViewController {
 //	}
 	
 	func insertFolderAtSelectedLocation(folderTitle:String, selectNodeIndexs:[Int]) {
-		
 		let appendFolder = BookmarksData.init(titleString: folderTitle, child: [], indexPath: selectNodeIndexs)
 		
 		if selectNodeIndexs.count == 0 {
@@ -250,6 +254,7 @@ class EditFolder: UIViewController {
 		
 		let isSaveSuccess = UserDefaultsManager.shared.saveBookMarkListData(bookmarkD: bookmarksData as! [BookmarksData])
 		print("Inserting Folder at Selected Location success?: ", isSaveSuccess)
+//		UserDefaultsManager.shared.updateBookmarkListDataNoti() //?????????
 		treeView.reloadData()
 		treeView.expandAllRows()
 	}
@@ -261,7 +266,7 @@ class EditFolder: UIViewController {
 extension EditFolder: UITextFieldDelegate {
 	func textFieldDidEndEditing(_ textField: UITextField) {
 		print("textfieldDidEndEditing!!")
-		
+
 		
 	}
 	
