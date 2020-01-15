@@ -27,6 +27,8 @@
 		CC5F4D3723B9C09200B8C9B8 /* ReadingListData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5F4D3623B9C09100B8C9B8 /* ReadingListData.swift */; };
 		CC5F4D3A23B9F10A00B8C9B8 /* ReadingListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5F4D3823B9F10A00B8C9B8 /* ReadingListCell.swift */; };
 		CC5F4D3B23B9F10A00B8C9B8 /* ReadingListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CC5F4D3923B9F10A00B8C9B8 /* ReadingListCell.xib */; };
+		CC64362E23CEFA8600B71088 /* logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC64362D23CEFA8600B71088 /* logger.swift */; };
+		CC64363023CF052C00B71088 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC64362F23CF052C00B71088 /* LocalAuthentication.framework */; };
 		CC8698A12387A6460043D796 /* SnapshotCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A02387A6460043D796 /* SnapshotCard.swift */; };
 		CC8698A32387B4BE0043D796 /* TabsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A22387B4BE0043D796 /* TabsController.swift */; };
 		CC8698A9238B54CE0043D796 /* ReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8698A8238B54CE0043D796 /* ReadingList.swift */; };
@@ -72,6 +74,8 @@
 		CC5F4D3623B9C09100B8C9B8 /* ReadingListData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingListData.swift; sourceTree = "<group>"; };
 		CC5F4D3823B9F10A00B8C9B8 /* ReadingListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingListCell.swift; sourceTree = "<group>"; };
 		CC5F4D3923B9F10A00B8C9B8 /* ReadingListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReadingListCell.xib; sourceTree = "<group>"; };
+		CC64362D23CEFA8600B71088 /* logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = logger.swift; sourceTree = "<group>"; };
+		CC64362F23CF052C00B71088 /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
 		CC8698A02387A6460043D796 /* SnapshotCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotCard.swift; sourceTree = "<group>"; };
 		CC8698A22387B4BE0043D796 /* TabsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsController.swift; sourceTree = "<group>"; };
 		CC8698A8238B54CE0043D796 /* ReadingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingList.swift; sourceTree = "<group>"; };
@@ -101,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC64363023CF052C00B71088 /* LocalAuthentication.framework in Frameworks */,
 				51C125083E4B8FDC9D9711F0 /* Pods_SafariSample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -234,6 +239,7 @@
 				CC0E121223A3565A00557B67 /* BookmarkModel.xcdatamodeld */,
 				CCB7A74D2382295E00D8B0A0 /* AppDelegate.swift */,
 				CCB7A74F2382295E00D8B0A0 /* SceneDelegate.swift */,
+				CC64362D23CEFA8600B71088 /* logger.swift */,
 				CC456729238FACB0006C1EF1 /* CITreeViewClasses */,
 				CC5B8B2D239A35AB004688A3 /* Model */,
 				CC5B8B2E239A35CB004688A3 /* View */,
@@ -249,6 +255,7 @@
 		D57D2AFA47E8B4A6496302AA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CC64362F23CF052C00B71088 /* LocalAuthentication.framework */,
 				8C0B2BB88E69780FE2F8CA02 /* Pods_SafariSample.framework */,
 			);
 			name = Frameworks;
@@ -381,6 +388,7 @@
 				CC26079A23BF35B900B453CA /* CusBarItem.swift in Sources */,
 				CCC26AAE23825EE5006E2E62 /* OpenTabsVC.swift in Sources */,
 				CC8698AD238BBCBD0043D796 /* BookmarksData.swift in Sources */,
+				CC64362E23CEFA8600B71088 /* logger.swift in Sources */,
 				CC8698A9238B54CE0043D796 /* ReadingList.swift in Sources */,
 				CC8698AB238B6C460043D796 /* SegmentControlVC.swift in Sources */,
 				CC5F4D3A23B9F10A00B8C9B8 /* ReadingListCell.swift in Sources */,

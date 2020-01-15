@@ -387,17 +387,23 @@ class UserDefaultsManager {
 	}
 	
 	func isNameDuplicate(targetDatas:[BookmarksData], title: String) -> Bool {
+		//target 데이터를 for loop 으로 돌린다.
 		for data in targetDatas {
+			//첫번째 depth 의 아이템의 titleString 이 우리가 검색하는 title 이면 duplicate
+			
+			print("data.titleString : \(data.titleString ?? "?")")
 			if data.titleString == title {
+				print("DDDDDD!")
 				return true
 			}
-			
-			if data.child.count != 0 {
+			//마지막 노드 depth가 아니라면 재귀로 이번에는 child node 를 돈다.
+			if data.child.count != 0{
 				let isNameDuplicate = self.isNameDuplicate(targetDatas: data.child, title: title)
-				return isNameDuplicate
+				
+				if isNameDuplicate {
+					return true
+				}
 			}
-			
-			return false
 		}
 		
 		return false

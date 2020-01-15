@@ -41,7 +41,7 @@ class EditBookmarkVC: UIViewController {
 		}
 	}
 
-//	var data: [BookmarksData] = [] //
+	var isExpanded: Bool = true
 	var caseType: CaseType = .EditBookmark
 	var bookmarksData: NSMutableArray = []
 //	var selectedFolderTitle: String?
@@ -111,6 +111,18 @@ class EditBookmarkVC: UIViewController {
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
+	}
+	
+	@IBAction func expandCollapseButton(_ sender: UIButton) {
+		isExpanded = !isExpanded
+		if isExpanded {
+			sender.setTitle("Expand All", for: UIControl.State.normal)
+			self.treeView.collapseAllRows()
+		}
+		else {
+			sender.setTitle("CollapseAll", for: UIControl.State.normal)
+			self.treeView.expandAllRows()
+		}
 	}
 	
 	func locateSelectedBookmark(targetArray: [BookmarksData], searchKeyword: String) -> BookmarksData? {
@@ -235,19 +247,12 @@ extension EditBookmarkVC: CITreeViewDelegate {
 	}
 	
 	func didExpandTreeViewNode(treeViewNode: CITreeViewNode, atIndexPath: IndexPath) {
-		if atIndexPath.row == 0 {
-			treeView.expandAllRows()
-		}
 	}
 	
 	func willCollapseTreeViewNode(treeViewNode: CITreeViewNode, atIndexPath: IndexPath) {
-		//
 	}
 	
 	func didCollapseTreeViewNode(treeViewNode: CITreeViewNode, atIndexPath: IndexPath) {
-		if atIndexPath.row == 0 {
-			treeView.collapseAllRows()
-		}
 	}
 	
 	func treeView(_ treeView: CITreeView, heightForRowAt indexPath: IndexPath, withTreeViewNode treeViewNode: CITreeViewNode) -> CGFloat {

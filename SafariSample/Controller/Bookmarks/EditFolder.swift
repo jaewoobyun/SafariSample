@@ -175,16 +175,19 @@ class EditFolder: UIViewController {
 			return
 		}
 		if caseType == .AddNewFolder {
-			if UserDefaultsManager.shared.isNameDuplicate(targetDatas: UserDefaultsManager.shared.loadUserBookMarkListData(), title: title) {
-				let alert = UIAlertController.init(title: "Duplicate Folder Name", message: nil, preferredStyle: UIAlertController.Style.alert)
+			let origin = UserDefaultsManager.shared.loadUserBookMarkListData()
+			if UserDefaultsManager.shared.isNameDuplicate(targetDatas: origin, title: title) {
 				
-				let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.destructive, handler: nil)
-				alert.addAction(okAction)
-				self.present(alert, animated: true, completion: nil)
+					let alert = UIAlertController.init(title: "Duplicate Folder Name", message: nil, preferredStyle: UIAlertController.Style.alert)
+
+					let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.destructive, handler: nil)
+					alert.addAction(okAction)
+					self.present(alert, animated: true, completion: nil)
+				
 			} else {
-				insertFolderAtSelectedLocation(folderTitle: title, selectNodeIndexs: selectNodeIndexs)
+				
+				self.insertFolderAtSelectedLocation(folderTitle: title, selectNodeIndexs: self.selectNodeIndexs)
 			}
-			
 		}
 		
 		if caseType == .EditFolder {
