@@ -13,21 +13,30 @@ import WebKit
 
 
 let hostNameForLocalFile = ""
+/**
+# MainVC
+  웹 컨텐츠가 표시되는 메인 뷰를 관리 하는 뷰 컨트롤러
 
+*/
 class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPreviewingDelegate {
 	
 	/// 검색 결과를 표시할 searchController
 	let searchController = UISearchController(searchResultsController: nil)
+	/// searchBar 검색
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
-	
+	/// 웹 컨텐츠의 로딩을 표시할 파란색 진행 줄
 	@IBOutlet weak var progressView: UIProgressView!
-	
+	/// CustomBarItem 을 상속한다. longPress 를 하기 위해
 	@IBOutlet weak var backButton: CusBarItem!
+	/// CustomBarItem 을 상속한다. longPress 를 하기 위해
 	@IBOutlet weak var forwardButton: CusBarItem!
+	/// ShareButton
 	@IBOutlet weak var shareButton: UIBarButtonItem!
+	/// CustomBarItem 을 상속한다. longPress 를 하기 위해
 	@IBOutlet weak var bookmarksButton: CusBarItem!
+	/// CustomBarItem 을 상속한다. longPress 를 하기 위해
 	@IBOutlet weak var tabsButton: CusBarItem!
-	
+	/// Main webView. WKWebView
 	@IBOutlet weak var webView: WKWebView!
 	
 	var currentContentMode: WKWebpagePreferences.ContentMode?
@@ -74,7 +83,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	//MARK: - Life Cycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		is3dTouchAvailable(traitCollection: self.view!.traitCollection)
+//		is3dTouchAvailable(traitCollection: self.view!.traitCollection)
 		
 		setupCustomButtons()
 		
@@ -674,6 +683,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 
 //MARK: - ScrollView Delegate
 extension MainVC: UIScrollViewDelegate {
+	/// 웹뷰를 스크롤 할 때 상위의 navigation bar (search bar) 와 하단의 toolbar 가 위 아래로 사라지기 위해 사용
 	func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
 		
 		if(velocity.y>0) {
@@ -701,11 +711,8 @@ extension MainVC: UIScrollViewDelegate {
 //MARK: - UIToolBar Delegate
 extension MainVC: UIToolbarDelegate {
 	func position(for bar: UIBarPositioning) -> UIBarPosition {
-		
 		return UIBarPosition.bottom
 	}
-	
-	
 }
 
 //MARK: - UISearchResultsUpdating
@@ -759,7 +766,6 @@ extension MainVC: UISearchResultsUpdating {
 				urlString = "https://" + urlString
 			}
 		}
-		
 		//		if !urlString.contains(".com") {
 		//			urlString.append(contentsOf: ".com")
 		//		}
@@ -795,9 +801,7 @@ extension MainVC: UISearchBarDelegate {
 	}
 	
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-		//		self.searchBar.endEditing(true)
 		searchBar.endEditing(true)
-		//		searchBar.showsCancelButton = false
 		searchBar.resignFirstResponder()
 		resignFirstResponder()
 		hideKeyboardWhenTappedAround()
@@ -849,7 +853,7 @@ extension MainVC: WKNavigationDelegate {
 		//NotificationGroup.shared.post(type: .historyDataInstance, userInfo: ["historyDataInstance": historyDataInstance])
 	}
 	
-	//--------
+	
 	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
 		if let hostName = navigationAction.request.url?.host {
 			if let preferredContentMode = contentModeToRequestForHost[hostName] {
@@ -862,7 +866,7 @@ extension MainVC: WKNavigationDelegate {
 		}
 		decisionHandler(.allow, preferences)
 	}
-	//--------
+	
 	
 }
 

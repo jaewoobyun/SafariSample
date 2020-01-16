@@ -15,10 +15,21 @@ class ReadingList: UIViewController {
 	@IBOutlet weak var tableView: UITableView!
 	@IBOutlet weak var editButton: UIBarButtonItem!
 	@IBOutlet weak var secretButton: UIBarButtonItem!
+	@IBOutlet weak var instructionLabel: UILabel!
 	
 	var toggle: Bool = false
 	var isContentsHidden: Bool = true
 	
+	enum AuthenticationState {
+		case loggedin, loggedout
+	}
+	
+	var state = AuthenticationState.loggedout {
+		didSet {
+			secretButton.image = state == .loggedin ? UIImage(systemName: "lock.open") : UIImage(systemName: "lock")
+			tableView.isHidden = state == .loggedin ? false : true
+		}
+	}
 	
 	let searchController = UISearchController(searchResultsController: nil)
 	lazy var searchBar = UISearchBar(frame: CGRect.zero)
@@ -33,12 +44,13 @@ class ReadingList: UIViewController {
 		self.title = "Reading List"
 		self.navigationController?.navigationBar.isHidden = false
 		
-		if isContentsHidden == true {
-			self.tableView.isHidden = true
-		}
-		if isContentsHidden == false {
-			self.tableView.isHidden = false
-		}
+		//		if isContentsHidden == true {
+		//			self.tableView.isHidden = true
+		//		}
+		//		if isContentsHidden == false {
+		//			self.tableView.isHidden = false
+		//		}
+		state = .loggedout
 		
 		self.editButton = self.editButtonItem
 		tableView.delegate = self
@@ -64,11 +76,11 @@ class ReadingList: UIViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-//		if isContentsHidden {
-//			self.tableView.isHidden = true
-//		} else {
-//			self.tableView.isHidden = false
-//		}
+		//		if isContentsHidden {
+		//			self.tableView.isHidden = true
+		//		} else {
+		//			self.tableView.isHidden = false
+		//		}
 		UserDefaultsManager.shared.registerReadingListDataObserver(vc: self, selector: #selector(updateReadingListDatas))
 		UserDefaultsManager.shared.loadUserReadingListData()
 	}
@@ -87,16 +99,38 @@ class ReadingList: UIViewController {
 	}
 	
 	@IBAction func bioAuthenticate(_ sender: UIBarButtonItem) {
-		if isContentsHidden == true {
-			sender.image = UIImage(systemName: "lock")
-			self.tableView.isHidden = true
+		//		if isContentsHidden == true {
+		//			sender.image = UIImage(systemName: "lock")
+		//			self.tableView.isHidden = true
+		//			isContentsHidden = false
+		////			authenticationWithTouchID()
+		//		}
+		//		if isContentsHidden == false {
+		//			sender.image = UIImage(systemName: "lock.open")
+		//			self.tableView.isHidden = false
+		//			isContentsHidden = true
+		//		}
+		
+		//		self.isContentsHidden = !self.isContentsHidden
+		//		authenticationWithTouchID()
+		
+		
+		//		if state == .loggedout {
+		//			state = .loggedin
+		//		}
+		//		if state == .loggedin {
+		//			state = .loggedout
+		//		} else {
+		////			authenticationWithTouchID()
+		//		}
+		
+		switch state {
+		case .loggedin:
+			state = .loggedout
+		case .loggedout:
+			//			state = .loggedin
+			authenticationWithTouchID()
 		}
-		if isContentsHidden == false {
-			sender.image = UIImage(systemName: "lock.open")
-			self.tableView.isHidden = false
-		}
-		self.isContentsHidden = !self.isContentsHidden
-//		authenticationWithTouchID()
 		
 	}
 	
@@ -233,7 +267,7 @@ extension ReadingList : UITableViewDelegate, UITableViewDataSource {
 				print("cancel")
 			})
 			let deleteConfirmation = AlertsAndMenus.MenuButtonType.deleteConfirmation.createButtonAction({ (action) in
-//				self.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+				//				self.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
 					UserDefaultsManager.shared.removeReadingListItemAtIndexPath(indexPath: indexPath)
 				}
@@ -315,120 +349,119 @@ extension ReadingList : UITableViewDelegate, UITableViewDataSource {
 
 
 extension ReadingList {
+	
 	func authenticationWithTouchID() {
-		 let localAuthenticationContext = LAContext()
-		 localAuthenticationContext.localizedFallbackTitle = "Use Passcode"
-
-		 var authError: NSError?
-		 let reasonString = "To access the secure data"
-
-		 if localAuthenticationContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &authError) {
-			  
-			  localAuthenticationContext.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reasonString) { success, evaluateError in
-					
-					if success {
-						 
-						 //TODO: User authenticated successfully, take appropriate action
-						self.isContentsHidden = !self.isContentsHidden
-						 
-					} else {
-						 //TODO: User did not authenticate successfully, look at error and take appropriate action
-						 guard let error = evaluateError else {
-							  return
-						 }
-						 
-						 print(self.evaluateAuthenticationPolicyMessageForLA(errorCode: error._code))
-						 
-						 //TODO: If you have choosen the 'Fallback authentication mechanism selected' (LAError.userFallback). Handle gracefully
-						let alert = UIAlertController(title: self.evaluatePolicyFailErrorMessageForLA(errorCode: error._code), message: nil, preferredStyle: UIAlertController.Style.alert)
-						let cancelAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil)
-						alert.addAction(cancelAction)
-						self.present(alert, animated: true, completion: nil)
+		
+		
+		let localAuthenticationContext = LAContext()
+		//		 localAuthenticationContext.localizedFallbackTitle = "Use Passcode"
+		
+		var authError: NSError?
+		let reasonString = "To access the secure data"
+		
+		
+		//생체인증을 사용가능한가?
+		if localAuthenticationContext.canEvaluatePolicy(.deviceOwnerAuthentication, error: &authError) {
+			
+			localAuthenticationContext.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reasonString) { success, evaluateError in
+				
+				if success {
+					//TODO: User authenticated successfully, take appropriate action
+					//						self.isContentsHidden = false
+					DispatchQueue.main.async { [weak self] in
+						self?.state = .loggedin
 					}
-			  }
-		 } else {
-			  
-			  guard let error = authError else {
-					return
-			  }
-			  //TODO: Show appropriate alert if biometry/TouchID/FaceID is lockout or not enrolled
-			  print(self.evaluateAuthenticationPolicyMessageForLA(errorCode: error.code))
-			let alert = UIAlertController(title: self.evaluatePolicyFailErrorMessageForLA(errorCode: error.code), message: nil, preferredStyle: UIAlertController.Style.alert)
-			let cancelAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil)
-			alert.addAction(cancelAction)
-			self.present(alert, animated: true, completion: nil)
-		 }
+					
+				} else {
+					//TODO: User did not authenticate successfully, look at error and take appropriate action
+					guard let error = evaluateError else {
+						return
+					}
+					
+					print(self.evaluateAuthenticationPolicyMessageForLA(errorCode: error._code))
+				}
+			}
+		} else {
+			
+			if let error = authError {
+				print(self.evaluateAuthenticationPolicyMessageForLA(errorCode: error.code))
+			} else {
+				print("unknow error")
+			}
+			
+		}
 	}
 	
+	
 	func evaluatePolicyFailErrorMessageForLA(errorCode: Int) -> String {
-		 var message = ""
-		 if #available(iOS 11.0, macOS 10.13, *) {
-			  switch errorCode {
-					case LAError.biometryNotAvailable.rawValue:
-						 message = "Authentication could not start because the device does not support biometric authentication."
-					
-					case LAError.biometryLockout.rawValue:
-						 message = "Authentication could not continue because the user has been locked out of biometric authentication, due to failing authentication too many times."
-					
-					case LAError.biometryNotEnrolled.rawValue:
-						 message = "Authentication could not start because the user has not enrolled in biometric authentication."
-					
-					default:
-						 message = "Did not find error code on LAError object"
-			  }
-		 } else {
-			  switch errorCode {
-					case LAError.touchIDLockout.rawValue:
-						 message = "Too many failed attempts."
-					
-					case LAError.touchIDNotAvailable.rawValue:
-						 message = "TouchID is not available on the device"
-					
-					case LAError.touchIDNotEnrolled.rawValue:
-						 message = "TouchID is not enrolled on the device"
-					
-					default:
-						 message = "Did not find error code on LAError object"
-			  }
-		 }
-		 
-		 return message;
+		var message = ""
+		if #available(iOS 11.0, macOS 10.13, *) {
+			switch errorCode {
+			case LAError.biometryNotAvailable.rawValue:
+				message = "Authentication could not start because the device does not support biometric authentication."
+				
+			case LAError.biometryLockout.rawValue:
+				message = "Authentication could not continue because the user has been locked out of biometric authentication, due to failing authentication too many times."
+				
+			case LAError.biometryNotEnrolled.rawValue:
+				message = "Authentication could not start because the user has not enrolled in biometric authentication."
+				
+			default:
+				message = "Did not find error code on LAError object"
+			}
+		} else {
+			switch errorCode {
+			case LAError.touchIDLockout.rawValue:
+				message = "Too many failed attempts."
+				
+			case LAError.touchIDNotAvailable.rawValue:
+				message = "TouchID is not available on the device"
+				
+			case LAError.touchIDNotEnrolled.rawValue:
+				message = "TouchID is not enrolled on the device"
+				
+			default:
+				message = "Did not find error code on LAError object"
+			}
+		}
+		
+		return message;
 	}
 	
 	func evaluateAuthenticationPolicyMessageForLA(errorCode: Int) -> String {
-		 
-		 var message = ""
-		 
-		 switch errorCode {
-			  
-		 case LAError.authenticationFailed.rawValue:
-			  message = "The user failed to provide valid credentials"
-			  
-		 case LAError.appCancel.rawValue:
-			  message = "Authentication was cancelled by application"
-			  
-		 case LAError.invalidContext.rawValue:
-			  message = "The context is invalid"
-			  
-		 case LAError.notInteractive.rawValue:
-			  message = "Not interactive"
-			  
-		 case LAError.passcodeNotSet.rawValue:
-			  message = "Passcode is not set on the device"
-			  
-		 case LAError.systemCancel.rawValue:
-			  message = "Authentication was cancelled by the system"
-			  
-		 case LAError.userCancel.rawValue:
-			  message = "The user did cancel"
-			  
-		 case LAError.userFallback.rawValue:
-			  message = "The user chose to use the fallback"
-
-		 default:
-			  message = evaluatePolicyFailErrorMessageForLA(errorCode: errorCode)
-		 }
-		 
-		 return message
+		
+		var message = ""
+		
+		switch errorCode {
+			
+		case LAError.authenticationFailed.rawValue:
+			message = "The user failed to provide valid credentials"
+			
+		case LAError.appCancel.rawValue:
+			message = "Authentication was cancelled by application"
+			
+		case LAError.invalidContext.rawValue:
+			message = "The context is invalid"
+			
+		case LAError.notInteractive.rawValue:
+			message = "Not interactive"
+			
+		case LAError.passcodeNotSet.rawValue:
+			message = "Passcode is not set on the device"
+			
+		case LAError.systemCancel.rawValue:
+			message = "Authentication was cancelled by the system"
+			
+		case LAError.userCancel.rawValue:
+			message = "The user did cancel"
+			
+		case LAError.userFallback.rawValue:
+			message = "The user chose to use the fallback"
+			
+		default:
+			message = evaluatePolicyFailErrorMessageForLA(errorCode: errorCode)
+		}
+		
+		return message
 	}
 }

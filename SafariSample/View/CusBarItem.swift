@@ -10,6 +10,11 @@ import Foundation
 import UIKit
 
 //MARK: - Custom Bar Button Item for long press functionality
+/**
+#CustomBarItem
+- tapEvent
+- longEvent
+*/
 class CusBarItem: UIBarButtonItem {
 	
 	let touchView:UIView = UIView()
