@@ -506,8 +506,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⬇ Please Unlock to see contents" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1up-3C-gmE">
-                                <rect key="frame" x="15" y="582" width="258.5" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="⬇ Please Unlock to see contents" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1up-3C-gmE">
+                                <rect key="frame" x="16" y="530" width="258.5" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -549,12 +550,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="1up-3C-gmE" firstAttribute="leading" secondItem="5cV-N2-I6a" secondAttribute="leading" constant="15" id="AgP-a7-qZx"/>
                             <constraint firstItem="6Ps-b4-QL3" firstAttribute="top" secondItem="5cV-N2-I6a" secondAttribute="top" id="Hcb-Kh-V7U"/>
                             <constraint firstItem="6Ps-b4-QL3" firstAttribute="leading" secondItem="5cV-N2-I6a" secondAttribute="leading" id="LCL-fh-nBv"/>
                             <constraint firstItem="6Ps-b4-QL3" firstAttribute="bottom" secondItem="5cV-N2-I6a" secondAttribute="bottom" id="LHw-Tv-LVQ"/>
-                            <constraint firstItem="5cV-N2-I6a" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="1up-3C-gmE" secondAttribute="trailing" constant="101.5" id="QtO-Yl-kfB"/>
-                            <constraint firstItem="5cV-N2-I6a" firstAttribute="bottom" secondItem="1up-3C-gmE" secondAttribute="bottom" constant="15" id="j8L-cb-DW6"/>
                             <constraint firstItem="6Ps-b4-QL3" firstAttribute="trailing" secondItem="5cV-N2-I6a" secondAttribute="trailing" id="zPc-sH-SuY"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="5cV-N2-I6a"/>

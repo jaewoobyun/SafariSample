@@ -16,7 +16,6 @@ let hostNameForLocalFile = ""
 /**
 # MainVC
   웹 컨텐츠가 표시되는 메인 뷰를 관리 하는 뷰 컨트롤러
-
 */
 class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPreviewingDelegate {
 	
@@ -79,7 +78,7 @@ class MainVC: UIViewController, UISearchControllerDelegate, UIViewControllerPrev
 	}
 	
 	
-	
+
 	//MARK: - Life Cycle
 	override func viewDidLoad() {
 		super.viewDidLoad()

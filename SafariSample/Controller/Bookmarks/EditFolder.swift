@@ -170,38 +170,70 @@ class EditFolder: UIViewController {
 		//guard let selectedNode = self.selectedNode else { return}
 
 		///New title input here
-		guard let title = self.titleTextField.text, !title.isEmpty
-		else {
-			return
-		}
-		if caseType == .AddNewFolder {
-			let origin = UserDefaultsManager.shared.loadUserBookMarkListData()
-			if UserDefaultsManager.shared.isNameDuplicate(targetDatas: origin, title: title) {
-				
+		guard let title = self.titleTextField.text, !title.isEmpty else { return }
+		let origin = UserDefaultsManager.shared.loadUserBookMarkListData()
+		guard let edittedFolderTitle = self.folderTitleInputText else { return }
+		
+//		if caseType == .AddNewFolder { /// 새로운 폴더를 추가하려고 할때
+//			if UserDefaultsManager.shared.isNameDuplicate(targetDatas: origin, title: title) {
+//					let alert = UIAlertController.init(title: "Duplicate Folder Name", message: nil, preferredStyle: UIAlertController.Style.alert)
+//					let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.destructive, handler: nil)
+//					alert.addAction(okAction)
+//					self.present(alert, animated: true, completion: nil)
+//			} else {
+//				self.insertFolderAtSelectedLocation(folderTitle: title, selectNodeIndexs: self.selectNodeIndexs)
+//			}
+//		}
+//
+//		if caseType == .EditFolder { /// 기존 데이터 (폴더이름) 을 수정 할때
+//			// 만약에 고친 폴더 이름이 원래 있던 폴더 이름과 같다면 그냥 pop.
+//
+//			// 만약에 고친 폴더 이름이 다르다면 원본데이터에 고친 이름이 같은 폴더가 있는지 확인해야 함.
+//
+//
+//			/// Editting folder title here
+//			guard let edittedFolderTitle = self.folderTitleInputText else {
+//				return
+//			}
+//
+//			self.treeView.isUserInteractionEnabled = false
+//			editFolderNameAtSelectedLocation(edittedFolderTitle: edittedFolderTitle)
+//
+//		}
+		
+		// input 에 있는 텍스트가 원본 데이터를 돌며 duplicate 가 있는지 확인한다.
+		if UserDefaultsManager.shared.isNameDuplicate(targetDatas: origin, title: title) {
+			if caseType == .AddNewFolder { //추가 시에는 같은 이름의 폴더 추가를 불가
+				let alert = UIAlertController.init(title: "Duplicate Folder Name", message: nil, preferredStyle: UIAlertController.Style.alert)
+				let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.destructive, handler: nil)
+				alert.addAction(okAction)
+				self.present(alert, animated: true, completion: nil)
+			}
+			if caseType == .EditFolder { //수정 시에는 변경된 폴더 이름이 원본에 있으면 불가
+				if UserDefaultsManager.shared.isNameDuplicate(targetDatas: origin, title: edittedFolderTitle) { //중복이 있는지를 edittedFolderTitle 과 비교해 한번 더 돈다.
 					let alert = UIAlertController.init(title: "Duplicate Folder Name", message: nil, preferredStyle: UIAlertController.Style.alert)
-
 					let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.destructive, handler: nil)
 					alert.addAction(okAction)
 					self.present(alert, animated: true, completion: nil)
-				
-			} else {
-				
+				}
+				else { //변경된 폴더이름이 다르다면
+					DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+						self.navigationController?.popViewController(animated: true)
+					}
+				}
+			}
+		}
+		else { // duplicate 이 없다면
+			if caseType == .AddNewFolder { //해당 위치에 폴더 타이틀을 가져와 insert 한다.
 				self.insertFolderAtSelectedLocation(folderTitle: title, selectNodeIndexs: self.selectNodeIndexs)
+			}
+			if caseType == .EditFolder { //treeview 의 다른 row 를 선택 불가로 만들고 그 위치의 폴더이름을 변경한다.
+				self.treeView.isUserInteractionEnabled = false
+				self.editFolderNameAtSelectedLocation(edittedFolderTitle: edittedFolderTitle)
 			}
 		}
 		
-		if caseType == .EditFolder {
-			/// Editting folder title here
-			guard let edittedFolderTitle = self.folderTitleInputText else {
-				return
-			}
-			self.treeView.isUserInteractionEnabled = false
-			editFolderNameAtSelectedLocation(edittedFolderTitle: edittedFolderTitle)
-			
-		}
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-			self.navigationController?.popViewController(animated: true)
-		}
+		
 	}
 	
 	func editFolderNameAtSelectedLocation(edittedFolderTitle: String) {
